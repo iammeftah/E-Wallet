@@ -1,0 +1,84 @@
+<!-- header.component.html -->
+<header class="fixed w-full z-50  bg-white dark:bg-neutral-900 backdrop-blur-xl transition-colors duration-200">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center py-4 md:space-x-10">
+      <!-- Logo -->
+      <div class="flex justify-start lg:w-0 lg:flex-1">
+        <a href="/" class="flex items-center">
+          <span class="ml-2 text-2xl font-bold text-neutral-900 dark:text-white">eJibi</span>
+        </a>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="-mr-2 -my-2 md:hidden">
+        <button
+          (click)="toggleMobileMenu()"
+          type="button"
+          class="outline-none bg-white rounded-md p-2 inline-flex items-center justify-center text-neutral-900 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-300 bg-transparent dark:bg-transparent "
+        >
+          <span class="sr-only">Open menu</span>
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+
+      <!-- Auth Buttons and Dark Mode Toggle -->
+      <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-2">
+        <!-- Dark Mode Toggle -->
+        <app-darkmode-toggler></app-darkmode-toggler>
+
+        <!-- Sign In Button -->
+        <a
+          href="/auth"
+          class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 hover:border-neutral-800  dark:border-white dark:hover:border-neutral-200  bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200"
+        >
+          Sign in
+        </a>
+
+        <!-- Sign Up Button -->
+        <a
+          href="/auth"
+          class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200"
+        >
+          Sign up
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu, show/hide based on mobile menu state -->
+  <div
+    *ngIf="isMenuOpen"
+    class="absolute top-full inset-x-0 p-2 transition transform origin-top-right md:hidden"
+  >
+    <div class="rounded-lg shadow-lg ring-1 ring-neutral-900 ring-opacity-5 bg-white dark:bg-neutral-900 divide-y-2 divide-neutral-50 dark:divide-neutral-700">
+      <div class="pt-5 pb-6 px-5">
+        <div class="flex flex-row items-center justify-between">
+
+          <p class="text-2xl font-bold text-black dark:text-white">
+            Join us in eJibi.
+          </p>
+          <app-darkmode-toggler></app-darkmode-toggler>
+        </div>
+        <div class="mt-6 space-y-4">
+
+          <a
+            href="/auth"
+            class="w-full flex items-center justify-center px-4 py-2  rounded-md shadow-sm text-base font-bold border border-neutral-900 hover:border-neutral-800  dark:border-white dark:hover:border-neutral-200  bg-transparent text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200"
+          >
+            Sign in
+          </a>
+          <a
+            href="/auth"
+            class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200"
+          >
+            Sign up
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

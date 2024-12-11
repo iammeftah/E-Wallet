@@ -1,0 +1,200 @@
+<div class="bg-white dark:bg-neutral-800 p-8 rounded-lg w-full" data-aos="fade-in" data-aos-duration="1000">
+  <h2 class="text-2xl font-bold text-center mb-8 text-neutral-900 dark:text-white" data-aos="fade-in" data-aos-duration="1000">Sign Up as Agent</h2>
+
+  <!-- Progress -->
+  <div class="mb-8" data-aos="fade-in" data-aos-duration="1000">
+    <div class="flex justify-between mb-2">
+      <span class="text-sm font-medium text-neutral-900 dark:text-white">Step {{currentStep}} of {{totalSteps}}</span>
+      <span class="text-sm font-medium text-neutral-900 dark:text-white">{{steps[currentStep - 1]}}</span>
+    </div>
+    <div class="h-2 bg-neutral-200 dark:bg-neutral-700 rounded-full">
+      <div
+        class="h-2 bg-neutral-900 dark:bg-white rounded-full transition-all duration-300 ease-in-out"
+        [style.width]="getStepProgress() + '%'"
+      ></div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <!-- Step 1: Personal Information -->
+    <div *ngIf="currentStep === 1" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+      <div class="flex flex-wrap -mx-3">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label for="firstName" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">First Name</label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your first name"
+          >
+        </div>
+        <div class="w-full md:w-1/2 px-3">
+          <label for="lastName" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Last Name</label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your last name"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Contact Information -->
+    <div *ngIf="currentStep === 2" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+      <div class="flex flex-wrap -mx-3">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label for="email" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your email"
+          >
+        </div>
+        <div class="w-full md:w-1/2 px-3">
+          <label for="confirmEmail" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Confirm Email</label>
+          <input
+            type="email"
+            id="confirmEmail"
+            formControlName="confirmEmail"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Confirm your email"
+          >
+        </div>
+      </div>
+      <div>
+        <label for="phone" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Phone</label>
+        <input
+          type="tel"
+          id="phone"
+          formControlName="phone"
+          class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+          placeholder="Enter your phone number"
+        >
+      </div>
+    </div>
+
+    <!-- Step 3: Identity Information -->
+    <div *ngIf="currentStep === 3" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+      <div class="flex flex-wrap -mx-3">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label for="idType" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Type</label>
+          <select
+            id="idType"
+            formControlName="idType"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+          >
+            <option value="">Select ID type</option>
+            <option *ngFor="let type of idTypes" [value]="type">{{type}}</option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/2 px-3">
+          <label for="idNumber" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Number</label>
+          <input
+            type="text"
+            id="idNumber"
+            formControlName="idNumber"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your ID number"
+          >
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Document</label>
+        <div class="space-y-4">
+          <div *ngIf="idDocumentCount === 1; else twoSidedUpload">
+            <input
+              type="file"
+              (change)="onFileChange($event)"
+              accept=".pdf,.jpg,.jpeg,.png"
+              class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+            >
+          </div>
+          <ng-template #twoSidedUpload>
+            <div class="space-y-4">
+              <div>
+                <input
+                  type="file"
+                  (change)="onFileChange($event, 'front')"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+                >
+                <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Front side</p>
+              </div>
+              <div>
+                <input
+                  type="file"
+                  (change)="onFileChange($event, 'back')"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+                >
+                <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Back side</p>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4: Professional Information -->
+    <div *ngIf="currentStep === 4" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+      <div class="flex flex-wrap -mx-3">
+        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+          <label for="immatriculation" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Immatriculation</label>
+          <input
+            type="text"
+            id="immatriculation"
+            formControlName="immatriculation"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your immatriculation number"
+          >
+        </div>
+        <div class="w-full md:w-1/2 px-3">
+          <label for="patentNumber" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Patent Number</label>
+          <input
+            type="text"
+            id="patentNumber"
+            formControlName="patentNumber"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your patent number"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex justify-between pt-8" data-aos="fade-in" data-aos-duration="1000">
+      <button
+        type="button"
+        *ngIf="currentStep > 1"
+        (click)="previousStep()"
+        class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 hover:border-neutral-800  dark:border-white dark:hover:border-neutral-200  bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200"
+      >
+        Back
+      </button>
+      <div class="flex-1"></div>
+      <button
+        type="button"
+        *ngIf="currentStep < totalSteps"
+        (click)="nextStep()"
+        class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200"
+      >
+        Next
+      </button>
+      <button
+        type="submit"
+        *ngIf="currentStep === totalSteps"
+        [disabled]="signUpForm.invalid"
+        class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Complete Sign Up
+      </button>
+    </div>
+  </form>
+</div>
+
