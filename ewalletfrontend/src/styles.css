@@ -1,13 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 button{
   outline: none;
 }
 
 *{
+  font-family: "PT Serif", serif;
+
   caret-color: transparent;
 }
 
@@ -15,3 +22,10 @@ input {
   @apply caret-neutral-900 dark:caret-neutral-100
 }
 
+.primary-button{
+  @apply whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200 w-full
+}
+
+.secondary-button{
+  @apply whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 hover:border-neutral-800  dark:border-white dark:hover:border-neutral-200  bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200 w-full
+}

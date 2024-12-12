@@ -8,11 +8,18 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { HeaderComponent } from './components/layout/header/header.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { DarkmodeTogglerComponent } from './components/elements/darkmode-toggler/darkmode-toggler.component';
-import { SignInComponent } from './components/SigningForms/sign-in/sign-in.component';
-import { SignUpAgentComponent } from './components/SigningForms/sign-up-agent/sign-up-agent.component';
-import { SignUpClientComponent } from './components/SigningForms/sign-up-client/sign-up-client.component';
+import { SignInComponent } from './components/signing-forms/sign-in/sign-in.component';
+import { SignUpAgentComponent } from './components/signing-forms/sign-up-agent/sign-up-agent.component';
+import { SignUpClientComponent } from './components/signing-forms/sign-up-client/sign-up-client.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { WalletOrbitComponent } from './components/three/wallet-orbit/wallet-orbit.component';
+import { BackofficePageComponent } from './pages/backoffice-page/backoffice-page.component';
+import { SidebarComponent } from './components/backoffice-components/sidebar/sidebar.component';
+import { AgentListComponent } from './components/backoffice-components/agent-list/agent-list.component';
+import { RegistrationRequestsComponent } from './components/backoffice-components/registration-requests/registration-requests.component';
+import { ClientListComponent } from './components/backoffice-components/client-list/client-list.component';
+import { AccountTerminationComponent } from './components/backoffice-components/account-termination/account-termination.component';
+import { HistoryComponent } from './components/backoffice-components/history/history.component';
 
 
 
@@ -20,9 +27,10 @@ import { WalletOrbitComponent } from './components/three/wallet-orbit/wallet-orb
   declarations: [
     AppComponent,
     HomePageComponent,
-    HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+
+
 
 
   ],
@@ -36,7 +44,13 @@ import { WalletOrbitComponent } from './components/three/wallet-orbit/wallet-orb
     SignUpAgentComponent,
     SignUpClientComponent,
     AuthenticationPageComponent,
-
+    SidebarComponent,
+    AgentListComponent,
+    BackofficePageComponent,
+    RegistrationRequestsComponent,
+    ClientListComponent,
+    AccountTerminationComponent,
+    HistoryComponent,
 
 
   ],

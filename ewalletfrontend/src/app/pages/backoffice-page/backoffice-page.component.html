@@ -1,0 +1,16 @@
+<app-header></app-header>
+
+<div class="flex bg-neutral-50 dark:bg-neutral-900 min-h-screen pt-16">
+  <app-sidebar (viewChange)="setCurrentView($event)" class="w-64 flex-shrink-0"></app-sidebar>
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 dark:bg-neutral-900 p-6">
+      <div class="container mx-auto ">
+        <app-agent-list *ngIf="currentView === 'agents'"></app-agent-list>
+        <app-registration-requests *ngIf="currentView === 'registration-requests'"></app-registration-requests>
+        <app-client-list *ngIf="currentView === 'clients'"></app-client-list>
+        <app-account-termination *ngIf="currentView === 'account-termination'"></app-account-termination>
+        <app-history *ngIf="currentView === 'history'"></app-history>
+      </div>
+    </main>
+  </div>
+</div>

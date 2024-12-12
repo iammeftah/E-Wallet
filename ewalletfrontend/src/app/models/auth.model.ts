@@ -6,7 +6,7 @@ export interface SignInData {
 export interface AgentSignUpData {
   firstName: string;
   lastName: string;
-  idType: 'CIN' | 'Passport' | 'Carte sejour';
+  idType: 'CIN' | 'Passport' | 'Residence permit';
   idNumber: string;
   birthdate: string;
   address: string;
@@ -18,13 +18,15 @@ export interface AgentSignUpData {
   idDocument: File | null;
 }
 
+
+
 export interface ClientSignUpData {
   clientType: 'HSSAB1' | 'HSSAB2' | 'HSSAB3';
   firstName: string;
   lastName: string;
   phone: string;
   email: string;
-  idType?: 'CIN' | 'Passport' | 'Carte sejour';
+  idType?: 'CIN' | 'Passport' | 'Residence permit';
   idNumber?: string;
   idDocument?: File | null;
   incomeProof?: File | null;

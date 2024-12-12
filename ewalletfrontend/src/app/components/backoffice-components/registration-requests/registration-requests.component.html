@@ -1,0 +1,122 @@
+<div class="bg-white dark:bg-neutral-800 rounded-lg shadow-md overflow-hidden">
+  <div class="p-6 border-b border-neutral-200 dark:border-neutral-700">
+    <h2 class="text-2xl font-serif text-neutral-800 dark:text-neutral-200">Registration Requests</h2>
+  </div>
+
+  <div class="p-4">
+    <ul class="space-y-2">
+      <li
+        *ngFor="let request of paginatedRequests"
+        (click)="openRequestModal(request)"
+        class="cursor-pointer bg-neutral-50 dark:bg-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-600 p-4 rounded-lg flex justify-between items-center transition-colors"
+      >
+        <div>
+          <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+            {{ request.firstName }} {{ request.lastName }}
+          </p>
+          <p class="text-xs text-neutral-600 dark:text-neutral-400">
+            {{ request.phone }}
+          </p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-500 dark:text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </li>
+    </ul>
+  </div>
+
+  <div class="p-4 border-t border-neutral-200 dark:border-neutral-700 flex justify-between items-center bg-neutral-50 dark:bg-neutral-800">
+    <div class="text-sm text-neutral-600 dark:text-neutral-400">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, registrationRequests.length) }} of {{ registrationRequests.length }} entries
+    </div>
+    <div>
+      <button
+        *ngFor="let page of getPaginationArray()"
+        (click)="onPageChange(page)"
+        [class.bg-neutral-200]="currentPage === page"
+        [class.dark:bg-neutral-700]="currentPage === page"
+        [class.text-neutral-800]="currentPage === page"
+        [class.dark:text-neutral-200]="currentPage === page"
+        class="px-3 py-1 mx-1 text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 border border-neutral-300 dark:border-neutral-600 rounded transition-colors">
+        {{ page }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div
+    *ngIf="selectedRequest"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    (click)="closeRequestModal($event)"
+  >
+    <div
+      class="bg-white dark:bg-neutral-800 rounded-lg shadow-xl max-w-md w-full p-6"
+      (click)="$event.stopPropagation()"
+      data-aos="fade-up"
+    >
+      <h3 class="text-xl font-semibold mb-4 text-neutral-800 dark:text-neutral-200 border-b pb-2">
+        Registration Request Details
+      </h3>
+
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Full Name</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.firstName }} {{ selectedRequest.lastName }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">ID Type</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.idType }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">ID Number</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.idNumber }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Email</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.email }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Phone</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.phone }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Immatriculation</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.immatriculation }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Patent Number</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.patentNumber }}
+          </span>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-between space-x-4">
+        <button
+          (click)="onAcceptRequest(selectedRequest)"
+          class="primary-button w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Accept
+        </button>
+        <button
+          (click)="onRejectRequest(selectedRequest)"
+          class="secondary-button w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
