@@ -12,6 +12,7 @@ import { SignInComponent } from './components/SigningForms/sign-in/sign-in.compo
 import { SignUpAgentComponent } from './components/SigningForms/sign-up-agent/sign-up-agent.component';
 import { SignUpClientComponent } from './components/SigningForms/sign-up-client/sign-up-client.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { WalletOrbitComponent } from './components/three/wallet-orbit/wallet-orbit.component';
 
 
 
@@ -21,6 +22,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     HomePageComponent,
     HomePageComponent,
     NotFoundPageComponent,
+    WalletOrbitComponent,
 
 
   ],
@@ -34,6 +36,8 @@ import {ReactiveFormsModule} from '@angular/forms';
     SignUpAgentComponent,
     SignUpClientComponent,
     AuthenticationPageComponent,
+
+
 
   ],
   providers: [],
