@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
+
 @Component({
   selector: 'app-sign-up-agent',
   standalone: true,
@@ -16,7 +17,9 @@ export class SignUpAgentComponent implements OnInit {
   totalSteps = 4;
   steps = ['Personal Info', 'Contact', 'Identity', 'Professional'];
 
-  idTypes: string[] = ['CIN', 'Passport', 'Carte sejour'];
+  isIdTypeDropdownOpen = false;
+
+  idTypes: string[] = ['CIN', 'Passport', 'Residence permit'];
   idDocumentCount: number = 1;
 
   constructor(private fb: FormBuilder) {
@@ -81,5 +84,16 @@ export class SignUpAgentComponent implements OnInit {
 
   getStepProgress(): number {
     return (this.currentStep / this.totalSteps) * 100;
+  }
+
+
+  toggleIdTypeDropdown(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isIdTypeDropdownOpen = !this.isIdTypeDropdownOpen;
+  }
+
+  closeIdTypeDropdown() {
+    this.isIdTypeDropdownOpen = false;
   }
 }

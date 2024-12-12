@@ -34,6 +34,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     SignUpAgentComponent,
     SignUpClientComponent,
     AuthenticationPageComponent,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

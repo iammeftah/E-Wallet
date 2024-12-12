@@ -2,3 +2,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+button{
+  outline: none;
+}
+
+*{
+  caret-color: transparent;
+}
+
+input {
+  @apply caret-neutral-900 dark:caret-neutral-100
+}

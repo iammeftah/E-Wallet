@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-neutral-800 p-8 rounded-lg w-full" data-aos="fade-in" data-aos-duration="1000">
+<div class="p-8 rounded-lg w-full" data-aos="fade-in" data-aos-duration="1000">
   <h2 class="text-2xl font-bold text-center mb-8 text-neutral-900 dark:text-white" data-aos="fade-in" data-aos-duration="1000">Sign Up as Agent</h2>
 
   <!-- Progress -->
@@ -44,9 +44,9 @@
     </div>
 
     <!-- Step 2: Contact Information -->
-    <div *ngIf="currentStep === 2" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+    <div *ngIf="currentStep === 2" class="space-y-6">
       <div class="flex flex-wrap -mx-3">
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div data-aos="fade-in" data-aos-duration="1000" class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label for="email" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Email</label>
           <input
             type="email"
@@ -67,7 +67,7 @@
           >
         </div>
       </div>
-      <div>
+      <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
         <label for="phone" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Phone</label>
         <input
           type="tel"
@@ -80,20 +80,41 @@
     </div>
 
     <!-- Step 3: Identity Information -->
-    <div *ngIf="currentStep === 3" class="space-y-6" data-aos="fade-in" data-aos-duration="1000">
+    <div *ngIf="currentStep === 3" class="space-y-6">
       <div class="flex flex-wrap -mx-3">
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div data-aos="fade-in" data-aos-duration="1000" class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
           <label for="idType" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Type</label>
-          <select
-            id="idType"
-            formControlName="idType"
-            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
-          >
-            <option value="">Select ID type</option>
-            <option *ngFor="let type of idTypes" [value]="type">{{type}}</option>
-          </select>
+          <div class="relative">
+            <select
+              id="idType"
+              formControlName="idType"
+              class="appearance-none block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800 pr-10"
+            >
+              <option value="">Select ID type</option>
+              <option *ngFor="let type of idTypes" [value]="type">{{type}}</option>
+            </select>
+            <div
+              class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-neutral-500 dark:text-neutral-400 transition-transform duration-300"
+                [class.rotate-180]="isIdTypeDropdownOpen"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
-        <div class="w-full md:w-1/2 px-3">
+        <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200" class="w-full md:w-1/2 px-3">
           <label for="idNumber" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Number</label>
           <input
             type="text"
@@ -104,7 +125,7 @@
           >
         </div>
       </div>
-      <div>
+      <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="400">
         <label class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Document</label>
         <div class="space-y-4">
           <div *ngIf="idDocumentCount === 1; else twoSidedUpload">
@@ -116,7 +137,7 @@
             >
           </div>
           <ng-template #twoSidedUpload>
-            <div class="space-y-4">
+            <div class="flex flex-row gap-4 items-center">
               <div>
                 <input
                   type="file"
@@ -192,7 +213,7 @@
         [disabled]="signUpForm.invalid"
         class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Complete Sign Up
+        Submit application
       </button>
     </div>
   </form>
