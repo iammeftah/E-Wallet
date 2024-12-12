@@ -127,7 +127,7 @@
       </div>
       <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="400">
         <label class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">ID Document</label>
-        <div class="space-y-4">
+        <div class="space-y-4 w-full">
           <div *ngIf="idDocumentCount === 1; else twoSidedUpload">
             <input
               type="file"
@@ -137,8 +137,8 @@
             >
           </div>
           <ng-template #twoSidedUpload>
-            <div class="flex flex-row gap-4 items-center">
-              <div>
+            <div class="flex flex-row gap-4 items-center w-full">
+              <div class="w-full">
                 <input
                   type="file"
                   (change)="onFileChange($event, 'front')"
@@ -147,7 +147,7 @@
                 >
                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Front side</p>
               </div>
-              <div>
+              <div class="w-full">
                 <input
                   type="file"
                   (change)="onFileChange($event, 'back')"
@@ -210,7 +210,7 @@
       <button
         type="submit"
         *ngIf="currentStep === totalSteps"
-        [disabled]="signUpForm.invalid"
+        [disabled]="!signUpForm.valid"
         class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-base font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Submit application

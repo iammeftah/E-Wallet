@@ -15,7 +15,7 @@ type DarkModeState = 'light' | 'dark' | 'system';
       class="outline-none p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 relative"
     >
       <!-- Light Mode Icon -->
-      <svg *ngIf="currentState === 'light'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun text-neutral-900"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+      <svg *ngIf="currentState === 'light'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun text-neutral-900"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/></svg>
 
       <!-- Dark Mode Icon -->
       <svg *ngIf="currentState === 'dark'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon text-neutral-100"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
@@ -44,15 +44,20 @@ export class DarkmodeTogglerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Retrieve saved state or default to light
+    // Retrieve saved state or default to 'system'
     const savedState = localStorage.getItem('darkModeState') as DarkModeState;
-    this.currentState = savedState || 'light';
+    this.currentState = savedState || 'system';
 
     // Apply initial mode
     this.applyCurrentMode();
 
     // Add listener for system dark mode changes
     this.mediaQuery.addListener(this.mediaQueryListener);
+
+    // Initial check for system preference
+    if (this.currentState === 'system') {
+      this.applyDarkMode(this.mediaQuery.matches);
+    }
   }
 
   ngOnDestroy() {
@@ -88,6 +93,13 @@ export class DarkmodeTogglerComponent implements OnInit, OnDestroy {
   }
 
   private applyDarkMode(isDark: boolean) {
-    document.documentElement.classList.toggle('dark', isDark);
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
   }
 }
+
