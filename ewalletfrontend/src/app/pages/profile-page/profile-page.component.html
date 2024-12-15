@@ -115,6 +115,20 @@
             </div>
           </div>
 
+          <!-- Subscription Plans -->
+          <div *ngIf="isClient(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up" data-aos-delay="300">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-neutral-200">Subscription Plan</h2>
+              <button (click)="toggleSubscriptionPlans()" class="text-neutral-900 dark:text-neutral-100 hover:underline">
+                {{ showSubscriptionPlans ? 'Hide Plans' : 'View Plans' }}
+              </button>
+            </div>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-4">
+              Current Plan: <span class="font-semibold">{{ user.clientType }}</span>
+            </p>
+            <app-subscription-plans *ngIf="showSubscriptionPlans" (planChange)="handlePlanChange($event)"></app-subscription-plans>
+          </div>
+
           <!-- Agent Specific Details -->
           <div *ngIf="isAgent(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up">
             <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-neutral-800 dark:text-neutral-200">Agent Information</h2>
@@ -171,7 +185,6 @@
           </div>
         </ng-container>
 
-
         <!-- Change Password Modal -->
         <div *ngIf="showChangePasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 w-full max-w-md">
@@ -204,4 +217,3 @@
     </main>
   </div>
 </div>
-

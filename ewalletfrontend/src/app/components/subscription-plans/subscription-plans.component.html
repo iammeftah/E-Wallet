@@ -1,0 +1,46 @@
+<div class="bg-white dark:bg-neutral-800 rounded-lg">
+  <div class="flex justify-center mb-6">
+    <button
+      [class.bg-neutral-300]="selectedPlan === 'monthly'"
+      [class.dark:bg-neutral-600]="selectedPlan === 'monthly'"
+      [class.text-neutral-600]="selectedPlan === 'monthly'"
+      [class.bg-white]="selectedPlan !== 'monthly'"
+      [class.dark:bg-neutral-800]="selectedPlan !== 'monthly'"
+      (click)="selectedPlan = 'monthly'"
+      class="px-4 py-2 rounded-l-lg border border-neutral-300 dark:border-neutral-600 text-neutral-800 dark:text-neutral-200 transition-colors">
+      Monthly
+    </button>
+    <button
+      [class.bg-neutral-300]="selectedPlan === 'annually'"
+      [class.dark:bg-neutral-600]="selectedPlan === 'annually'"
+      [class.text-neutral-600]="selectedPlan === 'annually'"
+      [class.bg-white]="selectedPlan !== 'annually'"
+      [class.dark:bg-neutral-800]="selectedPlan !== 'annually'"
+      (click)="selectedPlan = 'annually'"
+      class="px-4 py-2 rounded-r-lg border border-neutral-300 dark:border-neutral-600 text-neutral-800 dark:text-neutral-200 transition-colors">
+      Annually
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div *ngFor="let plan of plans"
+         class="border dark:border-neutral-700 rounded-lg p-6 flex flex-col bg-white dark:bg-neutral-800">
+      <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">{{ plan.name }}</h3>
+      <p class="text-neutral-600 dark:text-neutral-400 mb-4">{{ plan.description }}</p>
+      <p class="text-3xl font-bold mb-4 text-neutral-800 dark:text-neutral-200">
+        ${{ plan.price }}<span class="text-lg font-normal text-neutral-600 dark:text-neutral-400">/{{ selectedPlan === 'monthly' ? 'month' : 'year' }}</span>
+      </p>
+      <ul class="mb-6 flex-grow">
+        <li *ngFor="let feature of plan.features" class="flex items-center mb-2 text-neutral-700 dark:text-neutral-300">
+          <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          {{ feature }}
+        </li>
+      </ul>
+      <button (click)="selectPlan(plan)" class="primary-button bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors">
+        Select Plan
+      </button>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { User, Client, Agent, Admin } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../components/layout/header/header.component';
+import { SubscriptionPlansComponent } from '../../components/subscription-plans/subscription-plans.component';
 
 interface Transaction {
   date: Date;
@@ -20,7 +21,7 @@ interface SystemActivity {
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent]
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, SubscriptionPlansComponent]
 })
 export class ProfilePageComponent implements OnInit {
   user: User | undefined;
@@ -32,7 +33,8 @@ export class ProfilePageComponent implements OnInit {
   totalUsers: number = 0;
   activeAgents: number = 0;
   recentActivities: SystemActivity[] = [];
-  showChangePasswordModal = false; // Added property
+  showChangePasswordModal = false;
+  showSubscriptionPlans = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,7 +63,7 @@ export class ProfilePageComponent implements OnInit {
       email: 'john@example.com',
       phone: '1234567890',
       role: 'client',
-      clientType: 'HSSAB3', // Changed from 'Individual' to 'HSSAB1'
+      clientType: 'HSSAB1',
       idType: 'Passport',
       idNumber: 'AB123456',
       balance: 5000
@@ -93,18 +95,20 @@ export class ProfilePageComponent implements OnInit {
   }
 
   private loadClientData() {
-    // Mock client-specific data
-    this.lastTransaction = {
-      date: new Date(),
-      description: 'Online Purchase',
-      amount: -150
-    };
+    if (this.isClient(this.user)) {
+      // Mock client-specific data
+      this.lastTransaction = {
+        date: new Date(),
+        description: 'Online Purchase',
+        amount: -150
+      };
 
-    this.recentTransactions = [
-      { date: new Date(), description: 'Salary Deposit', amount: 3000 },
-      { date: new Date(Date.now() - 86400000), description: 'Grocery Shopping', amount: -75 },
-      { date: new Date(Date.now() - 172800000), description: 'Online Transfer', amount: -200 },
-    ];
+      this.recentTransactions = [
+        { date: new Date(), description: 'Salary Deposit', amount: 3000 },
+        { date: new Date(Date.now() - 86400000), description: 'Grocery Shopping', amount: -75 },
+        { date: new Date(Date.now() - 172800000), description: 'Online Transfer', amount: -200 },
+      ];
+    }
   }
 
   private loadAgentData() {
@@ -112,14 +116,16 @@ export class ProfilePageComponent implements OnInit {
   }
 
   private loadAdminData() {
-    // Mock admin-specific data
-    this.totalUsers = 1000;
-    this.activeAgents = 50;
-    this.recentActivities = [
-      { date: new Date(), description: 'New user registration' },
-      { date: new Date(Date.now() - 3600000), description: 'System update completed' },
-      { date: new Date(Date.now() - 7200000), description: 'Suspicious activity detected' },
-    ];
+    if (this.isAdmin(this.user)) {
+      // Mock admin-specific data
+      this.totalUsers = 1000;
+      this.activeAgents = 50;
+      this.recentActivities = [
+        { date: new Date(), description: 'New user registration' },
+        { date: new Date(Date.now() - 3600000), description: 'System update completed' },
+        { date: new Date(Date.now() - 7200000), description: 'Suspicious activity detected' },
+      ];
+    }
   }
 
   private passwordMatchValidator(form: FormGroup) {
@@ -158,11 +164,11 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  openChangePasswordModal() { // Added method
+  openChangePasswordModal() {
     this.showChangePasswordModal = true;
   }
 
-  closeChangePasswordModal() { // Added method
+  closeChangePasswordModal() {
     this.showChangePasswordModal = false;
     this.passwordForm.reset();
   }
@@ -185,5 +191,17 @@ export class ProfilePageComponent implements OnInit {
       alert('Viewing all transactions (not implemented)');
     }
   }
-}
 
+  toggleSubscriptionPlans() {
+    this.showSubscriptionPlans = !this.showSubscriptionPlans;
+  }
+
+  handlePlanChange(planName: 'HSSAB1' | 'HSSAB2' | 'HSSAB3') {
+    if (this.user && this.isClient(this.user)) {
+      this.user.clientType = planName;
+      console.log(`Changed plan to: ${planName}`);
+      alert(`Plan changed to ${planName}`);
+      this.cdr.detectChanges();
+    }
+  }
+}
