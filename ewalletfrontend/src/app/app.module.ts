@@ -21,6 +21,10 @@ import { ClientListComponent } from './components/backoffice-components/client-l
 import { AccountTerminationComponent } from './components/backoffice-components/account-termination/account-termination.component';
 import { HistoryComponent } from './components/backoffice-components/history/history.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
+import { AgencyPageComponent } from './pages/agency-page/agency-page.component';
+import { AgencyHistoryComponent } from './components/agency-components/agency-history/agency-history.component';
+import { AgencySidebarComponent } from './components/agency-components/agency-sidebar/agency-sidebar.component';
+import { ClientRegistrationRequestsComponent } from './components/agency-components/client-registration-requests/client-registration-requests.component';
 
 
 
@@ -30,6 +34,8 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+
+
 
 
 
@@ -54,6 +60,10 @@ import { ProfilePageComponent } from './pages/profile-page/profile-page.componen
     AccountTerminationComponent,
     HistoryComponent,
     ProfilePageComponent,
+    AgencyPageComponent,
+    AgencySidebarComponent,
+    ClientRegistrationRequestsComponent,
+    AgencyHistoryComponent,
 
 
   ],

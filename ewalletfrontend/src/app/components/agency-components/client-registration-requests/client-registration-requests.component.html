@@ -1,0 +1,78 @@
+<div class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-md overflow-hidden flex flex-col grow">
+  <div class="p-6 border-b border-neutral-300 dark:border-neutral-700 flex flex-row items-center justify-between">
+    <h2 class="text-2xl font-serif mb-4">Client Registration Requests</h2>
+    <div class="flex items-center w-64">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearch()"
+        placeholder="Search by name, email or phone"
+        class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+      />
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+      <tr class="bg-neutral-200 dark:bg-neutral-800">
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Client Name</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Email</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Phone</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Status</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Submission Date</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let request of paginatedRequests" class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.clientName}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.email}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.phone}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.status}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.submissionDate | date:'short'}}</td>
+        <td class="px-5 py-4 text-sm flex flex-row gap-2 items-center">
+          <button class="secondary-button">
+            View
+          </button>
+          <button class="primary-button" *ngIf="request.status === 'Pending'">
+            Approve
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800">
+    <div class="px-4 py-3 flex justify-between items-center">
+      <div class="text-sm text-neutral-800 dark:text-neutral-400">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, filteredRequests.length) }} of {{ filteredRequests.length }} entries
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          (click)="onPreviousPage()"
+          [disabled]="currentPage === 1"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <button
+          *ngFor="let page of getPaginationArray()"
+          (click)="onPageChange(page)"
+          [class.bg-neutral-600]="currentPage === page"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors"
+        >
+          {{ page }}
+        </button>
+        <button
+          (click)="onNextPage()"
+          [disabled]="currentPage === Math.ceil(filteredRequests.length / pageSize)"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

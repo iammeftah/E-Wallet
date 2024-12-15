@@ -14,6 +14,11 @@ import {
   AccountTerminationComponent
 } from './components/backoffice-components/account-termination/account-termination.component';
 import {HistoryComponent} from './components/backoffice-components/history/history.component';
+import { AgencyPageComponent } from './pages/agency-page/agency-page.component';
+import {
+  ClientRegistrationRequestsComponent
+} from './components/agency-components/client-registration-requests/client-registration-requests.component';
+import {AgencyHistoryComponent} from './components/agency-components/agency-history/agency-history.component';
 
 
 const routes: Routes = [
@@ -30,6 +35,16 @@ const routes: Routes = [
       { path: 'registration-requests', component: RegistrationRequestsComponent },
       { path: 'account-termination', component: AccountTerminationComponent },
       { path: 'history', component: HistoryComponent }
+    ]
+  },
+  {
+    path: 'agency',
+    component: AgencyPageComponent,
+    children: [
+      { path: '', redirectTo: 'clients', pathMatch: 'full' },
+      { path: 'clients', component: ClientListComponent },
+      { path: 'client-registration-requests', component: ClientRegistrationRequestsComponent },
+      { path: 'history', component: AgencyHistoryComponent }
     ]
   },
   { path: '*', component: NotFoundPageComponent },
