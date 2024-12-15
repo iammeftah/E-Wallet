@@ -1,5 +1,82 @@
-<div class="bg-white rounded-lg shadow-md p-6">
-  <h2 class="text-2xl font-serif text-neutral-800 mb-4">Client List</h2>
-  <p class="text-neutral-600">Content for client list will be displayed here.</p>
+<div class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-md overflow-hidden flex flex-col grow">
+  <div class="p-6 border-b border-neutral-300 dark:border-neutral-700 flex flex-row items-center justify-between">
+    <h2 class="text-2xl font-serif  mb-4">Client List</h2>
+    <div class="flex items-center w-64">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearch()"
+        placeholder="Search by name or phone number"
+        class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+      />
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+      <tr class="bg-neutral-200 dark:bg-neutral-800">
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Full Name</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Client Type</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">ID Type</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">ID Number</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Email</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Phone</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let client of paginatedClients" class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-100 hover-bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.firstName}} {{client.lastName}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.clientType}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.idType}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.idNumber}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.email}}</td>
+        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{client.phone}}</td>
+        <td class="px-5 py-4 text-sm flex flex-row gap-2 items-center">
+          <button class="secondary-button">
+            Edit
+          </button>
+          <button class="primary-button">
+            Deactivate
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800">
+    <div class="px-4 py-3 flex justify-between items-center">
+      <div class="text-sm text-neutral-800 dark:text-neutral-400">
+        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, filteredClients.length) }} of {{ filteredClients.length }} entries
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          (click)="onPreviousPage()"
+          [disabled]="currentPage === 1"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
+        >
+          Previous
+        </button>
+        <button
+          *ngFor="let page of getPaginationArray()"
+          (click)="onPageChange(page)"
+          [class.bg-neutral-600]="currentPage === page"
+          [class.text-neutral-200]="currentPage === page"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors"
+        >
+          {{ page }}
+        </button>
+        <button
+          (click)="onNextPage()"
+          [disabled]="currentPage === Math.ceil(filteredClients.length / pageSize)"
+          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 

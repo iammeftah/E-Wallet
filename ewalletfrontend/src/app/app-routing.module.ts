@@ -5,17 +5,31 @@ import {AuthenticationPageComponent} from './pages/authentication-page/authentic
 import {NotFoundPageComponent} from './pages/not-found-page/not-found-page.component';
 import {BackofficePageComponent} from './pages/backoffice-page/backoffice-page.component';
 import {AgentListComponent} from './components/backoffice-components/agent-list/agent-list.component';
+import {ProfilePageComponent} from './pages/profile-page/profile-page.component';
+import {ClientListComponent} from './components/backoffice-components/client-list/client-list.component';
+import {
+  RegistrationRequestsComponent
+} from './components/backoffice-components/registration-requests/registration-requests.component';
+import {
+  AccountTerminationComponent
+} from './components/backoffice-components/account-termination/account-termination.component';
+import {HistoryComponent} from './components/backoffice-components/history/history.component';
 
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'auth', component: AuthenticationPageComponent },
+  { path: 'profile', component: ProfilePageComponent },
   {
     path: 'backoffice',
     component: BackofficePageComponent,
     children: [
+      { path: '', redirectTo: 'agents', pathMatch: 'full' },
       { path: 'agents', component: AgentListComponent },
-      { path: '', redirectTo: 'agents', pathMatch: 'full' }
+      { path: 'clients', component: ClientListComponent },
+      { path: 'registration-requests', component: RegistrationRequestsComponent },
+      { path: 'account-termination', component: AccountTerminationComponent },
+      { path: 'history', component: HistoryComponent }
     ]
   },
   { path: '*', component: NotFoundPageComponent },

@@ -67,6 +67,11 @@ export class SignUpAgentComponent implements OnInit {
   onSubmit() {
     if (this.signUpForm.valid) {
       console.log(this.signUpForm.value);
+
+
+
+
+
     }
   }
 

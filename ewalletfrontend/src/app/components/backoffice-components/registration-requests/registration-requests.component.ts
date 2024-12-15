@@ -13,7 +13,7 @@ import 'aos/dist/aos.css';
 })
 export class RegistrationRequestsComponent implements OnInit {
   registrationRequests: AgentSignUpData[] = [];
-  pageSize = 10;
+  pageSize = 21; // Changed from 10 to 12 to fit better in a grid
   currentPage = 1;
   selectedRequest: AgentSignUpData | null = null;
 
@@ -25,7 +25,7 @@ export class RegistrationRequestsComponent implements OnInit {
     });
 
     // Populate with dummy registration requests
-    this.registrationRequests = Array(20).fill(null).map((_, index) => ({
+    this.registrationRequests = Array(50).fill(null).map((_, index) => ({
       firstName: `FirstName ${index + 1}`,
       lastName: `LastName ${index + 1}`,
       idType: index % 3 === 0 ? 'Passport' : 'CIN',
@@ -52,7 +52,18 @@ export class RegistrationRequestsComponent implements OnInit {
 
   getPaginationArray(): number[] {
     const pageCount = Math.ceil(this.registrationRequests.length / this.pageSize);
-    return Array.from({ length: pageCount }, (_, i) => i + 1);
+    const currentPage = this.currentPage;
+    const visiblePages = 5; // Number of visible page buttons
+
+    let startPage = Math.max(currentPage - Math.floor(visiblePages / 2), 1);
+    let endPage = startPage + visiblePages - 1;
+
+    if (endPage > pageCount) {
+      endPage = pageCount;
+      startPage = Math.max(endPage - visiblePages + 1, 1);
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
 
   openRequestModal(request: AgentSignUpData) {
@@ -89,5 +100,19 @@ export class RegistrationRequestsComponent implements OnInit {
     }
   }
 
+  onPreviousPage() {
+    if (this.currentPage > 1) {
+      this.onPageChange(this.currentPage - 1);
+    }
+  }
+
+  onNextPage() {
+    const pageCount = Math.ceil(this.registrationRequests.length / this.pageSize);
+    if (this.currentPage < pageCount) {
+      this.onPageChange(this.currentPage + 1);
+    }
+  }
+
   protected readonly Math = Math;
 }
+

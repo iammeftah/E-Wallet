@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../components/backoffice-components/sidebar/sidebar.component';
-import { AgentListComponent } from '../../components/backoffice-components/agent-list/agent-list.component';
-import { RegistrationRequestsComponent } from '../../components/backoffice-components/registration-requests/registration-requests.component';
-import { ClientListComponent } from '../../components/backoffice-components/client-list/client-list.component';
-import { AccountTerminationComponent } from '../../components/backoffice-components/account-termination/account-termination.component';
-import { HistoryComponent } from '../../components/backoffice-components/history/history.component';
+import {Router, ActivatedRoute, RouterOutlet} from '@angular/router';
 import {HeaderComponent} from '../../components/layout/header/header.component';
 
 @Component({
@@ -16,19 +12,26 @@ import {HeaderComponent} from '../../components/layout/header/header.component';
   imports: [
     CommonModule,
     SidebarComponent,
-    AgentListComponent,
-    RegistrationRequestsComponent,
-    ClientListComponent,
-    AccountTerminationComponent,
-    HistoryComponent,
-    HeaderComponent
+    RouterOutlet,
+    HeaderComponent,
   ]
 })
 export class BackofficePageComponent {
   currentView: string = 'agents';
 
+  constructor(private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.firstChild?.url.subscribe(segments => {
+      if (segments.length > 0) {
+        this.currentView = segments[0].path;
+      }
+    });
+  }
+
   setCurrentView(view: string) {
     this.currentView = view;
+    this.router.navigate([view], { relativeTo: this.route });
   }
 }
 

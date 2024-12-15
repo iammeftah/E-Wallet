@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 interface MenuItem {
   name: string;
@@ -16,7 +17,7 @@ interface MenuSection {
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule, RouterLink, RouterLinkActive]
 })
 export class SidebarComponent {
   @Output() viewChange = new EventEmitter<string>();
@@ -36,9 +37,11 @@ export class SidebarComponent {
       ]}
   ];
 
+  constructor(private router: Router) {}
+
   changeView(view: string) {
     this.currentView = view;
-    this.viewChange.emit(view);
+    this.router.navigate(['/backoffice', view]);
   }
 }
 

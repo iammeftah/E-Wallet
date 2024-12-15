@@ -20,6 +20,7 @@ import { RegistrationRequestsComponent } from './components/backoffice-component
 import { ClientListComponent } from './components/backoffice-components/client-list/client-list.component';
 import { AccountTerminationComponent } from './components/backoffice-components/account-termination/account-termination.component';
 import { HistoryComponent } from './components/backoffice-components/history/history.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 
 
@@ -29,6 +30,7 @@ import { HistoryComponent } from './components/backoffice-components/history/his
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+
 
 
 
@@ -51,10 +53,13 @@ import { HistoryComponent } from './components/backoffice-components/history/his
     ClientListComponent,
     AccountTerminationComponent,
     HistoryComponent,
+    ProfilePageComponent,
 
 
   ],
   providers: [],
+  exports: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
