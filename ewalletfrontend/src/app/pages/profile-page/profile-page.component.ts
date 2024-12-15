@@ -1,8 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { User, Client, Agent, Admin } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
-import {HeaderComponent} from '../../components/layout/header/header.component';
+import { HeaderComponent } from '../../components/layout/header/header.component';
+
+interface Transaction {
+  date: Date;
+  description: string;
+  amount: number;
+}
+
+interface SystemActivity {
+  date: Date;
+  description: string;
+}
 
 @Component({
   selector: 'app-profile-page',
@@ -16,9 +27,16 @@ export class ProfilePageComponent implements OnInit {
   isEditing = false;
   profileForm: FormGroup;
   passwordForm: FormGroup;
+  lastTransaction: Transaction | undefined;
+  recentTransactions: Transaction[] = [];
+  totalUsers: number = 0;
+  activeAgents: number = 0;
+  recentActivities: SystemActivity[] = [];
+  showChangePasswordModal = false; // Added property
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -36,22 +54,21 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     // Mock user data
-    this.user = new Agent({
-      id: '2',
-      firstName: 'Jane',
-      lastName: 'Smith',
-      email: 'jane@example.com',
-      phone: '9876543210',
-      role: 'agent',
+    this.user = new Client({
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      phone: '1234567890',
+      role: 'client',
+      clientType: 'HSSAB3', // Changed from 'Individual' to 'HSSAB1'
       idType: 'Passport',
-      idNumber: 'P123456',
-      birthdate: '1985-05-15',
-      address: '123 Agent St, City',
-      immatriculation: 'AG12345',
-      patentNumber: 'PT98765'
+      idNumber: 'AB123456',
+      balance: 5000
     });
 
     this.updateFormWithUserData();
+    this.loadUserSpecificData();
   }
 
   private updateFormWithUserData() {
@@ -63,6 +80,46 @@ export class ProfilePageComponent implements OnInit {
         phone: this.user.phone
       });
     }
+  }
+
+  private loadUserSpecificData() {
+    if (this.isClient(this.user)) {
+      this.loadClientData();
+    } else if (this.isAgent(this.user)) {
+      this.loadAgentData();
+    } else if (this.isAdmin(this.user)) {
+      this.loadAdminData();
+    }
+  }
+
+  private loadClientData() {
+    // Mock client-specific data
+    this.lastTransaction = {
+      date: new Date(),
+      description: 'Online Purchase',
+      amount: -150
+    };
+
+    this.recentTransactions = [
+      { date: new Date(), description: 'Salary Deposit', amount: 3000 },
+      { date: new Date(Date.now() - 86400000), description: 'Grocery Shopping', amount: -75 },
+      { date: new Date(Date.now() - 172800000), description: 'Online Transfer', amount: -200 },
+    ];
+  }
+
+  private loadAgentData() {
+    // Mock agent-specific data (if needed)
+  }
+
+  private loadAdminData() {
+    // Mock admin-specific data
+    this.totalUsers = 1000;
+    this.activeAgents = 50;
+    this.recentActivities = [
+      { date: new Date(), description: 'New user registration' },
+      { date: new Date(Date.now() - 3600000), description: 'System update completed' },
+      { date: new Date(Date.now() - 7200000), description: 'Suspicious activity detected' },
+    ];
   }
 
   private passwordMatchValidator(form: FormGroup) {
@@ -87,6 +144,7 @@ export class ProfilePageComponent implements OnInit {
       this.isEditing = false;
       console.log('Profile updated:', this.user);
       alert('Profile updated successfully');
+      this.cdr.detectChanges();
     }
   }
 
@@ -95,7 +153,18 @@ export class ProfilePageComponent implements OnInit {
       console.log('Password changed:', this.passwordForm.value);
       alert('Password changed successfully');
       this.passwordForm.reset();
+      this.closeChangePasswordModal();
+      this.cdr.detectChanges();
     }
+  }
+
+  openChangePasswordModal() { // Added method
+    this.showChangePasswordModal = true;
+  }
+
+  closeChangePasswordModal() { // Added method
+    this.showChangePasswordModal = false;
+    this.passwordForm.reset();
   }
 
   isClient(user: User | undefined): user is Client {
@@ -110,10 +179,10 @@ export class ProfilePageComponent implements OnInit {
     return user?.role === 'admin';
   }
 
-  viewTransactions() {
+  viewAllTransactions() {
     if (this.user && this.isClient(this.user)) {
-      console.log('Viewing transactions for client:', this.user.id);
-      alert('Viewing transactions (not implemented)');
+      console.log('Viewing all transactions for client:', this.user.id);
+      alert('Viewing all transactions (not implemented)');
     }
   }
 }

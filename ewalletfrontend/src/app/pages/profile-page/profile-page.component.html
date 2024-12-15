@@ -1,179 +1,204 @@
 <app-header></app-header>
 
-<div class="flex bg-neutral-50 dark:bg-neutral-900 min-h-screen pt-16">
-  <div class="flex-1 flex flex-col overflow-hidden">
-    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-neutral-50 dark:bg-neutral-900 p-6">
-      <div class="container mx-auto h-[calc(100vh-140px)] flex flex-col">
-        <h1 class="text-3xl font-bold mb-6 text-neutral-800 dark:text-neutral-100">Profile</h1>
+<div class="flex flex-col bg-neutral-100 dark:bg-neutral-900 min-h-screen pt-16">
+  <div class="flex-1 flex flex-col">
+    <main class="flex-1 p-4 sm:p-6">
+      <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
+        <h1 class="text-4xl font-bold mb-8 text-neutral-800 dark:text-neutral-200">My Profile</h1>
 
         <!-- Basic Profile Information -->
-        <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-md p-8 mb-8">
-          <div *ngIf="!isEditing">
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Full Name:</strong> {{ user?.firstName }} {{ user?.lastName }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Email:</strong> {{ user?.email }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Phone:</strong> {{ user?.phone }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Role:</strong> {{ user?.role }}</p>
+        <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up">
+          <div class="flex flex-col sm:flex-row items-center mb-4 sm:mb-6">
+            <div class="w-20 h-20 rounded-full bg-neutral-300 flex items-center justify-center text-neutral-600 text-3xl font-bold mb-4 sm:mb-0 sm:mr-4">
+              {{ (user?.firstName ?? '').charAt(0) }}{{ (user?.lastName ?? '').charAt(0) }}
+            </div>
+            <div class="text-center sm:text-left">
+              <h2 class="text-xl sm:text-2xl font-semibold text-neutral-800 dark:text-neutral-200">{{ user?.firstName }} {{ user?.lastName }}</h2>
+              <p class="text-neutral-600 dark:text-neutral-400">{{ user?.role | titlecase }}</p>
+            </div>
+          </div>
+
+          <div *ngIf="!isEditing" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="text-neutral-600 dark:text-neutral-400"><strong>Email:</strong></p>
+              <p class="text-neutral-800 dark:text-neutral-200">{{ user?.email }}</p>
+            </div>
+            <div>
+              <p class="text-neutral-600 dark:text-neutral-400"><strong>Phone:</strong></p>
+              <p class="text-neutral-800 dark:text-neutral-200">{{ user?.phone }}</p>
+            </div>
+            <div class="col-span-2">
+              <a (click)="openChangePasswordModal()" class="text-neutral-600 dark:text-neutral-400 hover:underline cursor-pointer">Change Password</a>
+            </div>
           </div>
 
           <!-- Editable Profile Form -->
-          <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="saveProfile()">
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">First Name</label>
-                <input
-                  type="text"
-                  formControlName="firstName"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-              </div>
-              <div>
-                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Last Name</label>
-                <input
-                  type="text"
-                  formControlName="lastName"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-              </div>
-              <div class="col-span-2">
-                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Email</label>
-                <input
-                  type="email"
-                  formControlName="email"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-              </div>
-              <div class="col-span-2">
-                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Phone</label>
-                <input
-                  type="tel"
-                  formControlName="phone"
-                  class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-              </div>
-              <div class="col-span-2 flex justify-end space-x-4">
-                <button
-                  type="button"
-                  (click)="toggleEdit()"
-                  class="secondary-button"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  class="primary-button"
-                  [disabled]="profileForm.invalid"
-                >
-                  Save Changes
-                </button>
-              </div>
+          <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-aos="fade-in">
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">First Name</label>
+              <input type="text" formControlName="firstName" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+            </div>
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Last Name</label>
+              <input type="text" formControlName="lastName" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+            </div>
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Email</label>
+              <input type="email" formControlName="email" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+            </div>
+            <div>
+              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Phone</label>
+              <input type="tel" formControlName="phone" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
             </div>
           </form>
 
           <!-- Edit Profile Button -->
-          <div *ngIf="!isEditing" class="mt-4">
-            <button
-              (click)="toggleEdit()"
-              class="primary-button"
-            >
-              Edit Profile
-            </button>
+          <div class="mt-6 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+            <div class="w-full sm:w-auto">
+              <button *ngIf="!isEditing" (click)="toggleEdit()" class="primary-button w-full sm:w-auto">
+                Edit Profile
+              </button>
+            </div>
+            <div *ngIf="isEditing" class="flex flex-col sm:flex-row gap-4">
+              <button (click)="toggleEdit()" class="secondary-button w-full sm:w-auto">
+                Cancel
+              </button>
+              <button (click)="saveProfile()" [disabled]="profileForm.invalid" class="primary-button w-full sm:w-auto">
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- User Type Specific Content -->
         <ng-container *ngIf="user">
           <!-- Client Specific Details -->
-          <div *ngIf="isClient(user)" class="bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-md p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">Client Details</h2>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Client Type:</strong> {{ user.clientType }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>ID Type:</strong> {{ user.idType }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>ID Number:</strong> {{ user.idNumber }}</p>
-
-            <div class="mt-4">
-              <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-100">Financial Information</h3>
-              <p class="text-neutral-700 dark:text-neutral-300"><strong>Account Balance:</strong> {{ user.balance | currency }}</p>
-              <button
-                (click)="viewTransactions()"
-                class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mt-2 transition duration-300 ease-in-out"
-              >
-                View Transactions
-              </button>
+          <div *ngIf="isClient(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up" data-aos-delay="200">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-neutral-800 dark:text-neutral-200">E-Wallet</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div class="bg-neutral-200 dark:bg-neutral-700 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Balance</h3>
+                <p class="text-3xl font-bold text-neutral-800 dark:text-neutral-200">{{ user.balance | currency }}</p>
+              </div>
+              <div class="bg-neutral-200 dark:bg-neutral-700 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Last Transaction</h3>
+                <p class="text-lg text-neutral-800 dark:text-neutral-200">{{ lastTransaction?.amount | currency }} - {{ lastTransaction?.date | date:'short' }}</p>
+              </div>
+            </div>
+            <div class="mt-6">
+              <h3 class="text-lg sm:text-xl font-semibold mb-4 text-neutral-800 dark:text-neutral-200">Recent Transactions</h3>
+              <div class="overflow-x-auto -mx-4 sm:mx-0">
+                <table class="min-w-full bg-white dark:bg-neutral-700 rounded-lg overflow-hidden">
+                  <thead class="bg-neutral-100 dark:bg-neutral-600">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">Description</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-300 uppercase tracking-wider">Amount</th>
+                  </tr>
+                  </thead>
+                  <tbody class="divide-y divide-neutral-200 dark:divide-neutral-500">
+                  <tr *ngFor="let transaction of recentTransactions">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{{ transaction.date | date:'short' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-800 dark:text-neutral-200">{{ transaction.description }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm" [ngClass]="{'text-green-600': transaction.amount > 0, 'text-red-600': transaction.amount < 0}">
+                      {{ transaction.amount | currency }}
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="w-full flex justify-end mt-4">
+                <button (click)="viewAllTransactions()" class="primary-button w-full sm:w-auto">
+                  View All Transactions
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Agent Specific Details -->
-          <div *ngIf="isAgent(user)" class="bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-md p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">Agent Details</h2>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>ID Type:</strong> {{ user.idType }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>ID Number:</strong> {{ user.idNumber }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Birthdate:</strong> {{ user.birthdate }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Address:</strong> {{ user.address }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Immatriculation:</strong> {{ user.immatriculation }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Patent Number:</strong> {{ user.patentNumber }}</p>
+          <div *ngIf="isAgent(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-neutral-800 dark:text-neutral-200">Agent Information</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>ID Type:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.idType }}</p>
+              </div>
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>ID Number:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.idNumber }}</p>
+              </div>
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>Birthdate:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.birthdate | date:'mediumDate' }}</p>
+              </div>
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>Address:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.address }}</p>
+              </div>
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>Immatriculation:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.immatriculation }}</p>
+              </div>
+              <div>
+                <p class="text-neutral-600 dark:text-neutral-400"><strong>Patent Number:</strong></p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ user.patentNumber }}</p>
+              </div>
+            </div>
           </div>
 
           <!-- Admin Specific Details -->
-          <div *ngIf="isAdmin(user)" class="bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-md p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">Admin Details</h2>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Admin Level:</strong> {{ user.adminLevel }}</p>
-            <p class="text-neutral-700 dark:text-neutral-300"><strong>Department:</strong> {{ user.department }}</p>
+          <div *ngIf="isAdmin(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-neutral-800 dark:text-neutral-200">Admin Dashboard</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+              <div class="bg-neutral-200 dark:bg-neutral-700 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Total Users</h3>
+                <p class="text-3xl font-bold text-neutral-800 dark:text-neutral-200">{{ totalUsers }}</p>
+              </div>
+              <div class="bg-neutral-200 dark:bg-neutral-700 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Active Agents</h3>
+                <p class="text-3xl font-bold text-neutral-800 dark:text-neutral-200">{{ activeAgents }}</p>
+              </div>
+            </div>
+            <div class="mt-6">
+              <h3 class="text-lg sm:text-xl font-semibold mb-4 text-neutral-800 dark:text-neutral-200">Recent System Activities</h3>
+              <ul class="space-y-2">
+                <li *ngFor="let activity of recentActivities" class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-3">
+                  <p class="text-neutral-800 dark:text-neutral-200">{{ activity.description }}</p>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ activity.date | date:'medium' }}</p>
+                </li>
+              </ul>
+            </div>
           </div>
         </ng-container>
 
-        <!-- Change Password Section -->
-        <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-md p-8 mb-8">
-          <h2 class="text-2xl font-bold mb-4 text-neutral-800 dark:text-neutral-100">Change Password</h2>
 
-          <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="grid grid-cols-1 gap-4">
-            <div>
-              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Current Password</label>
-              <input
-                type="password"
-                formControlName="currentPassword"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-              <p *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
-                 class="text-red-500 text-xs italic">
-                Current password is required
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">New Password</label>
-              <input
-                type="password"
-                formControlName="newPassword"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-              <p *ngIf="passwordForm.get('newPassword')?.errors?.['minlength'] && passwordForm.get('newPassword')?.touched"
-                 class="text-red-500 text-xs italic">
-                Password must be at least 8 characters long
-              </p>
-            </div>
-
-            <div>
-              <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Confirm New Password</label>
-              <input
-                type="password"
-                formControlName="confirmNewPassword"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-              <p *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmNewPassword')?.touched"
-                 class="text-red-500 text-xs italic">
-                Passwords do not match
-              </p>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                [disabled]="passwordForm.invalid"
-                class="primary-button"
-              >
-                Change Password
-              </button>
-            </div>
-          </form>
+        <!-- Change Password Modal -->
+        <div *ngIf="showChangePasswordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 w-full max-w-md">
+            <h2 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-neutral-800 dark:text-neutral-200">Change Password</h2>
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Current Password</label>
+                <input type="password" formControlName="currentPassword" placeholder="Enter your current password" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+              </div>
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">New Password</label>
+                <input type="password" formControlName="newPassword" placeholder="Enter your new password" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+              </div>
+              <div>
+                <label class="block text-neutral-700 dark:text-neutral-300 text-sm font-bold mb-2">Confirm New Password</label>
+                <input type="password" formControlName="confirmNewPassword" placeholder="Confirm your new password" class="w-full px-3 py-2 text-neutral-700 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-500">
+              </div>
+              <div class="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+                <button type="button" (click)="closeChangePasswordModal()" class="secondary-button w-full sm:w-auto">
+                  Cancel
+                </button>
+                <button type="submit" [disabled]="passwordForm.invalid" class="primary-button w-full sm:w-auto">
+                  Change Password
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </main>
