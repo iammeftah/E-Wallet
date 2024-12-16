@@ -34,6 +34,8 @@ import { RecurringPaymentsComponent } from './components/client-space-components
 import { SendMoneyComponent } from './components/client-space-components/send-money/send-money.component';
 import { DonationComponent } from './components/client-space-components/donation/donation.component';
 import { NewSubscriptionComponent } from './components/client-space-components/new-subscription/new-subscription.component';
+import { AboutPageComponent } from './pages/about-page/about-page.component';
+import { ContactSupportPageComponent } from './pages/contact-support-page/contact-support-page.component';
 
 
 
@@ -43,6 +45,8 @@ import { NewSubscriptionComponent } from './components/client-space-components/n
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+    AboutPageComponent,
+    ContactSupportPageComponent,
 
 
 

@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { User, Client, Agent, Admin } from '../../models/auth.model';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../components/layout/header/header.component';
-import { SubscriptionPlansComponent } from '../../components/subscription-plans/subscription-plans.component';
 
 interface Transaction {
   date: Date;
@@ -21,7 +20,7 @@ interface SystemActivity {
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, SubscriptionPlansComponent]
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent]
 })
 export class ProfilePageComponent implements OnInit {
   user: User | undefined;

@@ -9,12 +9,18 @@
         </a>
       </div>
 
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex space-x-8">
+        <a href="/about" class="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 text-sm font-medium">About</a>
+        <a href="/support" class="text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-neutral-100 text-sm font-medium">Contact Support</a>
+      </nav>
+
       <!-- Mobile menu button -->
       <div class="-mr-2 -my-2 md:hidden">
         <button
           (click)="toggleMobileMenu()"
           type="button"
-          class="outline-none bg-neutral-100 rounded-md p-2 inline-flex items-center justify-center text-neutral-900 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-300 bg-transparent dark:bg-transparent "
+          class="outline-none bg-neutral-100 rounded-md p-2 inline-flex items-center justify-center text-neutral-900 hover:text-neutral-800 dark:text-neutral-200 dark:hover:text-neutral-300 bg-transparent dark:bg-transparent"
         >
           <span class="sr-only">Open menu</span>
           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -23,23 +29,28 @@
         </button>
       </div>
 
-
       <!-- Auth Buttons and Dark Mode Toggle -->
       <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-4">
         <!-- Dark Mode Toggle -->
-
         <app-darkmode-toggler></app-darkmode-toggler>
 
         <!-- Profile & Avatar Button -->
         <div class="profile-avatar">
-          <a href="/profile" class="flex items-center space-x-2">
-            <img src="/placeholder.svg?height=32&width=32" alt="User Avatar" class="w-8 h-8 rounded-full">
-            <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">Profile</span>
+          <a
+            href="/auth"
+            class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-neutral-100 hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-neutral-100 dark:text-neutral-900  duration-200"
+          >
+            Sign up
           </a>
         </div>
 
         <!-- This is sign up button -->
         <!--
+        <a href="/profile" class="flex items-center space-x-2">
+            <img src="/placeholder.svg?height=32&width=32" alt="User Avatar" class="w-8 h-8 rounded-full">
+            <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">Profile</span>
+          </a>
+
         <a
           href="/auth"
           class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-neutral-100 hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-neutral-100 dark:text-neutral-900  duration-200"
@@ -47,11 +58,12 @@
           Sign up
         </a>
         -->
+
       </div>
     </div>
   </div>
 
-  <!-- Mobile menu, show/hide based on mobile menu state -->
+  <!-- Mobile menu -->
   <div
     *ngIf="isMenuOpen"
     class="absolute top-full inset-x-0 p-2 transition transform origin-top-right md:hidden"
@@ -59,21 +71,32 @@
     <div class="rounded-lg shadow-lg ring-1 ring-neutral-900 ring-opacity-5 bg-neutral-100 dark:bg-neutral-900 divide-y-2 divide-neutral-50 dark:divide-neutral-700">
       <div class="pt-5 pb-6 px-5">
         <div class="flex flex-row items-center justify-between">
-
           <p class="text-2xl font-bold text-neutral-900 dark:text-neutral-100">
             Join us in eJibi.
           </p>
           <app-darkmode-toggler></app-darkmode-toggler>
         </div>
         <div class="mt-6 space-y-4">
+          <!-- Navigation Links (Mobile) -->
+          <a
+          href="/about"
+          class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-medium text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 duration-200"
+          >
+          About
+          </a>
+          <a
+          href="/support"
+          class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-medium text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 duration-200"
+          >
+          Contact Support
+          </a>
 
           <!-- Profile & Avatar Button (Mobile) -->
           <a
-            href="/profile"
-            class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-medium text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 duration-200"
+            href="/auth"
+            class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-bold border border-neutral-900 dark:border-neutral-100 hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-neutral-100 dark:text-neutral-900  duration-200"
           >
-            <img src="/placeholder.svg?height=24&width=24" alt="User Avatar" class="w-6 h-6 rounded-full mr-2">
-            Profile
+            Sign up
           </a>
 
           <!-- This is sign up button (Mobile) -->
@@ -84,6 +107,14 @@
           >
             Sign up
           </a>
+
+          <a
+          href="/profile"
+          class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-medium text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 duration-200"
+          >
+          <img src="/placeholder.svg?height=24&width=24" alt="User Avatar" class="w-6 h-6 rounded-full mr-2">
+          Profile
+          </a>
           -->
         </div>
       </div>
@@ -91,3 +122,23 @@
   </div>
 </header>
 
+
+<!-- This is sign up button -->
+<!--
+<a
+  href="/auth"
+  class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-neutral-100 hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-neutral-100 dark:text-neutral-900  duration-200"
+>
+  Sign up
+</a>
+-->
+
+<!-- This is sign up button (Mobile) -->
+<!--
+<a
+  href="/auth"
+  class="w-full flex items-center justify-center px-4 py-2 rounded-md shadow-sm text-sm font-bold border border-neutral-900 dark:border-neutral-100 hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-neutral-100 dark:text-neutral-900  duration-200"
+>
+  Sign up
+</a>
+-->

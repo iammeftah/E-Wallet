@@ -117,16 +117,17 @@
 
           <!-- Subscription Plans -->
           <div *ngIf="isClient(user)" class="bg-white dark:bg-neutral-800 rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8" data-aos="fade-up" data-aos-delay="300">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-center mb-6">
               <h2 class="text-xl sm:text-2xl font-bold text-neutral-800 dark:text-neutral-200">Subscription Plan</h2>
-              <button (click)="toggleSubscriptionPlans()" class="text-neutral-900 dark:text-neutral-100 hover:underline">
-                {{ showSubscriptionPlans ? 'Hide Plans' : 'View Plans' }}
-              </button>
             </div>
-            <p class="text-neutral-600 dark:text-neutral-400 mb-4">
-              Current Plan: <span class="font-semibold">{{ user.clientType }}</span>
-            </p>
-            <app-subscription-plans *ngIf="showSubscriptionPlans" (planChange)="handlePlanChange($event)"></app-subscription-plans>
+
+            <div class="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-6 text-center">
+              <p class="text-neutral-600 dark:text-neutral-400 text-lg mb-2">Current Plan</p>
+              <h3 class="text-3xl font-bold text-neutral-800 dark:text-neutral-200 mb-2">{{ user.clientType }}</h3>
+              <div class="inline-block bg-neutral-200 dark:bg-neutral-600 px-4 py-2 rounded-full">
+                <span class="text-neutral-700 dark:text-neutral-300">Active</span>
+              </div>
+            </div>
           </div>
 
           <!-- Agent Specific Details -->

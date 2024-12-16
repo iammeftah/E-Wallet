@@ -30,6 +30,8 @@ import { DonationComponent } from './components/client-space-components/donation
 import {
   NewSubscriptionComponent
 } from './components/client-space-components/new-subscription/new-subscription.component';
+import {ContactSupportPageComponent} from './pages/contact-support-page/contact-support-page.component';
+import {AboutPageComponent} from './pages/about-page/about-page.component';
 
 
 const routes: Routes = [
@@ -86,6 +88,8 @@ const routes: Routes = [
       { path: '', redirectTo: 'portfolio', pathMatch: 'full' },
     ],
   },
+  { path: 'contact-support', component: ContactSupportPageComponent },
+  { path: 'about', component: AboutPageComponent },
   { path: '*', component: NotFoundPageComponent },
 ];
 

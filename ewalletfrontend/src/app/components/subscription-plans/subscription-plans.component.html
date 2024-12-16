@@ -1,23 +1,23 @@
 <h2 class="text-2xl font-bold mb-6 text-neutral-800 dark:text-neutral-200">Subscription Plans</h2>
 
-<div class="bg-white dark:bg-neutral-800 rounded-lg p-6">
+<div class="bg-white dark:bg-neutral-900 rounded-lg p-6">
   <div class="flex justify-center mb-6">
     <button
       [class.bg-neutral-300]="selectedPlan === 'monthly'"
-      [class.dark:bg-neutral-600]="selectedPlan === 'monthly'"
+      [class.dark:bg-neutral-800]="selectedPlan === 'monthly'"
       [class.text-neutral-600]="selectedPlan === 'monthly'"
       [class.bg-white]="selectedPlan !== 'monthly'"
-      [class.dark:bg-neutral-800]="selectedPlan !== 'monthly'"
+      [class.dark:bg-neutral-600]="selectedPlan !== 'monthly'"
       (click)="selectedPlan = 'monthly'"
       class="px-4 py-1 rounded-l-lg border border-neutral-300 dark:border-neutral-600 text-neutral-800 dark:text-neutral-200 transition-colors">
       Monthly
     </button>
     <button
       [class.bg-neutral-300]="selectedPlan === 'annually'"
-      [class.dark:bg-neutral-600]="selectedPlan === 'annually'"
+      [class.dark:bg-neutral-800]="selectedPlan === 'annually'"
       [class.text-neutral-600]="selectedPlan === 'annually'"
       [class.bg-white]="selectedPlan !== 'annually'"
-      [class.dark:bg-neutral-800]="selectedPlan !== 'annually'"
+      [class.dark:bg-neutral-600]="selectedPlan !== 'annually'"
       (click)="selectedPlan = 'annually'"
       class="px-4 py-1 rounded-r-lg border border-neutral-300 dark:border-neutral-600 text-neutral-800 dark:text-neutral-200 transition-colors">
       Annually
@@ -26,7 +26,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <div *ngFor="let plan of plans"
-         class="border dark:border-neutral-700 rounded-3xl p-6 flex flex-col bg-white dark:bg-neutral-800 min-h-[600px]">
+         class="border dark:border-neutral-700 rounded-3xl p-6 flex flex-col bg-white dark:bg-neutral-900 min-h-[600px]">
       <h3 class="text-3xl font-bold mb-2 text-neutral-800 dark:text-neutral-200 text-center">{{ plan.name }}</h3>
       <p class="text-neutral-600 dark:text-neutral-400 mb-4 text-center">{{ plan.description }}</p>
 
