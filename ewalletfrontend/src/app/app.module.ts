@@ -25,6 +25,15 @@ import { AgencyPageComponent } from './pages/agency-page/agency-page.component';
 import { AgencyHistoryComponent } from './components/agency-components/agency-history/agency-history.component';
 import { AgencySidebarComponent } from './components/agency-components/agency-sidebar/agency-sidebar.component';
 import { ClientRegistrationRequestsComponent } from './components/agency-components/client-registration-requests/client-registration-requests.component';
+import { ClientSpacePageComponent } from './pages/client-space-page/client-space-page.component';
+import { BillsComponent } from './components/client-space-components/bills/bills.component';
+import { ClientSpaceSidebarComponent } from './components/client-space-components/client-space-sidebar/client-space-sidebar.component';
+import { MerchantPartnersComponent } from './components/client-space-components/merchant-partners/merchant-partners.component';
+import { PortfolioComponent } from './components/client-space-components/portfolio/portfolio.component';
+import { RecurringPaymentsComponent } from './components/client-space-components/recurring-payments/recurring-payments.component';
+import { SendMoneyComponent } from './components/client-space-components/send-money/send-money.component';
+import { DonationComponent } from './components/client-space-components/donation/donation.component';
+import { NewSubscriptionComponent } from './components/client-space-components/new-subscription/new-subscription.component';
 
 
 
@@ -34,6 +43,9 @@ import { ClientRegistrationRequestsComponent } from './components/agency-compone
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+
+
+
 
 
 
@@ -64,6 +76,15 @@ import { ClientRegistrationRequestsComponent } from './components/agency-compone
     AgencySidebarComponent,
     ClientRegistrationRequestsComponent,
     AgencyHistoryComponent,
+    BillsComponent,
+    MerchantPartnersComponent,
+    PortfolioComponent,
+    ClientSpaceSidebarComponent,
+    RecurringPaymentsComponent,
+    SendMoneyComponent,
+    ClientSpacePageComponent,
+    DonationComponent,
+    NewSubscriptionComponent,
 
 
   ],

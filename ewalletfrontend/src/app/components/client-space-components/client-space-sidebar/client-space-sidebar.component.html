@@ -1,0 +1,23 @@
+<aside class="bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 h-full w-64 overflow-y-auto border-r border-neutral-200 dark:border-neutral-700">
+  <nav class="p-4">
+    <h1 class="text-2xl font-bold text-start mb-7">Client Space</h1>
+    <ng-container *ngFor="let section of menuItems">
+      <div class="mb-6">
+        <h2 class="font-serif text-lg text-neutral-700 dark:text-neutral-300 border-b border-neutral-200 dark:border-neutral-700 pb-2 mb-3">
+          {{ section.title }}
+        </h2>
+        <ul class="space-y-2">
+          <li *ngFor="let item of section.items">
+            <a [routerLink]="['/client-space', item.view]"
+               routerLinkActive="bg-neutral-200 dark:bg-neutral-700"
+               [routerLinkActiveOptions]="{exact: true}"
+               class="block px-4 py-2 rounded text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer">
+              {{ item.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </ng-container>
+  </nav>
+</aside>
+

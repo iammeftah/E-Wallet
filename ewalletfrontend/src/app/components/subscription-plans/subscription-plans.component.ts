@@ -27,7 +27,10 @@ export class SubscriptionPlansComponent {
       features: [
         'Free ATM withdrawals',
         'Online banking',
-        'Mobile app access'
+        'Mobile app access',
+        'Basic customer support',
+        'Monthly account statement',
+        'Debit card included'
       ]
     },
     {
@@ -37,7 +40,11 @@ export class SubscriptionPlansComponent {
       features: [
         'All HSSAB1 features',
         'Overdraft protection',
-        'Higher daily transaction limits'
+        'Higher daily transaction limits',
+        'Cashback on debit card purchases',
+        'Free foreign currency exchanges',
+        'Priority customer support',
+        'Quarterly investment newsletter'
       ]
     },
     {
@@ -48,7 +55,12 @@ export class SubscriptionPlansComponent {
         'All HSSAB2 features',
         'Priority customer service',
         'Travel insurance',
-        'Exclusive rewards program'
+        'Exclusive rewards program',
+        'Unlimited free international transfers',
+        'Personalized financial advice',
+        'Concierge services',
+        'Access to exclusive events',
+        'Premium metal card'
       ]
     }
   ];
@@ -60,3 +72,4 @@ export class SubscriptionPlansComponent {
     this.planChange.emit(plan.name);
   }
 }
+

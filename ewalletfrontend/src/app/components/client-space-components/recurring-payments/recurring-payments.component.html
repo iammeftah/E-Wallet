@@ -1,0 +1,42 @@
+<div class="bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+  <h1 class="text-2xl font-bold mb-6">Paiment recurrents</h1>
+
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+      <tr class="border-b border-neutral-200 dark:border-neutral-700">
+        <th class="text-left py-3 px-4 text-neutral-700 dark:text-neutral-300">Service</th>
+        <th class="text-left py-3 px-4 text-neutral-700 dark:text-neutral-300">Amount</th>
+        <th class="text-left py-3 px-4 text-neutral-700 dark:text-neutral-300">Frequency</th>
+        <th class="text-left py-3 px-4 text-neutral-700 dark:text-neutral-300">Next Payment</th>
+        <th class="text-left py-3 px-4 text-neutral-700 dark:text-neutral-300">Status</th>
+        <th class="text-right py-3 px-4 text-neutral-700 dark:text-neutral-300">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let payment of payments"
+          class="border-b border-neutral-200 dark:border-neutral-700">
+        <td class="py-4 px-4 text-neutral-700 dark:text-neutral-300">{{ payment.service }}</td>
+        <td class="py-4 px-4 text-neutral-700 dark:text-neutral-300">${{ payment.amount.toFixed(2) }}</td>
+        <td class="py-4 px-4 text-neutral-700 dark:text-neutral-300">{{ payment.frequency }}</td>
+        <td class="py-4 px-4 text-neutral-700 dark:text-neutral-300">{{ payment.nextPayment }}</td>
+        <td class="py-4 px-4">
+            <span [class]="payment.status === 'Active' ? 'text-green-500' : 'text-yellow-500'">
+              {{ payment.status }}
+            </span>
+        </td>
+        <td class="py-4 px-4 text-right">
+          <button (click)="togglePaymentStatus(payment)"
+                  [class]="payment.status === 'Active'
+                      ? 'primary-button !border-none !bg-yellow-600 !hover:bg-yellow-700'
+                      : 'primary-button !border-none !bg-green-600 !hover:bg-green-700'"
+                  class="max-w-24">
+            {{ payment.status === 'Active' ? 'Pause' : 'Resume' }}
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

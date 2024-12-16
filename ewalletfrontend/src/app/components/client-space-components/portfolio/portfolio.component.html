@@ -1,0 +1,63 @@
+<div class="space-y-6">
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">E-Wallet</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Balance Card -->
+      <!-- Ghadi ndiro hna wahd service li kayjib les infos mn chi site , w ki 7wel lina dolar l drhem l euro l ga3 l currencies -->
+      <!-- w fach nbghiw nkhalso , ghadi ykhas nchofo l currency , dyalna , w n7wloha , ndiro na9is , apres nrj3o , hadchi ghaydar ghi implicitement -->
+      <div class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-6">
+        <h3 class="text-neutral-600 dark:text-neutral-400 mb-2">Balance</h3>
+        <p class="text-3xl font-bold text-neutral-900 dark:text-white">${{ balance.toFixed(2) }}</p>
+      </div>
+
+      <!-- Last Transaction Card -->
+      <div class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-6">
+        <h3 class="text-neutral-600 dark:text-neutral-400 mb-2">Last Transaction</h3>
+        <p class="text-xl"
+           [ngClass]="{
+       'text-red-500 dark:text-red-400': lastTransaction.amount < 0,
+       'text-green-500 dark:text-green-400': lastTransaction.amount >= 0
+     }">
+          <span class="font-bold">
+            {{ lastTransaction.amount < 0 ? '-$' : '$' }}{{ Math.abs(lastTransaction.amount).toFixed(2) }}
+          </span>
+          <span class="text-sm">
+            {{ lastTransaction.date | date:'d MMMM yyyy' }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6">
+    <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-4">Recent Transactions</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+        <tr class="text-neutral-600 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-700">
+          <th class="text-left py-3 px-4">DATE</th>
+          <th class="text-left py-3 px-4">DESCRIPTION</th>
+          <th class="text-right py-3 px-4">AMOUNT</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let transaction of recentTransactions"
+            class="border-b border-neutral-200 dark:border-neutral-700">
+          <td class="py-3 px-4 text-neutral-800 dark:text-neutral-300">{{ transaction.date | date:'d MMMM yyyy' }}</td>
+          <td class="py-3 px-4 text-neutral-800 dark:text-neutral-300">{{ transaction.description }}</td>
+          <td class="py-3 px-4 text-right"
+              [ngClass]="{
+                  'text-red-500 dark:text-red-400': transaction.amount < 0,
+                  'text-green-500 dark:text-green-400': transaction.amount >= 0
+                }">
+            ${{ transaction.amount.toFixed(2) }}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
