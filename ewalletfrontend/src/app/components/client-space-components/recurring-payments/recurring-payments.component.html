@@ -28,8 +28,8 @@
         <td class="py-4 px-4 text-right">
           <button (click)="togglePaymentStatus(payment)"
                   [class]="payment.status === 'Active'
-                      ? 'primary-button !border-none !bg-yellow-600 !hover:bg-yellow-700'
-                      : 'primary-button !border-none !bg-green-600 !hover:bg-green-700'"
+                      ? 'primary-button !border-transparent !bg-yellow-600 !hover:bg-yellow-700'
+                      : 'primary-button !border-transparent !bg-green-600 !hover:bg-green-700'"
                   class="max-w-24">
             {{ payment.status === 'Active' ? 'Pause' : 'Resume' }}
           </button>

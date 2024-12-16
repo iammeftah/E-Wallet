@@ -26,6 +26,15 @@ export class SendMoneyComponent {
     { firstName: 'Alice', lastName: 'Johnson', avatar: 'https://i.pravatar.cc/150?img=1' },
     { firstName: 'Bob', lastName: 'Smith', avatar: 'https://i.pravatar.cc/150?img=2' },
     { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=3' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=4' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=5' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=6' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=7' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=8' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=9' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=10' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=11' },
+    { firstName: 'Carol', lastName: 'Williams', avatar: 'https://i.pravatar.cc/150?img=12' },
   ];
 
   sendMoney() {

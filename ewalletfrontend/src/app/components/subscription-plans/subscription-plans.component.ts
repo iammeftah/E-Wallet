@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 interface Plan {
   name: 'HSSAB1' | 'HSSAB2' | 'HSSAB3';
   description: string;
-  price: number;
+  monthlyPrice: number;
   features: string[];
 }
 
@@ -23,7 +23,7 @@ export class SubscriptionPlansComponent {
     {
       name: 'HSSAB1',
       description: 'Basic account for everyday banking',
-      price: 5,
+      monthlyPrice: 5,
       features: [
         'Free ATM withdrawals',
         'Online banking',
@@ -36,7 +36,7 @@ export class SubscriptionPlansComponent {
     {
       name: 'HSSAB2',
       description: 'Enhanced account with additional benefits',
-      price: 10,
+      monthlyPrice: 10,
       features: [
         'All HSSAB1 features',
         'Overdraft protection',
@@ -50,7 +50,7 @@ export class SubscriptionPlansComponent {
     {
       name: 'HSSAB3',
       description: 'Premium account for maximum benefits',
-      price: 20,
+      monthlyPrice: 20,
       features: [
         'All HSSAB2 features',
         'Priority customer service',
@@ -67,9 +67,23 @@ export class SubscriptionPlansComponent {
 
   selectedPlan: 'monthly' | 'annually' = 'monthly';
 
+  getPrice(plan: Plan): number {
+    if (this.selectedPlan === 'monthly') {
+      return plan.monthlyPrice;
+    } else {
+      // Annual price = (monthly_price * 0.9) * 12
+      return Math.round((plan.monthlyPrice * 0.9) * 12);
+    }
+  }
+
+  getSavings(plan: Plan): number {
+    const regularAnnualPrice = plan.monthlyPrice * 12;
+    const discountedAnnualPrice = this.getPrice(plan);
+    return regularAnnualPrice - discountedAnnualPrice;
+  }
+
   selectPlan(plan: Plan) {
     this.planSelected.emit(plan);
     this.planChange.emit(plan.name);
   }
 }
-

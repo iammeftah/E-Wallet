@@ -1,93 +1,96 @@
-<div class="bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm w-1/2">
-  <h2 class="text-2xl font-bold mb-6">Send Money</h2>
+<div class="flex gap-6 w-full">
+  <!-- Left side - Send Money Form -->
+  <div class="flex-1 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm p-6">
+    <h2 class="text-2xl font-bold mb-6">Send Money</h2>
 
-  <div class="mb-8">
+    <form (ngSubmit)="sendMoney()" class="space-y-6">
+      <div class="flex space-x-4">
+        <div class="flex-1">
+          <label for="receiverFirstName" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Recipient First Name
+          </label>
+          <input type="text"
+                 id="receiverFirstName"
+                 [(ngModel)]="receiverFirstName"
+                 name="receiverFirstName"
+                 required
+                 class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex-1">
+          <label for="receiverLastName" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Recipient Last Name
+          </label>
+          <input type="text"
+                 id="receiverLastName"
+                 [(ngModel)]="receiverLastName"
+                 name="receiverLastName"
+                 required
+                 class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+
+      <div class="flex space-x-4">
+        <div class="flex-1">
+          <label for="amount" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Amount
+          </label>
+          <input type="number"
+                 id="amount"
+                 [(ngModel)]="amount"
+                 name="amount"
+                 required
+                 class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label for="currency" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Currency
+          </label>
+          <select id="currency"
+                  [(ngModel)]="selectedCurrency"
+                  name="currency"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label for="note" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          Note (Optional)
+        </label>
+        <textarea id="note"
+                  [(ngModel)]="note"
+                  name="note"
+                  rows="3"
+                  class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+
+      <div class="flex justify-end items-center w-full">
+        <div class="max-w-64 flex flex-row gap-4">
+          <button type="button"
+                  (click)="clearForm()"
+                  class="secondary-button">
+            Clear
+          </button>
+          <button type="submit"
+                  class="primary-button">
+            Send Money
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right side - Recent Recipients -->
+  <div class="w-80 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm p-6">
     <h3 class="text-lg font-semibold mb-4">Recent Recipients</h3>
-    <div class="flex space-x-4 overflow-x-auto pb-2">
+    <div class="grid grid-cols-2 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto">
       <button *ngFor="let recipient of recentRecipients"
               (click)="selectRecipient(recipient)"
               class="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
         <img [src]="recipient.avatar" [alt]="recipient.firstName + ' ' + recipient.lastName" class="w-12 h-12 rounded-full">
-        <span class="text-sm">{{ recipient.firstName }} {{ recipient.lastName }}</span>
+        <span class="text-sm text-center break-words w-full">{{ recipient.firstName }} {{ recipient.lastName }}</span>
       </button>
     </div>
   </div>
-
-  <form (ngSubmit)="sendMoney()" class="space-y-6">
-    <div class="flex space-x-4">
-      <div class="flex-1">
-        <label for="receiverFirstName" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Recipient First Name
-        </label>
-        <input type="text"
-               id="receiverFirstName"
-               [(ngModel)]="receiverFirstName"
-               name="receiverFirstName"
-               required
-               class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-      <div class="flex-1">
-        <label for="receiverLastName" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Recipient Last Name
-        </label>
-        <input type="text"
-               id="receiverLastName"
-               [(ngModel)]="receiverLastName"
-               name="receiverLastName"
-               required
-               class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-    </div>
-
-    <div class="flex space-x-4">
-      <div class="flex-1">
-        <label for="amount" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Amount
-        </label>
-        <input type="number"
-               id="amount"
-               [(ngModel)]="amount"
-               name="amount"
-               required
-               class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-      </div>
-      <div>
-        <label for="currency" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Currency
-        </label>
-        <select id="currency"
-                [(ngModel)]="selectedCurrency"
-                name="currency"
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
-        </select>
-      </div>
-    </div>
-
-    <div>
-      <label for="note" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-        Note (Optional)
-      </label>
-      <textarea id="note"
-                [(ngModel)]="note"
-                name="note"
-                rows="3"
-                class="w-full px-3 py-2 bg-white dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-600 rounded-lg text-neutral-900 dark:text-neutral-100 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-    </div>
-
-    <div class="flex justify-end items-center w-full">
-      <div class="max-w-64 flex flex-row gap-4">
-        <button type="button"
-                (click)="clearForm()"
-                class="secondary-button">
-          Clear
-        </button>
-        <button type="submit"
-                class="primary-button">
-          Send Money
-        </button>
-      </div>
-    </div>
-  </form>
 </div>
-
