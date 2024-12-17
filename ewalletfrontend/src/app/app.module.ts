@@ -36,6 +36,8 @@ import { DonationComponent } from './components/client-space-components/donation
 import { NewSubscriptionComponent } from './components/client-space-components/new-subscription/new-subscription.component';
 import { AboutPageComponent } from './pages/about-page/about-page.component';
 import { ContactSupportPageComponent } from './pages/contact-support-page/contact-support-page.component';
+import { RequestVirtualCardComponent } from './components/request-virtual-card/request-virtual-card.component';
+
 
 
 
@@ -45,8 +47,9 @@ import { ContactSupportPageComponent } from './pages/contact-support-page/contac
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
-    AboutPageComponent,
-    ContactSupportPageComponent,
+
+
+
 
 
 
@@ -89,6 +92,9 @@ import { ContactSupportPageComponent } from './pages/contact-support-page/contac
     ClientSpacePageComponent,
     DonationComponent,
     NewSubscriptionComponent,
+    AboutPageComponent,
+    ContactSupportPageComponent,
+    RequestVirtualCardComponent,
 
 
   ],

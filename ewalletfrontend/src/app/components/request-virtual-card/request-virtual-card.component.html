@@ -1,0 +1,65 @@
+<div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+  <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-6">Request a Virtual Card</h2>
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- Left side - Form -->
+    <div class="w-full md:w-1/2">
+      <form (ngSubmit)="onSubmit()" #cardForm="ngForm" class="space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Full Name</label>
+          <input type="text" id="name" name="name" [(ngModel)]="cardRequest.name" required
+                 class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+                 placeholder="Full name"
+          >
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="cardRequest.email" required
+                 class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+                  placeholder="Email">
+        </div>
+        <div>
+          <label for="initialBalance" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Initial Balance</label>
+          <input type="number" id="initialBalance" name="initialBalance" [(ngModel)]="cardRequest.initialBalance" required
+                 class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+      placeholder="Initial balance">
+        </div>
+        <button type="submit" [disabled]="!cardForm.form.valid || !selectedCard"
+                class="primary-button disabled:opacity-50">
+          Request Virtual Card
+        </button>
+      </form>
+    </div>
+
+    <!-- Right side - Card Type Selection -->
+    <div class="w-full md:w-1/2">
+      <h3 class="text-lg font-semibold mb-4 text-neutral-900 dark:text-neutral-100">Select Card Type</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div *ngFor="let type of cardTypes"
+             (click)="selectCard(type)"
+             class="relative aspect-video bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-xl p-6 text-white shadow-lg overflow-hidden cursor-pointer transition-transform duration-200 ease-in-out transform hover:scale-[102%]"
+             [ngClass]="{'ring-2 ring-neutral-500': selectedCard?.id === type.id}">
+          <div class="absolute top-4 right-4">
+            <img [src]="type.image" [alt]="type.name" class="w-12 h-8 object-contain">
+          </div>
+          <div class="flex flex-col justify-between h-full">
+            <div class="mb-4">
+              <p class="text-lg font-mono">XXXX XXXX XXXX XXXX</p>
+            </div>
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-xs uppercase">Card Holder</p>
+                <p class="font-semibold">YOUR NAME</p>
+              </div>
+              <div>
+                <p class="text-xs uppercase">Expires</p>
+                <p class="font-semibold">MM/YY</p>
+              </div>
+            </div>
+            <p class="text-sm font-medium mt-2">{{ type.name }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

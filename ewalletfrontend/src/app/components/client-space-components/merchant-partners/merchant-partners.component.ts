@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface MerchantPartner {
   name: string;
@@ -11,7 +12,7 @@ interface MerchantPartner {
 @Component({
   selector: 'app-merchant-partners',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './merchant-partners.component.html'
 })
 export class MerchantPartnersComponent {
@@ -36,8 +37,24 @@ export class MerchantPartnersComponent {
     }
   ];
 
+  selectedMerchant: MerchantPartner | null = null;
+  serieNumber: string = '';
+
+  openModal(merchant: MerchantPartner) {
+    this.selectedMerchant = merchant;
+  }
+
+  closeModal() {
+    this.selectedMerchant = null;
+    this.serieNumber = '';
+  }
+
+  scanQRCode() {
+    console.log('Scanning QR Code');
+    // Implement QR code scanning logic here
+  }
+
   viewOffers(merchant: string) {
     console.log(`Viewing offers for ${merchant}`);
   }
 }
-

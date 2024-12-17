@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClientSpaceSidebarComponent } from '../../components/client-space-components/client-space-sidebar/client-space-sidebar.component';
-import {HeaderComponent} from '../../components/layout/header/header.component';
+import { HeaderComponent } from '../../components/layout/header/header.component';
+
 
 
 @Component({

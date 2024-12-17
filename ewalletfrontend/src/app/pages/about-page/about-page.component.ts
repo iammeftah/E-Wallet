@@ -1,12 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {HeaderComponent} from '../../components/layout/header/header.component';
 
 @Component({
   selector: 'app-about-page',
-  standalone: false,
-  
   templateUrl: './about-page.component.html',
-  styleUrl: './about-page.component.css'
+  imports: [
+    HeaderComponent
+  ],
+  styleUrls: ['./about-page.component.css']
 })
-export class AboutPageComponent {
+export class AboutPageComponent implements OnInit {
+  teamMembers = [
+    { name: 'John Doe', position: 'CEO & Founder', image: 'assets/images/team-member-1.jpg' },
+    { name: 'Jane Smith', position: 'CTO', image: 'assets/images/team-member-2.jpg' },
+    { name: 'Mike Johnson', position: 'Head of Security', image: 'assets/images/team-member-3.jpg' }
+  ];
 
+  constructor() { }
+
+  ngOnInit(): void {
+    // Initialize any necessary data or perform any setup tasks
+  }
 }

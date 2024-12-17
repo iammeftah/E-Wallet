@@ -1,6 +1,6 @@
 <div class="flex gap-6 w-full">
   <!-- Left side - Send Money Form -->
-  <div class="flex-1 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm p-6">
+  <div class="w-2/3 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm">
     <h2 class="text-2xl font-bold mb-6">Send Money</h2>
 
     <form (ngSubmit)="sendMoney()" class="space-y-6">
@@ -82,15 +82,22 @@
   </div>
 
   <!-- Right side - Recent Recipients -->
-  <div class="w-80 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm p-6">
+  <div class="w-1/3 bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-sm p-4">
     <h3 class="text-lg font-semibold mb-4">Recent Recipients</h3>
-    <div class="grid grid-cols-2 gap-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-      <button *ngFor="let recipient of recentRecipients"
-              (click)="selectRecipient(recipient)"
-              class="flex flex-col items-center space-y-2 p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors">
-        <img [src]="recipient.avatar" [alt]="recipient.firstName + ' ' + recipient.lastName" class="w-12 h-12 rounded-full">
-        <span class="text-sm text-center break-words w-full">{{ recipient.firstName }} {{ recipient.lastName }}</span>
-      </button>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-[calc(100vh-200px)] overflow-y-auto p-2">
+      <div *ngFor="let recipient of recentRecipients" class="flex justify-center py-2">
+        <button (click)="selectRecipient(recipient)"
+                class="flex flex-col items-center justify-center w-full max-w-[80px] aspect-square rounded-full transition-colors group">
+          <img [src]="recipient.avatar" [alt]="recipient.firstName + ' ' + recipient.lastName"
+               class="w-16 h-16 rounded-full mb-1 group-hover:scale-105 transition-transform duration-200">
+          <span class="text-md text-center leading-tight overflow-hidden w-full px-1">
+          {{ recipient.firstName }} {{ recipient.lastName }}
+        </span>
+        </button>
+      </div>
     </div>
   </div>
+
+
 </div>
+

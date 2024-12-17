@@ -32,6 +32,7 @@ import {
 } from './components/client-space-components/new-subscription/new-subscription.component';
 import {ContactSupportPageComponent} from './pages/contact-support-page/contact-support-page.component';
 import {AboutPageComponent} from './pages/about-page/about-page.component';
+import {RequestVirtualCardComponent} from './components/request-virtual-card/request-virtual-card.component';
 
 
 const routes: Routes = [
@@ -85,11 +86,13 @@ const routes: Routes = [
       { path: 'merchant-partners', component: MerchantPartnersComponent },
       { path: 'donation', component: DonationComponent },
       { path: 'new-subscription', component: NewSubscriptionComponent },
+      { path: 'request-virtual-card', component: RequestVirtualCardComponent },
       { path: '', redirectTo: 'portfolio', pathMatch: 'full' },
     ],
   },
   { path: 'contact-support', component: ContactSupportPageComponent },
   { path: 'about', component: AboutPageComponent },
+
   { path: '*', component: NotFoundPageComponent },
 ];
 

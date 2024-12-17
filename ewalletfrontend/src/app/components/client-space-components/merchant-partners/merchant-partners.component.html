@@ -21,12 +21,35 @@
         <span class="text-sm text-neutral-500 dark:text-neutral-400">
           Valid until {{ merchant.validUntil }}
         </span>
-        <button (click)="viewOffers(merchant.name)"
+        <button (click)="openModal(merchant)"
                 class="primary-button max-w-24">
           View Offers
         </button>
       </div>
     </div>
   </div>
-</div>
 
+  <!-- Modal -->
+  <div *ngIf="selectedMerchant" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-lg max-w-md w-full" data-aos="fade-in">
+      <h2 class="text-2xl font-bold mb-4">{{ selectedMerchant.name }} Offer</h2>
+      <div class="mb-4">
+        <label for="serieNumber" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+          Enter Serie Number
+        </label>
+        <input type="text" id="serieNumber" [(ngModel)]="serieNumber"
+               class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800">
+      </div>
+      <div class="mb-4">
+        <button (click)="scanQRCode()" class="secondary-button w-full">
+          Scan QR Code
+        </button>
+      </div>
+      <div class="flex justify-end">
+        <button (click)="closeModal()" class="primary-button">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

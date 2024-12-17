@@ -1,28 +1,22 @@
-<div class="space-y-6">
-  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6">
-    <h2 class="text-2xl font-bold text-neutral-900 dark:text-white mb-6">E-Wallet</h2>
+<div class="space-y-6 p-6 bg-neutral-100 dark:bg-neutral-900">
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+    <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-6">E-Wallet</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Balance Card -->
-      <!-- Ghadi ndiro hna wahd service li kayjib les infos mn chi site , w ki 7wel lina dolar l drhem l euro l ga3 l currencies -->
-      <!-- w fach nbghiw nkhalso , ghadi ykhas nchofo l currency , dyalna , w n7wloha , ndiro na9is , apres nrj3o , hadchi ghaydar ghi implicitement -->
       <div class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-6">
         <h3 class="text-neutral-600 dark:text-neutral-400 mb-2">Balance</h3>
-        <p class="text-3xl font-bold text-neutral-900 dark:text-white">${{ balance.toFixed(2) }}</p>
+        <p class="text-3xl font-bold text-neutral-900 dark:text-neutral-100">${{ balance.toFixed(2) }}</p>
       </div>
 
       <!-- Last Transaction Card -->
       <div class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-6">
         <h3 class="text-neutral-600 dark:text-neutral-400 mb-2">Last Transaction</h3>
-        <p class="text-xl"
-           [ngClass]="{
-       'text-red-500 dark:text-red-400': lastTransaction.amount < 0,
-       'text-green-500 dark:text-green-400': lastTransaction.amount >= 0
-     }">
+        <p class="text-xl" [ngClass]="{'text-red-500 dark:text-red-400': lastTransaction.amount < 0, 'text-green-500 dark:text-green-400': lastTransaction.amount >= 0}">
           <span class="font-bold">
             {{ lastTransaction.amount < 0 ? '-$' : '$' }}{{ Math.abs(lastTransaction.amount).toFixed(2) }}
           </span>
-          <span class="text-sm">
+          <span class="text-sm ml-2">
             {{ lastTransaction.date | date:'d MMMM yyyy' }}
           </span>
         </p>
@@ -31,8 +25,8 @@
   </div>
 
   <!-- Recent Transactions -->
-  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6">
-    <h3 class="text-xl font-semibold text-neutral-900 dark:text-white mb-4">Recent Transactions</h3>
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+    <h3 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Recent Transactions</h3>
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead>
@@ -43,15 +37,10 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let transaction of recentTransactions"
-            class="border-b border-neutral-200 dark:border-neutral-700">
+        <tr *ngFor="let transaction of recentTransactions" class="border-b border-neutral-200 dark:border-neutral-700">
           <td class="py-3 px-4 text-neutral-800 dark:text-neutral-300">{{ transaction.date | date:'d MMMM yyyy' }}</td>
           <td class="py-3 px-4 text-neutral-800 dark:text-neutral-300">{{ transaction.description }}</td>
-          <td class="py-3 px-4 text-right"
-              [ngClass]="{
-                  'text-red-500 dark:text-red-400': transaction.amount < 0,
-                  'text-green-500 dark:text-green-400': transaction.amount >= 0
-                }">
+          <td class="py-3 px-4 text-right" [ngClass]="{'text-red-500 dark:text-red-400': transaction.amount < 0, 'text-green-500 dark:text-green-400': transaction.amount >= 0}">
             ${{ transaction.amount.toFixed(2) }}
           </td>
         </tr>
@@ -59,5 +48,39 @@
       </table>
     </div>
   </div>
-</div>
 
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 shadow-md">
+    <div class="w-full flex flex-row items-center justify-between mb-6">
+      <h3 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Virtual Cards</h3>
+      <a href="client-space/request-virtual-card" class="primary-button max-w-32">Request new card</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div *ngFor="let card of virtualCards" class="aspect-video relative bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-xl p-6 text-white shadow-lg overflow-hidden">
+        <div class="absolute top-4 right-4">
+          <img [src]="getCardImage(card.type)" alt="Card type" class="w-12 h-8 object-contain">
+        </div>
+        <div class="flex flex-col justify-between h-full">
+          <div class="mb-4">
+            <p class="text-lg font-mono">{{ maskCardNumber(card.cardNumber) }}</p>
+          </div>
+          <div class="flex justify-between items-center mb-4">
+            <div>
+              <p class="text-xs uppercase">Card Holder</p>
+              <p class="font-semibold">{{ card.holderName }}</p>
+            </div>
+            <div>
+              <p class="text-xs uppercase">Expires</p>
+              <p class="font-semibold">{{ card.expiryDate }}</p>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <p class="text-lg font-bold">${{ card.balance.toFixed(2) }}</p>
+            <button (click)="toggleCVV(card)" class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded">
+              CVV: {{ card.cvvVisible ? card.cvv : '***' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

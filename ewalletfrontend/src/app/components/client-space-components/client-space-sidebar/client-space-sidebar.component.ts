@@ -42,6 +42,12 @@ export class ClientSpaceSidebarComponent {
       items: [
         { name: 'Merchant Partners', view: 'merchant-partners' }
       ]
+    },
+    {
+      title: 'Virtual Cards',
+      items: [
+        { name: 'Request Virtual Card', view: 'request-virtual-card' }
+      ]
     }
   ];
 }
