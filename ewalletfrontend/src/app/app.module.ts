@@ -37,6 +37,7 @@ import { NewSubscriptionComponent } from './components/client-space-components/n
 import { AboutPageComponent } from './pages/about-page/about-page.component';
 import { ContactSupportPageComponent } from './pages/contact-support-page/contact-support-page.component';
 import { RequestVirtualCardComponent } from './components/request-virtual-card/request-virtual-card.component';
+import { OtpVerificationComponent } from './components/elements/otp-verification/otp-verification.component';
 
 
 
@@ -47,6 +48,7 @@ import { RequestVirtualCardComponent } from './components/request-virtual-card/r
     HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
+
 
 
 
@@ -95,6 +97,7 @@ import { RequestVirtualCardComponent } from './components/request-virtual-card/r
     AboutPageComponent,
     ContactSupportPageComponent,
     RequestVirtualCardComponent,
+    OtpVerificationComponent,
 
 
   ],

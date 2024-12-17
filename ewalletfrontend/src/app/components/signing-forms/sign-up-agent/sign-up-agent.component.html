@@ -216,6 +216,12 @@
         Submit application
       </button>
     </div>
+    <app-otp-verification
+      *ngIf="showOtpVerification"
+      [phoneNumber]="phoneNumber"
+      (otpVerified)="onOtpVerified($event)"
+      (closeModal)="closeOtpModal()"
+    ></app-otp-verification>
   </form>
 </div>
 
