@@ -22,7 +22,7 @@
           Valid until {{ merchant.validUntil }}
         </span>
         <button (click)="openModal(merchant)"
-                class="primary-button max-w-24">
+                class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900 duration-200">
           View Offers
         </button>
       </div>
@@ -33,23 +33,72 @@
   <div *ngIf="selectedMerchant" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div class="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-lg max-w-md w-full" data-aos="fade-in">
       <h2 class="text-2xl font-bold mb-4">{{ selectedMerchant.name }} Offer</h2>
-      <div class="mb-4">
-        <label for="serieNumber" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-          Enter Serie Number
-        </label>
-        <input type="text" id="serieNumber" [(ngModel)]="serieNumber"
-               class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800">
+
+      <!-- Enter Code Step -->
+      <div *ngIf="currentStep === 'enterCode'">
+        <div class="mb-4">
+          <label for="serieNumber" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            Enter Serie Number
+          </label>
+          <input type="text" id="serieNumber" [(ngModel)]="serieNumber"
+                 class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800">
+        </div>
+        <div class="mb-4">
+          <button (click)="scanQRCode()" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 hover:border-neutral-800 dark:border-white dark:hover:border-neutral-200 bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200 w-full">
+            Scan QR Code
+          </button>
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button (click)="closeModal()" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 hover:border-neutral-800 dark:border-white dark:hover:border-neutral-200 bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200">
+            Close
+          </button>
+          <button (click)="nextStep()" [disabled]="!serieNumber" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900 duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Next
+          </button>
+        </div>
       </div>
-      <div class="mb-4">
-        <button (click)="scanQRCode()" class="secondary-button w-full">
-          Scan QR Code
-        </button>
+
+      <!-- Product Display Step -->
+      <div *ngIf="currentStep === 'productDisplay' && selectedProduct">
+        <div class="mb-4">
+          <img [src]="selectedProduct.image" [alt]="selectedProduct.name" class="w-full h-48 object-cover rounded-lg">
+        </div>
+        <h3 class="text-xl font-semibold mb-2">{{ selectedProduct.name }}</h3>
+        <p class="text-neutral-700 dark:text-neutral-300 mb-4">{{ selectedProduct.description }}</p>
+        <p class="text-lg font-bold mb-4">Price: ${{ selectedProduct.price.toFixed(2) }}</p>
+        <div class="flex justify-end space-x-4">
+          <button (click)="backStep()" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 hover:border-neutral-800 dark:border-white dark:hover:border-neutral-200 bg-transparent dark:hover:bg-neutral-800 text-neutral-900 hover:text-neutral-800 dark:text-white dark:hover:text-neutral-300 duration-200">
+            Back
+          </button>
+          <button (click)="payNow()" [disabled]="isLoading" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900 duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span *ngIf="!isLoading">Pay Now</span>
+            <span *ngIf="isLoading" class="flex items-center">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Processing...
+            </span>
+          </button>
+        </div>
       </div>
-      <div class="flex justify-end">
-        <button (click)="closeModal()" class="primary-button">
-          Close
-        </button>
+
+      <!-- Payment Complete Step -->
+      <div *ngIf="currentStep === 'paymentComplete'">
+        <div class="text-center mb-4">
+          <svg class="mx-auto h-12 w-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          <h3 class="mt-2 text-xl font-semibold text-neutral-900 dark:text-neutral-100">Payment Successful!</h3>
+          <p class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">Thank you for your purchase.</p>
+        </div>
+        <div class="flex justify-end">
+          <button (click)="closeModal()" class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900 duration-200">
+            Close
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+

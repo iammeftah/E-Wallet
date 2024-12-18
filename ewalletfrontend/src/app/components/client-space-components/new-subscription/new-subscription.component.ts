@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {LoaderComponent} from '../../elements/loader/loader.component';
+import { LoaderComponent } from '../../elements/loader/loader.component';
 
 interface Credit {
   id: number;
@@ -65,6 +65,56 @@ export class NewSubscriptionComponent {
         { id: 9, name: 'Max', price: 279, description: '70GB data, unlimited minutes, international SMS' },
       ]
     },
+    {
+      id: 4,
+      name: 'RADEEMA',
+      logo: 'https://www.mapexpress.ma/wp-content/uploads/2020/08/RADEEMA.jpg',
+      credits: [
+        { id: 10, name: 'Basic', price: 150, description: 'Up to 100 kWh, water included' },
+        { id: 11, name: 'Comfort', price: 250, description: 'Up to 200 kWh, water & waste management' },
+        { id: 12, name: 'Premium', price: 350, description: 'Unlimited kWh, all utilities included' },
+      ]
+    },
+    {
+      id: 5,
+      name: 'REDAL',
+      logo: '/api/placeholder/150/150',
+      credits: [
+        { id: 13, name: 'Essential', price: 120, description: 'Basic electricity and water package' },
+        { id: 14, name: 'Family', price: 220, description: 'Enhanced utilities package for families' },
+        { id: 15, name: 'Business', price: 420, description: 'Commercial utilities package' },
+      ]
+    },
+    {
+      id: 6,
+      name: 'LYDEC',
+      logo: 'https://seeklogo.com/images/L/lydec-logo-89838F3E68-seeklogo.com.png',
+      credits: [
+        { id: 16, name: 'Basic', price: 140, description: 'Standard utilities package' },
+        { id: 17, name: 'Plus', price: 240, description: 'Enhanced service with priority support' },
+        { id: 18, name: 'Premium', price: 340, description: 'Complete utilities management' },
+      ]
+    },
+    {
+      id: 7,
+      name: 'ADM',
+      logo: '/api/placeholder/150/150',
+      credits: [
+        { id: 19, name: 'TAG Basic', price: 100, description: 'Basic toll tag subscription' },
+        { id: 20, name: 'TAG Plus', price: 200, description: 'Enhanced toll coverage with discounts' },
+        { id: 21, name: 'TAG Fleet', price: 400, description: 'Business fleet toll management' },
+      ]
+    },
+    {
+      id: 8,
+      name: 'ONCF',
+      logo: 'https://seeklogo.com/images/O/oncf-logo-7B6DEB5007-seeklogo.com.png',
+      credits: [
+        { id: 22, name: 'ZEN', price: 150, description: 'Basic train travel card' },
+        { id: 23, name: 'ZEN Plus', price: 250, description: 'Premium train travel with lounge access' },
+        { id: 24, name: 'Business', price: 450, description: 'Unlimited first-class travel' },
+      ]
+    }
   ];
 
   selectedCreditor: Creditor | null = null;
@@ -72,6 +122,7 @@ export class NewSubscriptionComponent {
   currentStep: number = 1;
   isLoading: boolean = false;
 
+  // Rest of the component code remains the same...
   selectCreditor(creditor: Creditor) {
     this.selectedCreditor = creditor;
     this.selectedCredit = null;
