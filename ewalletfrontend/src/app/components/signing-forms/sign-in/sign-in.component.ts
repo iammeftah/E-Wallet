@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DOCUMENT } from '@angular/common';
+import { LoaderComponent } from '../../elements/loader/loader.component';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LoaderComponent],
   standalone: true,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -15,6 +16,7 @@ import { DOCUMENT } from '@angular/common';
 export class SignInComponent {
   signInForm: FormGroup;
   isDarkMode = false;
+  isLoading = false;
 
   constructor(private fb: FormBuilder, @Inject(DOCUMENT) private document: Document) {
     this.signInForm = this.fb.group({
@@ -41,9 +43,13 @@ export class SignInComponent {
 
   onSubmit() {
     if (this.signInForm.valid) {
-      console.log(this.signInForm.value);
-      // Handle form submission logic here
+      this.isLoading = true;
+      // Simulate API call
+      setTimeout(() => {
+        console.log(this.signInForm.value);
+        this.isLoading = false;
+        // Handle form submission logic here
+      }, 2000);
     }
   }
 }
-

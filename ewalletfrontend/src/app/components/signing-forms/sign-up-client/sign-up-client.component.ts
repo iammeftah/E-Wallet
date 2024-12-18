@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import {OtpVerificationComponent} from '../../elements/otp-verification/otp-verification.component';
+import {LoaderComponent} from '../../elements/loader/loader.component';
 
 
 @Component({
   selector: 'app-sign-up-client',
   templateUrl: './sign-up-client.component.html',
-  imports: [CommonModule, ReactiveFormsModule, OtpVerificationComponent],
+  imports: [CommonModule, ReactiveFormsModule, OtpVerificationComponent, LoaderComponent],
   standalone: true
 })
 export class SignUpClientComponent implements OnInit {

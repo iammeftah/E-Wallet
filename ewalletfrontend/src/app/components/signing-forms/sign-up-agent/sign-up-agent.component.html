@@ -210,7 +210,7 @@
       <button
         type="submit"
         *ngIf="currentStep === totalSteps"
-        [disabled]="!signUpForm.valid"
+        [disabled]="!signUpForm.valid || isLoading"
         class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700  bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900  duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Submit application
@@ -223,5 +223,7 @@
       (closeModal)="closeOtpModal()"
     ></app-otp-verification>
   </form>
+  <app-loader *ngIf="isLoading"></app-loader>
+
 </div>
 

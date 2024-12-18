@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import {OtpVerificationComponent} from '../../elements/otp-verification/otp-verification.component';
+import { LoaderComponent } from '../../elements/loader/loader.component';
 
 
 
 @Component({
   selector: 'app-sign-up-agent',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, OtpVerificationComponent],
+  imports: [CommonModule, ReactiveFormsModule, OtpVerificationComponent, LoaderComponent],
   templateUrl: './sign-up-agent.component.html',
   styleUrls: ['./sign-up-agent.component.css']
 })
@@ -26,6 +27,7 @@ export class SignUpAgentComponent implements OnInit {
 
   showOtpVerification = false;
   phoneNumber = '';
+  isLoading = false;
 
   constructor(private fb: FormBuilder) {
     this.signUpForm = this.fb.group({
@@ -71,9 +73,14 @@ export class SignUpAgentComponent implements OnInit {
 
   onSubmit() {
     if (this.signUpForm.valid) {
-      console.log(this.signUpForm.value);
-      this.phoneNumber = this.signUpForm.get('phone')?.value;
-      this.showOtpVerification = true;
+      this.isLoading = true;
+      // Simulate API call
+      setTimeout(() => {
+        console.log(this.signUpForm.value);
+        this.phoneNumber = this.signUpForm.get('phone')?.value;
+        this.showOtpVerification = true;
+        this.isLoading = false;
+      }, 2000);
     }
   }
 
