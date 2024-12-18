@@ -9,47 +9,19 @@
       </div>
     </div>
     <div class="w-full max-w-3xl">
-      <ng-container [ngSwitch]="currentView">
-        <!-- Sign In View -->
-        <ng-container *ngSwitchCase="'signin'">
-          <div class="p-8 rounded-lg w-full max-w-lg mx-auto">
-            <div class="text-center mb-8">
-              <h2 class="text-3xl font-bold text-neutral-900 dark:text-white">Sign In</h2>
-            </div>
-            <app-sign-in></app-sign-in>
-            <div class="mt-8 text-center text-sm text-neutral-600 dark:text-neutral-400">
-              <p>
-                Don't have an account?
-                <button (click)="switchView('signup-agent')" class="text-neutral-900 dark:text-white hover:underline cursor-pointer ml-2 font-medium">Sign up as Agent</button>
-                <span class="mx-2">|</span>
-                <button (click)="switchView('signup-client')" class="text-neutral-900 dark:text-white hover:underline cursor-pointer font-medium">Sign up as Client</button>
-              </p>
-            </div>
-          </div>
-        </ng-container>
-
-        <!-- Sign Up Agent View -->
-        <ng-container *ngSwitchCase="'signup-agent'">
-          <app-sign-up-agent></app-sign-up-agent>
-          <div class="mt-8 text-center text-sm">
-            <p class="text-neutral-900 dark:text-neutral-100">
-              Already have an account?
-              <button (click)="switchView('signin')" class="hover:underline cursor-pointer ml-2 font-medium">Sign In</button>
-            </p>
-          </div>
-        </ng-container>
-
-        <!-- Sign Up Client View -->
-        <ng-container *ngSwitchCase="'signup-client'">
-          <app-sign-up-client></app-sign-up-client>
-          <div class="mt-8 text-center text-sm">
-            <p class="text-neutral-900 dark:text-neutral-100">
-              Already have an account?
-              <button (click)="switchView('signin')" class="hover:underline cursor-pointer ml-2 font-medium">Sign In</button>
-            </p>
-          </div>
-        </ng-container>
-      </ng-container>
+      <router-outlet></router-outlet>
+      <div class="mt-8 text-center text-sm text-neutral-600 dark:text-neutral-400">
+        <p>
+          Don't have an account?
+          <button (click)="switchView('signup-agent')" class="text-neutral-900 dark:text-white hover:underline cursor-pointer ml-2 font-medium">Sign up as Agent</button>
+          <span class="mx-2">|</span>
+          <button (click)="switchView('signup-client')" class="text-neutral-900 dark:text-white hover:underline cursor-pointer font-medium">Sign up as Client</button>
+        </p>
+        <p>
+          Already have an account?
+          <button (click)="switchView('signin')" class="text-neutral-900 dark:text-white hover:underline cursor-pointer ml-2 font-medium"><span>Sign in</span></button>
+        </p>
+      </div>
     </div>
   </div>
 </div>

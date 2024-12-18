@@ -33,11 +33,23 @@ import {
 import {ContactSupportPageComponent} from './pages/contact-support-page/contact-support-page.component';
 import {AboutPageComponent} from './pages/about-page/about-page.component';
 import {RequestVirtualCardComponent} from './components/request-virtual-card/request-virtual-card.component';
+import {SignInComponent} from './components/signing-forms/sign-in/sign-in.component';
+import {SignUpAgentComponent} from './components/signing-forms/sign-up-agent/sign-up-agent.component';
+import {SignUpClientComponent} from './components/signing-forms/sign-up-client/sign-up-client.component';
 
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
-  { path: 'auth', component: AuthenticationPageComponent },
+  {
+    path: 'auth',
+    component: AuthenticationPageComponent,
+    children: [
+      { path: '', redirectTo: 'signin', pathMatch: 'full' },
+      { path: 'signin', component: SignInComponent },
+      { path: 'signup-agent', component: SignUpAgentComponent },
+      { path: 'signup-client', component: SignUpClientComponent }
+    ]
+  },
   { path: 'profile', component: ProfilePageComponent },
   {
     path: 'backoffice',
