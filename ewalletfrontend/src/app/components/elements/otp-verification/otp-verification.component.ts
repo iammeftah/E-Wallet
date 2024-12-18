@@ -90,6 +90,7 @@ export class OtpVerificationComponent implements OnInit {
   }
 
   onClose() {
+    console.log("Close modal");
     this.closeModal.emit();
   }
 }

@@ -138,6 +138,7 @@ export class SignUpClientComponent implements OnInit {
   onOtpVerified(verified: boolean) {
     if (verified) {
       console.log('OTP verified successfully');
+      this.closeOtpModal();
       // Proceed with the sign-up process
       // You can add your sign-up logic here
     } else {
@@ -165,6 +166,10 @@ export class SignUpClientComponent implements OnInit {
 
   closeIdTypeDropdown() {
     this.isIdTypeDropdownOpen = false;
+  }
+
+  closeOtpModal() {
+    this.showOtpVerification = false;
   }
 }
 

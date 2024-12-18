@@ -12,7 +12,7 @@
   </section>
 
   <!-- Contact Form Section -->
-  <section class="py-16 bg-white dark:bg-neutral-950">
+  <section class=" pb-32 pt-16 bg-white dark:bg-neutral-950">
     <div class="container  mx-auto px-4">
       <div class="w-full md:w-1/3  mx-auto">
         <form (ngSubmit)="onSubmit()" #contactForm="ngForm" class="space-y-6" data-aos="fade-up">
@@ -42,19 +42,25 @@
   <section class="py-16">
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="text-center" data-aos="fade-up" data-aos-delay="200">
-          <i class="fas fa-phone-alt text-4xl text-blue-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Phone</h3>
+        <div class="flex items-center justify-center flex-col" data-aos="fade-in" data-aos-delay="200">
+          <h3 class="text-xl font-semibold mb-2 flex flex-row items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headset"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg>
+            Phone
+          </h3>
           <p class="text-neutral-600 dark:text-neutral-400">+1 (123) 456-7890</p>
         </div>
-        <div class="text-center" data-aos="fade-up" data-aos-delay="400">
-          <i class="fas fa-envelope text-4xl text-blue-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Email</h3>
-          <p class="text-neutral-600 dark:text-neutral-400">support&#64;ejibi.com</p>
+        <div class="flex items-center justify-center flex-col" data-aos="fade-in" data-aos-delay="400">
+          <h3 class="text-xl font-semibold mb-2 flex flex-row items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            Email
+          </h3>
+          <p class="text-neutral-600 dark:text-neutral-400">support&#64;bankati.com</p>
         </div>
-        <div class="text-center" data-aos="fade-up" data-aos-delay="600">
-          <i class="fas fa-map-marker-alt text-4xl text-blue-600 mb-4"></i>
-          <h3 class="text-xl font-semibold mb-2">Address</h3>
+        <div class="flex items-center justify-center flex-col" data-aos="fade-in" data-aos-delay="600">
+          <h3 class="text-xl font-semibold mb-2 flex flex-row items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+            Address
+          </h3>
           <p class="text-neutral-600 dark:text-neutral-400">123 Banking Street, City, Country</p>
         </div>
       </div>
