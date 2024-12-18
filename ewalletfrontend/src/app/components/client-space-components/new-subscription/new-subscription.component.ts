@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {LoaderComponent} from '../../elements/loader/loader.component';
 
 interface Credit {
   id: number;
@@ -27,7 +28,7 @@ export interface NewSubscription {
 @Component({
   selector: 'app-new-subscription',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './new-subscription.component.html'
 })
 export class NewSubscriptionComponent {
@@ -69,6 +70,7 @@ export class NewSubscriptionComponent {
   selectedCreditor: Creditor | null = null;
   selectedCredit: Credit | null = null;
   currentStep: number = 1;
+  isLoading: boolean = false;
 
   selectCreditor(creditor: Creditor) {
     this.selectedCreditor = creditor;
@@ -82,6 +84,7 @@ export class NewSubscriptionComponent {
 
   createSubscription() {
     if (this.isSubscriptionReady()) {
+      this.isLoading = true;
       const newSubscription: NewSubscription = {
         service: `${this.selectedCreditor!.name} - ${this.selectedCredit!.name}`,
         amount: this.selectedCredit!.price,
@@ -89,8 +92,12 @@ export class NewSubscriptionComponent {
         nextPayment: this.getNextPaymentDate(),
         status: 'Active'
       };
-      this.newSubscriptionCreated.emit(newSubscription);
-      this.resetForm();
+      // Simulate API call
+      setTimeout(() => {
+        this.isLoading = false;
+        this.newSubscriptionCreated.emit(newSubscription);
+        this.resetForm();
+      }, 2000);
     }
   }
 
@@ -119,4 +126,3 @@ export class NewSubscriptionComponent {
     return this.selectedCreditor !== null && this.selectedCredit !== null;
   }
 }
-

@@ -48,9 +48,109 @@
           <span>{{ feature }}</span>
         </li>
       </ul>
-      <button (click)="selectPlan(plan)" class="primary-button bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors w-full">
-        Select {{ plan.name }}
+      <button
+        (click)="selectPlan(plan)"
+        [disabled]="isCurrentPlan(plan.name)"
+        [class.opacity-50]="isCurrentPlan(plan.name)"
+        [class.cursor-not-allowed]="isCurrentPlan(plan.name)"
+        class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1 rounded-lg shadow-sm text-sm font-bold border border-neutral-900 dark:border-white hover:border-neutral-700 bg-neutral-900 hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-300 dark:hover:border-neutral-300 text-white dark:text-neutral-900 duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full">
+        {{ getButtonText(plan.name) }}
       </button>
     </div>
   </div>
 </div>
+
+<!-- Modal for all plan types -->
+<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-neutral-800 p-8 rounded-lg shadow-lg max-w-md w-full">
+    <h3 class="text-2xl font-bold mb-6 text-neutral-800 dark:text-neutral-200">
+      {{ selectedPlanName === 'HSSAB1' ? 'Confirm Plan Selection' : 'Upgrade to ' + selectedPlanName }}
+    </h3>
+    <form [formGroup]="upgradeForm" (ngSubmit)="onUpgradeSubmit()" class="space-y-6">
+      <ng-container *ngIf="selectedPlanName !== 'HSSAB1'">
+        <div>
+          <label for="email" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Email</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
+            placeholder="Enter your email"
+          >
+        </div>
+        <div>
+          <label for="idType" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">ID Type</label>
+          <div class="relative">
+            <select
+              id="idType"
+              formControlName="idType"
+              class="appearance-none block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800 pr-10"
+            >
+              <option value="">Select ID type</option>
+              <option *ngFor="let type of idTypes" [value]="type">{{type}}</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral-500 dark:text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="idDocument" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+            {{ idDocumentCount === 1 ? 'ID Document' : 'Front side of ID Document' }}
+          </label>
+          <input
+            type="file"
+            id="idDocument"
+            (change)="onFileChange($event, 'idDocument')"
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+          >
+        </div>
+        <div *ngIf="idDocumentCount === 2">
+          <label for="idDocumentBack" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Back side of ID Document</label>
+          <input
+            type="file"
+            id="idDocumentBack"
+            (change)="onFileChange($event, 'idDocumentBack')"
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+          >
+        </div>
+        <div *ngIf="selectedPlanName === 'HSSAB3'">
+          <label for="incomeProof" class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Income Proof</label>
+          <input
+            type="file"
+            id="incomeProof"
+            (change)="onFileChange($event, 'incomeProof')"
+            accept=".pdf,.jpg,.jpeg,.png"
+            class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
+          >
+        </div>
+      </ng-container>
+      <div *ngIf="selectedPlanName === 'HSSAB1'" class="mb-6">
+        <p class="text-neutral-700 dark:text-neutral-300">Are you sure you want to select the HSSAB1 plan?</p>
+      </div>
+      <div class="flex justify-end space-x-4 mt-6">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="secondary-button"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="selectedPlanName !== 'HSSAB1' && !upgradeForm.valid"
+          class="primary-button disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {{ selectedPlanName === 'HSSAB1' ? 'Confirm Selection' : 'Upgrade' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-loader *ngIf="isLoading" [isDarkMode]="true"></app-loader>
+

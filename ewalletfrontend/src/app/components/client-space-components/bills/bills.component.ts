@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {LoaderComponent} from '../../elements/loader/loader.component';
 
 interface Bill {
   creditor: string;
@@ -11,7 +12,7 @@ interface Bill {
 @Component({
   selector: 'app-bills',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './bills.component.html'
 })
 export class BillsComponent {
@@ -36,9 +37,15 @@ export class BillsComponent {
     }
   ];
 
+  isLoading: boolean = false;
+
   payBill(bill: Bill) {
+    this.isLoading = true;
     console.log(`Paying ${bill.amount} to ${bill.creditor}`);
-    bill.status = 'Paid';
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      bill.status = 'Paid';
+    }, 2000);
   }
 }
-

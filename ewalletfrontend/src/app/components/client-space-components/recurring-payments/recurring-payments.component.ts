@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../../elements/loader/loader.component';
 
 interface RecurringPayment {
   service: string;
@@ -12,7 +13,7 @@ interface RecurringPayment {
 @Component({
   selector: 'app-recurring-payments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoaderComponent],
   templateUrl: './recurring-payments.component.html'
 })
 export class RecurringPaymentsComponent {
@@ -40,8 +41,14 @@ export class RecurringPaymentsComponent {
     }
   ];
 
+  isLoading: boolean = false;
+
   togglePaymentStatus(payment: RecurringPayment) {
-    payment.status = payment.status === 'Active' ? 'Paused' : 'Active';
+    this.isLoading = true;
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      payment.status = payment.status === 'Active' ? 'Paused' : 'Active';
+    }, 2000);
   }
 }
-

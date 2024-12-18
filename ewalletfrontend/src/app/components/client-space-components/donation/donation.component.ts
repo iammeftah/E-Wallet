@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {LoaderComponent} from '../../elements/loader/loader.component';
+import { LoaderComponent } from '../../elements/loader/loader.component';
 
 
 interface Creditor {
@@ -106,4 +106,3 @@ export class DonationComponent {
     this.motif = '';
   }
 }
-

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoaderComponent } from '../elements/loader/loader.component';
 
 interface Plan {
   name: 'HSSAB1' | 'HSSAB2' | 'HSSAB3';
@@ -13,7 +14,7 @@ interface Plan {
   selector: 'app-subscription-plans',
   templateUrl: './subscription-plans.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoaderComponent]
 })
 export class SubscriptionPlansComponent {
   @Output() planSelected = new EventEmitter<Plan>();
@@ -66,12 +67,38 @@ export class SubscriptionPlansComponent {
   ];
 
   selectedPlan: 'monthly' | 'annually' = 'monthly';
+  isLoading: boolean = false;
+  showModal: boolean = false;
+  currentPlanName: Plan['name'] = 'HSSAB1'; // Track current plan
+  selectedPlanName: Plan['name'] | null = null; // Track selected plan in modal
+  upgradeForm: FormGroup;
+  idTypes: string[] = ['CIN', 'Passport', 'Residence Permit'];
+  idDocumentCount: number = 1;
+
+  constructor(private fb: FormBuilder) {
+    this.upgradeForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      idType: ['', Validators.required],
+      idDocument: [null, Validators.required],
+      idDocumentBack: [null],
+      incomeProof: [null]
+    });
+
+    this.upgradeForm.get('idType')?.valueChanges.subscribe((idType: string) => {
+      this.idDocumentCount = (idType === 'Passport') ? 1 : 2;
+      if (this.idDocumentCount === 2) {
+        this.upgradeForm.get('idDocumentBack')?.setValidators([Validators.required]);
+      } else {
+        this.upgradeForm.get('idDocumentBack')?.clearValidators();
+      }
+      this.upgradeForm.get('idDocumentBack')?.updateValueAndValidity();
+    });
+  }
 
   getPrice(plan: Plan): number {
     if (this.selectedPlan === 'monthly') {
       return plan.monthlyPrice;
     } else {
-      // Annual price = (monthly_price * 0.9) * 12
       return Math.round((plan.monthlyPrice * 0.9) * 12);
     }
   }
@@ -83,7 +110,80 @@ export class SubscriptionPlansComponent {
   }
 
   selectPlan(plan: Plan) {
-    this.planSelected.emit(plan);
-    this.planChange.emit(plan.name);
+    if (plan.name === this.currentPlanName) {
+      return; // Don't do anything if the selected plan is the current plan
+    }
+
+    this.showModal = true;
+    this.selectedPlanName = plan.name;
+
+    // Reset form when opening modal
+    this.upgradeForm.reset();
+
+    if (plan.name === 'HSSAB3') {
+      this.upgradeForm.get('incomeProof')?.setValidators([Validators.required]);
+    } else {
+      this.upgradeForm.get('incomeProof')?.clearValidators();
+    }
+    this.upgradeForm.get('incomeProof')?.updateValueAndValidity();
+
+    if (plan.name === 'HSSAB1') {
+      this.upgradeForm.disable();
+    } else {
+      this.upgradeForm.enable();
+    }
+  }
+
+  upgradePlan(plan: Plan) {
+    // Additional validation before proceeding
+    if (plan.name !== 'HSSAB1' && !this.upgradeForm.valid) {
+      return;
+    }
+
+    this.isLoading = true;
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      this.currentPlanName = plan.name; // Update current plan only after successful upgrade
+      this.selectedPlanName = null; // Reset selected plan
+      this.planSelected.emit(plan);
+      this.planChange.emit(plan.name);
+      this.showModal = false;
+      this.upgradeForm.reset();
+    }, 2000);
+  }
+
+  onUpgradeSubmit() {
+    if (this.selectedPlanName === null) {
+      return;
+    }
+
+    if (this.selectedPlanName === 'HSSAB1' || this.upgradeForm.valid) {
+      const selectedPlan = this.plans.find(p => p.name === this.selectedPlanName);
+      if (selectedPlan) {
+        this.upgradePlan(selectedPlan);
+      }
+    }
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.upgradeForm.reset();
+    this.selectedPlanName = null; // Reset selected plan on modal close
+  }
+
+  onFileChange(event: any, fileType: 'idDocument' | 'idDocumentBack' | 'incomeProof') {
+    const file = event.target.files[0];
+    this.upgradeForm.patchValue({
+      [fileType]: file
+    });
+  }
+
+  isCurrentPlan(planName: Plan['name']): boolean {
+    return this.currentPlanName === planName;
+  }
+
+  getButtonText(planName: Plan['name']): string {
+    return this.isCurrentPlan(planName) ? 'Current Plan' : `Upgrade to ${planName}`;
   }
 }

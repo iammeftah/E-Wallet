@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {LoaderComponent} from '../elements/loader/loader.component';
 
 interface CardType {
   id: string;
@@ -11,7 +12,7 @@ interface CardType {
 @Component({
   selector: 'app-request-virtual-card',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './request-virtual-card.component.html'
 })
 export class RequestVirtualCardComponent {
@@ -29,6 +30,7 @@ export class RequestVirtualCardComponent {
   ];
 
   selectedCard: CardType | null = null;
+  isLoading: boolean = false;
 
   selectCard(card: CardType) {
     this.selectedCard = card;
@@ -36,8 +38,13 @@ export class RequestVirtualCardComponent {
   }
 
   onSubmit() {
+    this.isLoading = true;
     console.log('Card request submitted:', this.cardRequest);
     console.log('Selected card:', this.selectedCard);
-    // Here you would typically send this data to your backend
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      // Here you would typically send this data to your backend
+    }, 2000);
   }
 }

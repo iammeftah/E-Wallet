@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {LoaderComponent} from '../../elements/loader/loader.component';
 
 interface RecentRecipient {
   firstName: string;
@@ -11,7 +12,7 @@ interface RecentRecipient {
 @Component({
   selector: 'app-send-money',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './send-money.component.html'
 })
 export class SendMoneyComponent {
@@ -21,6 +22,7 @@ export class SendMoneyComponent {
   note: string = '';
   selectedCurrency: string = 'USD';
   currencies: string[] = ['USD', 'EUR', 'GBP', 'JPY'];
+  isLoading: boolean = false;
 
   recentRecipients: RecentRecipient[] = [
     { firstName: 'Alice', lastName: 'Johnson', avatar: 'https://i.pravatar.cc/150?img=1' },
@@ -38,9 +40,14 @@ export class SendMoneyComponent {
   ];
 
   sendMoney() {
+    this.isLoading = true;
     const fullName = `${this.receiverFirstName} ${this.receiverLastName}`.trim();
     console.log(`Sending ${this.amount} ${this.selectedCurrency} to ${fullName}`);
-    // Implement the logic to send money
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      // Implement the actual logic to send money
+    }, 2000);
   }
 
   selectRecipient(recipient: RecentRecipient) {
@@ -55,4 +62,3 @@ export class SendMoneyComponent {
     this.note = '';
   }
 }
-
