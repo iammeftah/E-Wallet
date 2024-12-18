@@ -20,6 +20,7 @@
     "@angular/router": "^19.0.0",
     "@splinetool/loader": "^1.9.48",
     "aos": "^2.3.4",
+    "ldrs": "^1.0.2",
     "rxjs": "~7.8.0",
     "three": "^0.171.0",
     "tslib": "^2.3.0",

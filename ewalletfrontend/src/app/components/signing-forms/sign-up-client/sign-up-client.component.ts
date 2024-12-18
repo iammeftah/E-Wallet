@@ -26,6 +26,9 @@ export class SignUpClientComponent implements OnInit {
   showOtpVerification = false;
   phoneNumber = '';
 
+  isLoading: boolean = false;
+
+
   constructor(private fb: FormBuilder) {
     this.signUpForm = this.fb.group({
       clientType: ['', Validators.required],
@@ -129,9 +132,14 @@ export class SignUpClientComponent implements OnInit {
 
   onSubmit() {
     if (this.signUpForm.valid) {
-      console.log(this.signUpForm.value);
-      this.phoneNumber = this.signUpForm.get('phone')?.value;
-      this.showOtpVerification = true;
+      this.isLoading = true;
+      // Simulate an API call
+      setTimeout(() => {
+        console.log(this.signUpForm.value);
+        this.phoneNumber = this.signUpForm.get('phone')?.value;
+        this.showOtpVerification = true;
+        this.isLoading = false;
+      }, 2000);
     }
   }
 

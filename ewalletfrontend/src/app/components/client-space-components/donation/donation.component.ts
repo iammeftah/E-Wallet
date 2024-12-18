@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {LoaderComponent} from '../../elements/loader/loader.component';
+
 
 interface Creditor {
   id: number;
@@ -12,7 +14,7 @@ interface Creditor {
 @Component({
   selector: 'app-donation',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoaderComponent],
   templateUrl: './donation.component.html'
 })
 export class DonationComponent {
@@ -77,6 +79,7 @@ export class DonationComponent {
   amount: number = 0;
   motif: string = '';
   currentStep: number = 1;
+  isLoading: boolean = false;
 
   selectCreditor(creditor: Creditor) {
     this.selectedCreditor = creditor;
@@ -85,9 +88,14 @@ export class DonationComponent {
 
   proceedToCheckout() {
     if (this.selectedCreditor && this.amount > 0) {
+      this.isLoading = true;
       console.log(`Donating ${this.amount} MAD to ${this.selectedCreditor.name}`);
       console.log(`Motif: ${this.motif}`);
-      // Implement actual donation logic here
+      // Simulate API call
+      setTimeout(() => {
+        this.isLoading = false;
+        // Implement actual donation logic here
+      }, 2000);
     }
   }
 
@@ -98,3 +106,4 @@ export class DonationComponent {
     this.motif = '';
   }
 }
+
