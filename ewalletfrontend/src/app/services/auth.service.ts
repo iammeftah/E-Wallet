@@ -13,7 +13,7 @@ export class AuthService {
   private AGENT_API = 'http://localhost:8091/api/agents';
   private CLIENT_API = 'http://localhost:8091/api/clients';
 
-  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
   constructor(private http: HttpClient) {
@@ -85,12 +85,16 @@ export class AuthService {
   }
 
   signOut(): Observable<void> {
-    return this.http.post<void>(`${this.AUTH_API}/logout`, {})
-      .pipe(tap(() => {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post<void>(`${this.AUTH_API}/logout`, {}, { headers }).pipe(
+      tap(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
-      }));
+      })
+    );
   }
 
   getAuthHeader(): HttpHeaders {
