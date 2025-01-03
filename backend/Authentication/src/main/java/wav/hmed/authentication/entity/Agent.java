@@ -6,9 +6,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import wav.hmed.authentication.entity.User;
 
 @Entity
 @Table(name = "agents")
@@ -20,6 +17,7 @@ public class Agent extends User {
     private String address;
     private String immatriculation;
     private String patentNumber;
+
     @Enumerated(EnumType.STRING)
     private RegistrationStatus status = RegistrationStatus.PENDING;
 
@@ -31,20 +29,20 @@ public class Agent extends User {
         this.idType = idType;
     }
 
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
-
     public String getBirthdate() {
         return birthdate;
     }
 
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
     }
 
     public String getAddress() {

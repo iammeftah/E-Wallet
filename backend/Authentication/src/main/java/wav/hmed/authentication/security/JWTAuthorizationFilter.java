@@ -20,9 +20,9 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     private final JWTUtil jwtUtil;
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    public JWTAuthorizationFilter(AuthenticationManager authManager, JWTUtil jwtUtil) {  // Add JWTUtil parameter
         super(authManager);
-        this.jwtUtil = new JWTUtil();
+        this.jwtUtil = jwtUtil;
     }
 
     @Override

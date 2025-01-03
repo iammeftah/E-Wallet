@@ -25,7 +25,7 @@ export class SignInComponent {
               private router: Router,
               @Inject(DOCUMENT) private document: Document) {
     this.signInForm = this.fb.group({
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
@@ -47,10 +47,10 @@ export class SignInComponent {
   }
 
   async onSubmit(): Promise<void> {
+    console.log("Login submit");
     if (this.signInForm.valid) {
       this.isLoading = true;
       console.log(this.signInForm.value);
-
 
       try {
         const credentials = this.signInForm.value;
@@ -59,20 +59,29 @@ export class SignInComponent {
         if (user) {
           switch (user.role) {
             case 'agent':
-              await this.router.navigate(['/agent/dashboard']);
+              await this.router.navigate(['/']);
               break;
             case 'client':
-              await this.router.navigate(['/client/dashboard']);
+              await this.router.navigate(['/']);
               break;
             case 'admin':
-              await this.router.navigate(['/admin/dashboard']);
+              await this.router.navigate(['/']);
               break;
             default:
-              await this.router.navigate(['/dashboard']);
+              await this.router.navigate(['/']);
           }
         }
       } catch (error: any) {
         console.error('Sign in error:', error);
+        // Display error message to the user
+        if (error.status === 403) {
+          // Handle forbidden error (e.g., invalid credentials)
+          // You can update the UI to show an error message
+          console.error('Invalid credentials');
+        } else {
+          // Handle other types of errors
+          console.error('An unexpected error occurred');
+        }
       } finally {
         this.isLoading = false;
       }

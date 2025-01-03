@@ -2,8 +2,10 @@ package wav.hmed.authentication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import wav.hmed.authentication.entity.User;
 import wav.hmed.authentication.service.UserService;
 
@@ -14,20 +16,13 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    /*
-    * curl -X POST 'http://localhost:8090/api/admin/create-admin' \
-     -H "Content-Type: application/json" \
-     -d '{"firstName":"Hmed","lastName":"Reda","email":"john@example.com","phone":"0707641333","role":"ADMIN","password":"meftah"}'
-    * */
-
     @PostMapping("/create-admin")
     public ResponseEntity<?> createAdminUser(@RequestBody User user) {
         try {
             User createdUser = userService.createUser(user);
-            return ResponseEntity.ok("Admin user created successfully");
+            return ResponseEntity.ok(createdUser); // Return the created user object
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error creating admin user: " + e.getMessage());
         }
     }
-
 }

@@ -3,6 +3,7 @@ package wav.hmed.authentication.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,32 +17,42 @@ import org.springframework.security.web.SecurityFilterChain;
 import wav.hmed.authentication.repository.UserRepository;
 import wav.hmed.authentication.security.JWTAuthenticationFilter;
 import wav.hmed.authentication.security.JWTAuthorizationFilter;
+import wav.hmed.authentication.util.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final UserRepository userRepository;
+
+    private final JWTUtil jwtUtil;  // Add this
+
+    public SecurityConfig(UserRepository userRepository, JWTUtil jwtUtil) {  // Add JWTUtil parameter
+        this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
                     corsConfig.addAllowedOrigin("http://localhost:4200");
-                    corsConfig.addAllowedMethod("*"); // Allow all HTTP methods
-                    corsConfig.addAllowedHeader("*"); // Allow all headers
-                    corsConfig.setAllowCredentials(true); // Allow cookies
+                    corsConfig.addAllowedMethod("*");
+                    corsConfig.addAllowedHeader("*");
+                    corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/create-admin").permitAll()
                         .requestMatchers("/api/auth/**", "/api/registration-response/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .addFilter(new JWTAuthenticationFilter(authManager))
-                .addFilter(new JWTAuthorizationFilter(authManager));
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilter(new JWTAuthenticationFilter(authManager, jwtUtil))  // Pass jwtUtil
+                .addFilter(new JWTAuthorizationFilter(authManager, jwtUtil));  //
 
         return http.build();
     }
@@ -52,13 +63,21 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return phone -> (org.springframework.security.core.userdetails.UserDetails) userRepository.findByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByPhone(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with phone: " + username));
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

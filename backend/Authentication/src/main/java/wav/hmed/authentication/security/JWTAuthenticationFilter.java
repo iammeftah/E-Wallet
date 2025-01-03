@@ -2,6 +2,7 @@ package wav.hmed.authentication.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,34 +21,46 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authManager;
     private final JWTUtil jwtUtil;
 
-    public JWTAuthenticationFilter(AuthenticationManager authManager) {
+    public JWTAuthenticationFilter(AuthenticationManager authManager, JWTUtil jwtUtil) {  // Add JWTUtil parameter
         this.authManager = authManager;
-        this.jwtUtil = new JWTUtil();
+        this.jwtUtil = jwtUtil;
         setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
         try {
-            // Example: Parsing JSON
-            LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword());
-            return getAuthenticationManager().authenticate(authToken);
+            LoginRequest loginRequest = new ObjectMapper()
+                    .readValue(request.getInputStream(), LoginRequest.class);
+
+            return authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getPhone(),
+                            loginRequest.getPassword()
+                    )
+            );
         } catch (IOException e) {
             throw new RuntimeException("Error reading login request", e);
         }
     }
 
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authResult) throws IOException {
+        User user = (User) authResult.getPrincipal();
+        String token = jwtUtil.generateToken(user);
 
-
+        LoginResponse loginResponse = new LoginResponse(token, user);
+        response.setContentType("application/json");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponse));
+    }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
-                                            FilterChain chain, Authentication auth) throws IOException {
-        User user = (User) auth.getPrincipal();
-        String token = jwtUtil.generateToken(user);
-        res.getWriter().write(new ObjectMapper().writeValueAsString(new LoginResponse(token, user)));
-        res.setContentType("application/json");
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException failed) throws IOException, ServletException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter().write("{\"error\": \"" + failed.getMessage() + "\"}");
     }
 }

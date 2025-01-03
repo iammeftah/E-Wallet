@@ -1,14 +1,14 @@
 <form [formGroup]="signInForm"  (ngSubmit)="onSubmit()" class="space-y-6 max-w-md mx-auto">
   <div data-aos="fade-in" data-aos-duration="1000">
-    <label for="phoneNumber" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Phone Number</label>
+    <label for="phone" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Phone Number</label>
     <input
       type="tel"
-      id="phoneNumber"
-      formControlName="phoneNumber"
+      id="phone"
+      formControlName="phone"
       class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
       placeholder="Enter your phone number"
     >
-    <div *ngIf="signInForm.get('phoneNumber')?.invalid && signInForm.get('phoneNumber')?.touched" class="text-red-500 text-sm mt-1">
+    <div *ngIf="signInForm.get('phone')?.invalid && signInForm.get('phone')?.touched" class="text-red-500 text-sm mt-1">
       Please enter a valid 10-digit phone number.
     </div>
   </div>

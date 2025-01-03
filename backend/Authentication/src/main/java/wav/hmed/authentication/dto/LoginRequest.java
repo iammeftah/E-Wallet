@@ -1,14 +1,10 @@
 package wav.hmed.authentication.dto;
 
-
-import lombok.Data;
-
-
-
 public class LoginRequest {
     private String phone;
     private String password;
 
+    // Getters and setters
     public String getPhone() {
         return phone;
     }
@@ -25,3 +21,4 @@ public class LoginRequest {
         this.password = password;
     }
 }
+

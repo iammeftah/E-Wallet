@@ -73,7 +73,7 @@ export class Admin extends User {
 }
 
 export interface SignInData {
-  phoneNumber: string;
+  phone: string;
   password: string;
 }
 
