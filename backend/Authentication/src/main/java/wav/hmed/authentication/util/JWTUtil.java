@@ -3,6 +3,7 @@ package wav.hmed.authentication.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import wav.hmed.authentication.entity.User;
 
@@ -10,7 +11,9 @@ import java.util.Date;
 
 @Component
 public class JWTUtil {
-    private String secret = "/lKPMmCX6G8gHY2Wlou6kXl12F53qyr8kmrAeltIHzbOvnhcA+r1cIxjpiBcy9vRHM8uJUxpIj9hIdW+QcojBw==\n";
+    @Value("${jwt.secret}")
+    private String secret;
+
     private long expirationTime = 86400000; // 24 hours
 
     public String generateToken(User user) {
