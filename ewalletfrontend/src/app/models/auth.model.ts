@@ -1,3 +1,9 @@
+// auth.model.ts
+export interface AuthResponse {
+  token: string;
+  user: Partial<User>;
+}
+
 export class User {
   id?: string;
   firstName: string;
@@ -5,6 +11,7 @@ export class User {
   email: string;
   phone: string;
   role: 'client' | 'agent' | 'admin';
+  token?: string;
 
   constructor(data: Partial<User>) {
     this.firstName = data.firstName || '';
@@ -13,6 +20,7 @@ export class User {
     this.phone = data.phone || '';
     this.role = data.role || 'client';
     this.id = data.id;
+    this.token = data.token;
   }
 }
 
@@ -64,10 +72,6 @@ export class Admin extends User {
   }
 }
 
-// ... rest of the file remains unchanged
-
-
-
 export interface SignInData {
   phoneNumber: string;
   password: string;
@@ -99,4 +103,3 @@ export interface ClientSignUpData {
   idDocument?: File | null;
   incomeProof?: File | null;
 }
-

@@ -39,6 +39,7 @@ import { ContactSupportPageComponent } from './pages/contact-support-page/contac
 import { RequestVirtualCardComponent } from './components/request-virtual-card/request-virtual-card.component';
 import { OtpVerificationComponent } from './components/elements/otp-verification/otp-verification.component';
 import { LoaderComponent } from './components/elements/loader/loader.component';
+import {HttpClientModule} from '@angular/common/http';
 
 
 
@@ -67,6 +68,7 @@ import { LoaderComponent } from './components/elements/loader/loader.component';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     HeaderComponent,
     ReactiveFormsModule,
