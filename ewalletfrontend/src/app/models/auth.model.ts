@@ -40,6 +40,27 @@ export class Client extends User {
   }
 }
 
+export interface AgentData {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  idType: 'CIN' | 'Passport' | 'Residence permit';
+  idNumber: string;
+  birthdate: string;
+  address: string;
+  immatriculation: string;
+  patentNumber: string;
+}
+
+export interface RegistrationRequest {
+  id: string;
+  agent_data: string | AgentData; // Changed from agentData to match backend
+  status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
+  created_at: string;
+}
+
 export class Agent extends User {
   idType: 'CIN' | 'Passport' | 'Residence permit';
   idNumber: string;
@@ -47,16 +68,49 @@ export class Agent extends User {
   address: string;
   immatriculation: string;
   patentNumber: string;
+  status?: string;
+  created_at?: string;
+  agent_data?: any; // Added to match backend response
 
-  constructor(data: Partial<Agent>) {
-    super(data);
+  constructor(data: Partial<Agent> | any) {
+    console.log('Creating Agent from data:', data); // Debug log
+
+    // Ensure we have an object to work with
+    const parsedData = { ...data };
+
+    // Handle string IDs that might be numbers
+    if (typeof parsedData.id === 'number') {
+      parsedData.id = parsedData.id.toString();
+    }
+
+    // Call super with the processed data
+    super(parsedData);
+
+    // Set Agent-specific properties
     this.role = 'agent';
-    this.idType = data.idType || 'CIN';
-    this.idNumber = data.idNumber || '';
-    this.birthdate = data.birthdate || '';
-    this.address = data.address || '';
-    this.immatriculation = data.immatriculation || '';
-    this.patentNumber = data.patentNumber || '';
+    this.idType = parsedData.idType || 'CIN';
+    this.idNumber = parsedData.idNumber || '';
+    this.birthdate = parsedData.birthdate || '';
+    this.address = parsedData.address || '';
+    this.immatriculation = parsedData.immatriculation || '';
+    this.patentNumber = parsedData.patentNumber || '';
+    this.status = parsedData.status || 'PENDING';
+    this.created_at = parsedData.created_at || new Date().toISOString();
+
+    console.log('Created Agent instance:', this); // Debug log
+  }
+
+  static fromRegistrationRequest(request: RegistrationRequest): Agent {
+    const agentData = typeof request.agent_data === 'string'
+      ? JSON.parse(request.agent_data)
+      : request.agent_data;
+
+    return new Agent({
+      id: request.id,
+      ...agentData,
+      status: request.status,
+      created_at: request.created_at
+    });
   }
 }
 

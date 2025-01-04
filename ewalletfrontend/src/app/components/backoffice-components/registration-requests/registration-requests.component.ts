@@ -1,118 +1,149 @@
-import { Component, OnInit, NgModule } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AgentSignUpData } from '../../../models/auth.model';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+
+import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+import { Agent } from '../../../models/auth.model';
+import { BackofficeService } from '../../../services/backoffice.service';
 
 @Component({
   selector: 'app-registration-requests',
   templateUrl: './registration-requests.component.html',
   styleUrls: ['./registration-requests.component.css'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
+  providers: [BackofficeService]  // Add this line
+
 })
 export class RegistrationRequestsComponent implements OnInit {
-  registrationRequests: AgentSignUpData[] = [];
-  pageSize = 21; // Changed from 10 to 12 to fit better in a grid
-  currentPage = 1;
-  selectedRequest: AgentSignUpData | null = null;
+  registrationRequests$: Observable<Agent[]>;
+  pageSize = 21;
+  currentPage$ = new BehaviorSubject<number>(1);
+  selectedRequest: Agent | null = null;
+  error: string | null = null;
+  protected readonly Math = Math;
+
+  constructor(private backofficeService: BackofficeService) {
+    this.registrationRequests$ = this.backofficeService.getPendingRequests().pipe(
+      tap(requests => {
+        console.log('Component received requests:', requests);
+      }),
+      catchError(error => {
+        console.error('Error fetching requests:', error);
+        this.error = 'Failed to load registration requests';
+        return [];
+      })
+    );
+  }
 
   ngOnInit() {
-    // Initialize AOS
-    AOS.init({
-      duration: 300,
-      easing: 'ease-in-out'
-    });
-
-    // Populate with dummy registration requests
-    this.registrationRequests = Array(50).fill(null).map((_, index) => ({
-      firstName: `FirstName ${index + 1}`,
-      lastName: `LastName ${index + 1}`,
-      idType: index % 3 === 0 ? 'Passport' : 'CIN',
-      idNumber: `ID${1000 + index}`,
-      email: `agent${index + 1}@example.com`,
-      phone: `+212${6000000 + index}`,
-      immatriculation: `IMM${5000 + index}`,
-      patentNumber: `PAT${7000 + index}`,
-      birthdate: new Date(1990, 0, index + 1).toISOString(),
-      address: `Address ${index + 1}`,
-      confirmEmail: `agent${index + 1}@example.com`,
-      idDocument: index % 2 === 0 ? new File([], `id-document-${index + 1}.pdf`) : null
-    }));
+    // Remove AOS initialization as it's not needed
+    this.loadRequests();
   }
 
-  get paginatedRequests() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    return this.registrationRequests.slice(startIndex, startIndex + this.pageSize);
+  loadRequests() {
+    this.registrationRequests$.subscribe(
+      requests => console.log('Loaded requests:', requests),
+      error => console.error('Error loading requests:', error)
+    );
   }
 
-  onPageChange(page: number) {
-    this.currentPage = page;
+  get paginatedRequests$(): Observable<Agent[]> {
+    return combineLatest([this.registrationRequests$, this.currentPage$]).pipe(
+      map(([requests, currentPage]) => {
+        const startIndex = (currentPage - 1) * this.pageSize;
+        return requests.slice(startIndex, startIndex + this.pageSize);
+      })
+    );
   }
 
-  getPaginationArray(): number[] {
-    const pageCount = Math.ceil(this.registrationRequests.length / this.pageSize);
-    const currentPage = this.currentPage;
-    const visiblePages = 5; // Number of visible page buttons
+  getPaginationArray$(): Observable<number[]> {
+    return this.registrationRequests$.pipe(
+      map(requests => {
+        const pageCount = Math.ceil(requests.length / this.pageSize);
+        const currentPage = this.currentPage$.getValue();
+        const visiblePages = 5;
 
-    let startPage = Math.max(currentPage - Math.floor(visiblePages / 2), 1);
-    let endPage = startPage + visiblePages - 1;
+        let startPage = Math.max(currentPage - Math.floor(visiblePages / 2), 1);
+        let endPage = startPage + visiblePages - 1;
 
-    if (endPage > pageCount) {
-      endPage = pageCount;
-      startPage = Math.max(endPage - visiblePages + 1, 1);
+        if (endPage > pageCount) {
+          endPage = pageCount;
+          startPage = Math.max(endPage - visiblePages + 1, 1);
+        }
+
+        return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+      })
+    );
+  }
+
+  get totalPages$(): Observable<number> {
+    return this.registrationRequests$.pipe(
+      map(requests => Math.ceil(requests.length / this.pageSize))
+    );
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage$.next(page);
+  }
+
+  onPreviousPage(): void {
+    const currentPage = this.currentPage$.getValue();
+    if (currentPage > 1) {
+      this.currentPage$.next(currentPage - 1);
     }
-
-    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
 
-  openRequestModal(request: AgentSignUpData) {
+  onNextPage(): void {
+    this.registrationRequests$.pipe(
+      map(requests => Math.ceil(requests.length / this.pageSize))
+    ).subscribe(totalPages => {
+      const currentPage = this.currentPage$.getValue();
+      if (currentPage < totalPages) {
+        this.currentPage$.next(currentPage + 1);
+      }
+    });
+  }
+
+  openRequestModal(request: Agent): void {
     this.selectedRequest = request;
   }
 
-  closeRequestModal(event: MouseEvent) {
-    // Close modal when clicking outside the modal content
+  closeRequestModal(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('fixed')) {
       this.selectedRequest = null;
     }
   }
 
-  onAcceptRequest(request: AgentSignUpData) {
-    // TODO: Implement actual acceptance logic
-    console.log('Accepting request:', request);
-    this.registrationRequests = this.registrationRequests.filter(r => r !== request);
-    this.selectedRequest = null;
-  }
-
-  onRejectRequest(request: AgentSignUpData) {
-    // TODO: Implement actual rejection logic
-    console.log('Rejecting request:', request);
-    this.registrationRequests = this.registrationRequests.filter(r => r !== request);
-    this.selectedRequest = null;
-  }
-
-  viewDocument(document: File | null) {
-    if (document) {
-      // Implement document viewing logic
-      console.log('Viewing document:', document.name);
-    } else {
-      console.log('No document available');
+  onAcceptRequest(request: Agent): void {
+    if (request.id !== undefined && request.id !== null) {
+      const requestId = String(request.id); // Use String() constructor instead of toString()
+      this.backofficeService.acceptRequest(requestId).pipe(
+        tap(() => {
+          this.registrationRequests$ = this.backofficeService.getPendingRequests();
+          this.selectedRequest = null;
+        }),
+        catchError(error => {
+          console.error('Error accepting request:', error);
+          return [];
+        })
+      ).subscribe();
     }
   }
 
-  onPreviousPage() {
-    if (this.currentPage > 1) {
-      this.onPageChange(this.currentPage - 1);
+  onRejectRequest(request: Agent): void {
+    if (request.id !== undefined && request.id !== null) {
+      const requestId = String(request.id); // Use String() constructor instead of toString()
+      this.backofficeService.declineRequest(requestId).pipe(
+        tap(() => {
+          this.registrationRequests$ = this.backofficeService.getPendingRequests();
+          this.selectedRequest = null;
+        }),
+        catchError(error => {
+          console.error('Error rejecting request:', error);
+          return [];
+        })
+      ).subscribe();
     }
   }
-
-  onNextPage() {
-    const pageCount = Math.ceil(this.registrationRequests.length / this.pageSize);
-    if (this.currentPage < pageCount) {
-      this.onPageChange(this.currentPage + 1);
-    }
-  }
-
-  protected readonly Math = Math;
 }
-

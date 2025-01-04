@@ -1,12 +1,21 @@
 <div class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-md overflow-hidden flex flex-col grow">
+  <div class="p-4 bg-gray-100 dark:bg-gray-800">
+    <h3 class="text-sm font-medium">Debug Information:</h3>
+    <pre class="mt-2 text-xs">{{ registrationRequests$ | async | json }}</pre>
+  </div>
+
   <div class="p-6 border-b border-neutral-300 dark:border-neutral-700">
     <h2 class="text-2xl font-serif text-neutral-800 dark:text-neutral-200">Registration Requests</h2>
+  </div>
+
+  <div *ngIf="error" class="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100">
+    {{ error }}
   </div>
 
   <div class="flex-grow overflow-auto p-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div
-        *ngFor="let request of paginatedRequests"
+        *ngFor="let request of paginatedRequests$ | async"
         (click)="openRequestModal(request)"
         class="cursor-pointer bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 p-4 rounded-lg transition-colors"
       >
@@ -17,6 +26,12 @@
             </p>
             <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
               {{ request.phone }}
+            </p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+              Status: {{ request.status }}
+            </p>
+            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
+              Created: {{ request.created_at | date:'short' }}
             </p>
           </div>
           <svg
@@ -36,35 +51,43 @@
         </div>
       </div>
     </div>
+
+    <div *ngIf="(paginatedRequests$ | async)?.length === 0" class="text-center py-8 text-neutral-600 dark:text-neutral-400">
+      No registration requests found
+    </div>
   </div>
 
   <div class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800">
     <div class="px-4 py-3 flex justify-between items-center">
       <div class="text-sm text-neutral-600 dark:text-neutral-400">
-        Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, registrationRequests.length) }} of {{ registrationRequests.length }} entries
+        <ng-container *ngIf="(registrationRequests$ | async) as requests">
+          Showing {{ ((currentPage$ | async)! - 1) * pageSize + 1 }} to {{ Math.min((currentPage$ | async)! * pageSize, requests.length) }} of {{ requests.length }} entries
+        </ng-container>
       </div>
       <div class="flex items-center gap-2">
         <button
           (click)="onPreviousPage()"
-          [disabled]="currentPage === 1"
+          [disabled]="(currentPage$ | async) === 1"
           class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
         >
           Previous
         </button>
-        <button
-          *ngFor="let page of getPaginationArray()"
-          (click)="onPageChange(page)"
-          [class.bg-neutral-400]="currentPage === page"
-          [class.dark:bg-neutral-600]="currentPage === page"
-          [class.text-neutral-800]="currentPage === page"
-          [class.dark:text-neutral-200]="currentPage === page"
-          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors"
-        >
-          {{ page }}
-        </button>
+        <ng-container *ngIf="getPaginationArray$() | async as pages">
+          <button
+            *ngFor="let page of pages"
+            (click)="onPageChange(page)"
+            [class.bg-neutral-400]="(currentPage$ | async) === page"
+            [class.dark:bg-neutral-600]="(currentPage$ | async) === page"
+            [class.text-neutral-800]="(currentPage$ | async) === page"
+            [class.dark:text-neutral-200]="(currentPage$ | async) === page"
+            class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors"
+          >
+            {{ page }}
+          </button>
+        </ng-container>
         <button
           (click)="onNextPage()"
-          [disabled]="currentPage === Math.ceil(registrationRequests.length / pageSize)"
+          [disabled]="(currentPage$ | async)! >= (totalPages$ | async)!"
           class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
         >
           Next
@@ -73,7 +96,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
   <div
     *ngIf="selectedRequest"
     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
@@ -131,6 +153,18 @@
             {{ selectedRequest.patentNumber }}
           </span>
         </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Status</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.status }}
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-neutral-600 dark:text-neutral-400">Created At</span>
+          <span class="text-neutral-800 dark:text-neutral-200">
+            {{ selectedRequest.created_at | date:'medium' }}
+          </span>
+        </div>
       </div>
 
       <div class="mt-6 flex justify-between space-x-4">
@@ -150,4 +184,3 @@
     </div>
   </div>
 </div>
-
