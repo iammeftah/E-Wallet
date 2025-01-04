@@ -27,24 +27,14 @@ public class RegistrationService {
 
     @Transactional
     public RegistrationRequest processRegistration(AgentDTO agentData) {
-        try {
-            RegistrationRequest request = new RegistrationRequest();
-            request.setAgentId(agentData.getId());
-            request.setAgentData(objectMapper.writeValueAsString(agentData));
-            request.setStatus(RegistrationStatus.PENDING);
-
-            return repository.save(request);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to process agent data", e);
-        }
+        RegistrationRequest request = new RegistrationRequest();
+        request.fromAgentDTO(agentData);
+        request.setStatus(RegistrationStatus.PENDING);
+        return repository.save(request);
     }
 
     public AgentDTO getAgentDataFromRequest(RegistrationRequest request) {
-        try {
-            return objectMapper.readValue(request.getAgentData(), AgentDTO.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to parse agent data", e);
-        }
+        return request.toAgentDTO();
     }
 
     @Transactional

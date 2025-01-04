@@ -1,186 +1,79 @@
-<div class="bg-neutral-100 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 rounded-lg shadow-md overflow-hidden flex flex-col grow">
-  <div class="p-4 bg-gray-100 dark:bg-gray-800">
-    <h3 class="text-sm font-medium">Debug Information:</h3>
-    <pre class="mt-2 text-xs">{{ registrationRequests$ | async | json }}</pre>
-  </div>
+<!-- Main content -->
+<div class="p-6">
+  <h2 class="text-2xl font-serif mb-6">Registration Requests</h2>
 
-  <div class="p-6 border-b border-neutral-300 dark:border-neutral-700">
-    <h2 class="text-2xl font-serif text-neutral-800 dark:text-neutral-200">Registration Requests</h2>
-  </div>
-
-  <div *ngIf="error" class="p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100">
-    {{ error }}
-  </div>
-
-  <div class="flex-grow overflow-auto p-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div
-        *ngFor="let request of paginatedRequests$ | async"
-        (click)="openRequestModal(request)"
-        class="cursor-pointer bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 p-4 rounded-lg transition-colors"
-      >
-        <div class="flex justify-between items-start">
-          <div>
-            <p class="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-              {{ request.firstName }} {{ request.lastName }}
-            </p>
-            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-              {{ request.phone }}
-            </p>
-            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-              Status: {{ request.status }}
-            </p>
-            <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-1">
-              Created: {{ request.created_at | date:'short' }}
-            </p>
-          </div>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5 text-neutral-600 dark:text-neutral-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="(paginatedRequests$ | async)?.length === 0" class="text-center py-8 text-neutral-600 dark:text-neutral-400">
+  <ng-container *ngIf="registrationRequests$ | async as requests">
+    <!-- No data message -->
+    <div *ngIf="requests.length === 0" class="text-center py-8 text-neutral-500">
       No registration requests found
     </div>
-  </div>
 
-  <div class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800">
-    <div class="px-4 py-3 flex justify-between items-center">
-      <div class="text-sm text-neutral-600 dark:text-neutral-400">
-        <ng-container *ngIf="(registrationRequests$ | async) as requests">
-          Showing {{ ((currentPage$ | async)! - 1) * pageSize + 1 }} to {{ Math.min((currentPage$ | async)! * pageSize, requests.length) }} of {{ requests.length }} entries
-        </ng-container>
-      </div>
-      <div class="flex items-center gap-2">
-        <button
-          (click)="onPreviousPage()"
-          [disabled]="(currentPage$ | async) === 1"
-          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <ng-container *ngIf="getPaginationArray$() | async as pages">
-          <button
-            *ngFor="let page of pages"
-            (click)="onPageChange(page)"
-            [class.bg-neutral-400]="(currentPage$ | async) === page"
-            [class.dark:bg-neutral-600]="(currentPage$ | async) === page"
-            [class.text-neutral-800]="(currentPage$ | async) === page"
-            [class.dark:text-neutral-200]="(currentPage$ | async) === page"
-            class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors"
-          >
-            {{ page }}
-          </button>
-        </ng-container>
-        <button
-          (click)="onNextPage()"
-          [disabled]="(currentPage$ | async)! >= (totalPages$ | async)!"
-          class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-300 dark:bg-neutral-700 rounded transition-colors disabled:opacity-50"
-        >
-          Next
-        </button>
+    <!-- Grid of requests -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div *ngFor="let request of requests"
+           class="bg-white dark:bg-neutral-800 p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer"
+           (click)="openRequestModal(request)">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="font-medium">{{request.firstName}} {{request.lastName}}</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{{request.email}}</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">{{request.phone}}</p>
+            <p class="text-sm mt-2">
+                  <span class="px-2 py-1 rounded-full text-xs"
+                        [ngClass]="{
+                          'bg-yellow-100 text-yellow-800': request.status === 'PENDING',
+                          'bg-green-100 text-green-800': request.status === 'ACCEPTED',
+                          'bg-red-100 text-red-800': request.status === 'DECLINED'
+                        }">
+                    {{request.status}}
+                  </span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
+</div>
 
-  <div
-    *ngIf="selectedRequest"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-    (click)="closeRequestModal($event)"
-  >
-    <div
-      class="bg-neutral-100 dark:bg-neutral-800 rounded-lg shadow-xl max-w-md w-full p-6"
-      (click)="$event.stopPropagation()"
-      data-aos="fade-up"
-    >
-      <h3 class="text-xl font-semibold mb-4 text-neutral-800 dark:text-neutral-200 border-b border-neutral-300 dark:border-neutral-700 pb-2">
-        Registration Request Details
-      </h3>
+<!-- Modal -->
+<div *ngIf="selectedRequest"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+     (click)="closeRequestModal($event)">
+  <div class="bg-white dark:bg-neutral-800 rounded-lg p-6 max-w-lg w-full" (click)="$event.stopPropagation()">
+    <!-- Modal content -->
+    <h3 class="text-xl font-semibold mb-4">Request Details</h3>
+    <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-2">
+        <span class="text-neutral-600">Name:</span>
+        <span>{{selectedRequest.firstName}} {{selectedRequest.lastName}}</span>
 
-      <div class="space-y-3">
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Full Name</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.firstName }} {{ selectedRequest.lastName }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">ID Type</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.idType }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">ID Number</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.idNumber }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Email</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.email }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Phone</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.phone }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Immatriculation</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.immatriculation }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Patent Number</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.patentNumber }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Status</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.status }}
-          </span>
-        </div>
-        <div class="flex justify-between items-center">
-          <span class="text-neutral-600 dark:text-neutral-400">Created At</span>
-          <span class="text-neutral-800 dark:text-neutral-200">
-            {{ selectedRequest.created_at | date:'medium' }}
-          </span>
-        </div>
+        <span class="text-neutral-600">Email:</span>
+        <span>{{selectedRequest.email}}</span>
+
+        <span class="text-neutral-600">Phone:</span>
+        <span>{{selectedRequest.phone}}</span>
+
+        <span class="text-neutral-600">ID Type:</span>
+        <span>{{selectedRequest.idType}}</span>
+
+        <span class="text-neutral-600">ID Number:</span>
+        <span>{{selectedRequest.idNumber}}</span>
+
+        <span class="text-neutral-600">Status:</span>
+        <span>{{selectedRequest.status}}</span>
       </div>
+    </div>
 
-      <div class="mt-6 flex justify-between space-x-4">
-        <button
-          (click)="onRejectRequest(selectedRequest)"
-          class="secondary-button"
-        >
-          Reject
-        </button>
-        <button
-          (click)="onAcceptRequest(selectedRequest)"
-          class="primary-button"
-        >
-          Accept
-        </button>
-      </div>
+    <!-- Action buttons -->
+    <div class="mt-6 flex justify-end space-x-4">
+      <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              (click)="onRejectRequest(selectedRequest)">
+        Reject
+      </button>
+      <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              (click)="onAcceptRequest(selectedRequest)">
+        Accept
+      </button>
     </div>
   </div>
 </div>
