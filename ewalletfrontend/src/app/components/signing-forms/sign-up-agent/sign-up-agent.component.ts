@@ -6,6 +6,7 @@ import { OtpVerificationComponent } from '../../elements/otp-verification/otp-ve
 import { LoaderComponent } from '../../elements/loader/loader.component';
 import { AgentSignUpData } from '../../../models/auth.model';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up-agent',
@@ -30,7 +31,7 @@ export class SignUpAgentComponent implements OnInit {
   isLoading = false;
 
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     // Remove birthdate and address since they're not in the template
     this.signUpForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(2)]],
@@ -233,6 +234,8 @@ export class SignUpAgentComponent implements OnInit {
   onOtpVerified(verified: boolean) {
     if (verified) {
       console.log('OTP verified successfully');
+      // Redirect to homepage
+      this.router.navigate(['/']);
       // Proceed with the sign-up process
       // You can add your sign-up logic here
     } else {
