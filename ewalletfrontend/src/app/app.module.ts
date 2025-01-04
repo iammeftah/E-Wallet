@@ -47,7 +47,6 @@ import {HttpClientModule} from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    HomePageComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
 
@@ -103,6 +102,7 @@ import {HttpClientModule} from '@angular/common/http';
     RequestVirtualCardComponent,
     OtpVerificationComponent,
     LoaderComponent,
+    HomePageComponent,
 
 
   ],

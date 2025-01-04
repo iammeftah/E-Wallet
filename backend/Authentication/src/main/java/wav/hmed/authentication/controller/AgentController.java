@@ -1,9 +1,8 @@
 package wav.hmed.authentication.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import wav.hmed.authentication.clients.BackofficeClient;
+import lombok.RequiredArgsConstructor;
 import wav.hmed.authentication.entity.Agent;
 import wav.hmed.authentication.entity.RegistrationStatus;
 import wav.hmed.authentication.service.AgentService;
@@ -12,40 +11,32 @@ import wav.hmed.authentication.service.AgentService;
 @RequestMapping("/api/agents")
 public class AgentController {
     private final AgentService agentService;
-    private final BackofficeClient backofficeClient;
 
-
-    public AgentController(AgentService agentService, BackofficeClient backofficeClient) {
+    public AgentController(AgentService agentService) {
         this.agentService = agentService;
-        this.backofficeClient = backofficeClient;
     }
 
-
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<?> registerAgent(@RequestBody Agent agent) {
-        Agent savedAgent = agentService.save(agent);
-        backofficeClient.sendRegistrationRequest(savedAgent);
-        return ResponseEntity.ok(savedAgent);
+        return ResponseEntity.ok(agentService.registerAgent(agent));
     }
 
     @GetMapping
     public ResponseEntity<?> getAllAgents() {
-        return ResponseEntity.ok(agentService.findAll());
+        return ResponseEntity.ok(agentService.getAllAgents());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateAgent(@PathVariable Long id, @RequestBody Agent agent) {
-        return ResponseEntity.ok(agentService.update(id, agent));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAgent(@PathVariable Long id) {
-        agentService.delete(id);
-        return ResponseEntity.ok().build();
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAgentById(@PathVariable Long id) {
+        return ResponseEntity.ok(agentService.getAgentById(id));
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateAgentStatus(@PathVariable Long id, @RequestBody RegistrationStatus status) {
-        return ResponseEntity.ok(agentService.updateStatus(id, status));
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestBody String status) {
+        return ResponseEntity.ok(
+                agentService.updateStatus(id, RegistrationStatus.valueOf(status))
+        );
     }
 }

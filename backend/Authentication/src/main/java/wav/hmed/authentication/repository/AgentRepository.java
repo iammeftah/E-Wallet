@@ -8,4 +8,6 @@ import wav.hmed.authentication.entity.RegistrationStatus;
 import java.util.List;
 
 @Repository
-public interface AgentRepository extends JpaRepository<Agent, Long> {}
+public interface AgentRepository extends JpaRepository<Agent, Long> {
+    List<Agent> findByStatus(RegistrationStatus status);
+}

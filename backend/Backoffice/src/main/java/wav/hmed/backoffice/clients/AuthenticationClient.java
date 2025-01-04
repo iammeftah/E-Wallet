@@ -12,7 +12,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationClient {
     private final RestTemplate restTemplate;
-    private final String authServiceUrl = "http://localhost:8091";
+    private final String authServiceUrl = "http://localhost:8091/auth";
 
     public void updateAgentStatus(Long agentId, RegistrationStatus status) {
         restTemplate.put(

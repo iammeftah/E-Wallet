@@ -21,6 +21,7 @@
     "@splinetool/loader": "^1.9.48",
     "aos": "^2.3.4",
     "ldrs": "^1.0.2",
+    "ngx-parallax": "^4.0.0",
     "rxjs": "~7.8.0",
     "three": "^0.171.0",
     "tslib": "^2.3.0",

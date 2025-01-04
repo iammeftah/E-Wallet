@@ -29,6 +29,10 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your first name"
           >
+          <div *ngIf="signUpForm.get('firstName')?.invalid && (signUpForm.get('firstName')?.dirty || signUpForm.get('firstName')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('firstName')?.errors?.['required']">First name is required.</p>
+            <p *ngIf="signUpForm.get('firstName')?.errors?.['minlength']">First name must be at least 2 characters long.</p>
+          </div>
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label for="lastName" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Last Name</label>
@@ -39,6 +43,10 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your last name"
           >
+          <div *ngIf="signUpForm.get('lastName')?.invalid && (signUpForm.get('lastName')?.dirty || signUpForm.get('lastName')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('lastName')?.errors?.['required']">Last name is required.</p>
+            <p *ngIf="signUpForm.get('lastName')?.errors?.['minlength']">Last name must be at least 2 characters long.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -55,8 +63,12 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your email"
           >
+          <div *ngIf="signUpForm.get('email')?.invalid && (signUpForm.get('email')?.dirty || signUpForm.get('email')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('email')?.errors?.['required']">Email is required.</p>
+            <p *ngIf="signUpForm.get('email')?.errors?.['email']">Invalid email format.</p>
+          </div>
         </div>
-        <div class="w-full md:w-1/2 px-3">
+        <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200" class="w-full md:w-1/2 px-3" >
           <label for="confirmEmail" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Confirm Email</label>
           <input
             type="email"
@@ -65,9 +77,14 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Confirm your email"
           >
+          <div *ngIf="signUpForm.get('confirmEmail')?.invalid && (signUpForm.get('confirmEmail')?.dirty || signUpForm.get('confirmEmail')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('confirmEmail')?.errors?.['required']">Confirm email is required.</p>
+            <p *ngIf="signUpForm.get('confirmEmail')?.errors?.['email']">Invalid email format.</p>
+            <p *ngIf="signUpForm.get('confirmEmail')?.errors?.['notMatch']">Emails do not match.</p>
+          </div>
         </div>
       </div>
-      <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200">
+      <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="300">
         <label for="phone" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Phone</label>
         <input
           type="tel"
@@ -76,6 +93,10 @@
           class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
           placeholder="Enter your phone number"
         >
+        <div *ngIf="signUpForm.get('phone')?.invalid && (signUpForm.get('phone')?.dirty || signUpForm.get('phone')?.touched)" class="text-red-500 text-xs mt-1">
+          <p *ngIf="signUpForm.get('phone')?.errors?.['required']">Phone number is required.</p>
+          <p *ngIf="signUpForm.get('phone')?.errors?.['pattern']">Invalid phone number format.</p>
+        </div>
       </div>
     </div>
 
@@ -112,6 +133,9 @@
                 />
               </svg>
             </div>
+            <div *ngIf="signUpForm.get('idType')?.invalid && (signUpForm.get('idType')?.dirty || signUpForm.get('idType')?.touched)" class="text-red-500 text-xs mt-1">
+              <p *ngIf="signUpForm.get('idType')?.errors?.['required']">ID type is required.</p>
+            </div>
           </div>
         </div>
         <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="200" class="w-full md:w-1/2 px-3">
@@ -123,6 +147,10 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your ID number"
           >
+          <div *ngIf="signUpForm.get('idNumber')?.invalid && (signUpForm.get('idNumber')?.dirty || signUpForm.get('idNumber')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('idNumber')?.errors?.['required']">ID number is required.</p>
+            <p *ngIf="signUpForm.get('idNumber')?.errors?.['minlength']">ID number must be at least 8 characters long.</p>
+          </div>
         </div>
       </div>
       <div data-aos="fade-in" data-aos-duration="1000" data-aos-delay="400">
@@ -135,6 +163,12 @@
               accept=".pdf,.jpg,.jpeg,.png"
               class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
             >
+            <p *ngIf="hasFileUploaded()" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+              File uploaded: {{ signUpForm.get('idDocumentFront')?.value?.file?.name }}
+            </p>
+            <div *ngIf="signUpForm.get('idDocumentFront')?.invalid && (signUpForm.get('idDocumentFront')?.dirty || signUpForm.get('idDocumentFront')?.touched)" class="text-red-500 text-xs mt-1">
+              <p *ngIf="signUpForm.get('idDocumentFront')?.errors?.['required']">ID document is required.</p>
+            </div>
           </div>
           <ng-template #twoSidedUpload>
             <div class="flex flex-row gap-4 items-center w-full">
@@ -146,6 +180,12 @@
                   class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
                 >
                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Front side</p>
+                <p *ngIf="hasFileUploaded('front')" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                  File uploaded: {{ signUpForm.get('idDocumentFront')?.value?.file?.name }}
+                </p>
+                <div *ngIf="signUpForm.get('idDocumentFront')?.invalid && (signUpForm.get('idDocumentFront')?.dirty || signUpForm.get('idDocumentFront')?.touched)" class="text-red-500 text-xs mt-1">
+                  <p *ngIf="signUpForm.get('idDocumentFront')?.errors?.['required']">Front side of ID document is required.</p>
+                </div>
               </div>
               <div class="w-full">
                 <input
@@ -155,6 +195,12 @@
                   class="block w-full text-sm text-neutral-500 dark:text-neutral-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-neutral-100 file:text-neutral-900 dark:file:bg-neutral-800 dark:file:text-white hover:file:bg-neutral-200 dark:hover:file:bg-neutral-700"
                 >
                 <p class="mt-1 text-xs text-neutral-500 dark:text-neutral-400">Back side</p>
+                <p *ngIf="hasFileUploaded('back')" class="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                  File uploaded: {{ signUpForm.get('idDocumentBack')?.value?.file?.name }}
+                </p>
+                <div *ngIf="signUpForm.get('idDocumentBack')?.invalid && (signUpForm.get('idDocumentBack')?.dirty || signUpForm.get('idDocumentBack')?.touched)" class="text-red-500 text-xs mt-1">
+                  <p *ngIf="signUpForm.get('idDocumentBack')?.errors?.['required']">Back side of ID document is required.</p>
+                </div>
               </div>
             </div>
           </ng-template>
@@ -174,6 +220,10 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your immatriculation number"
           >
+          <div *ngIf="signUpForm.get('immatriculation')?.invalid && (signUpForm.get('immatriculation')?.dirty || signUpForm.get('immatriculation')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('immatriculation')?.errors?.['required']">Immatriculation number is required.</p>
+            <p *ngIf="signUpForm.get('immatriculation')?.errors?.['minlength']">Immatriculation number must be at least 8 characters long.</p>
+          </div>
         </div>
         <div class="w-full md:w-1/2 px-3">
           <label for="patentNumber" class="block text-sm font-medium text-neutral-900 dark:text-white mb-2">Patent Number</label>
@@ -184,6 +234,10 @@
             class="block w-full rounded-md border border-neutral-300 dark:border-neutral-700 px-4 py-2 text-neutral-900 dark:text-white text-sm placeholder-neutral-500 dark:placeholder-neutral-400 focus:border-neutral-900 dark:focus:border-white outline-none bg-white dark:bg-neutral-800"
             placeholder="Enter your patent number"
           >
+          <div *ngIf="signUpForm.get('patentNumber')?.invalid && (signUpForm.get('patentNumber')?.dirty || signUpForm.get('patentNumber')?.touched)" class="text-red-500 text-xs mt-1">
+            <p *ngIf="signUpForm.get('patentNumber')?.errors?.['required']">Patent number is required.</p>
+            <p *ngIf="signUpForm.get('patentNumber')?.errors?.['minlength']">Patent number must be at least 8 characters long.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -224,6 +278,5 @@
     ></app-otp-verification>
   </form>
   <app-loader *ngIf="isLoading"></app-loader>
-
 </div>
 

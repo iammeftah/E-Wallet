@@ -1,6 +1,7 @@
 package wav.hmed.authentication.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wav.hmed.authentication.dto.LoginRequest;
@@ -23,9 +24,17 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token) {
-        authService.logout(token);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> logout(@RequestHeader(value = "Authorization", required = false) String token) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body("No authorization token provided");
+        }
+        try {
+            authService.logout(token);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error during logout: " + e.getMessage());
+        }
     }
 
 }

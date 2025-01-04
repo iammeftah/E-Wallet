@@ -12,8 +12,12 @@ public class RegistrationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long agentId;
+
+    @Column(columnDefinition = "LONGTEXT")
     private String agentData;
+
     @Enumerated(EnumType.STRING)
     private RegistrationStatus status = RegistrationStatus.PENDING;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 }

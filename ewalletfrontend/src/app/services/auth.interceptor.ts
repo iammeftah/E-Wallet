@@ -1,4 +1,3 @@
-// auth.interceptor.ts
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
@@ -18,19 +17,31 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = localStorage.getItem('token');
+    console.log('Raw token from localStorage:', token);
 
     if (token) {
+      const formattedToken = token.trim();
+      console.log('Formatted token:', formattedToken);
+
+      const finalHeader = `Bearer ${formattedToken}`;
+      console.log('Final Authorization header:', finalHeader);
+
       request = request.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
+          Authorization: finalHeader
         }
       });
+
+      // Log the final request headers
+      console.log('Request headers:', request.headers.keys());
+      console.log('Authorization header value:', request.headers.get('Authorization'));
     }
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.log('HTTP Error:', error);
         if (error.status === 401) {
-          // Clear local storage and redirect to login
+          console.log('401 Unauthorized error - clearing tokens');
           localStorage.removeItem('token');
           localStorage.removeItem('currentUser');
           this.router.navigate(['/sign-in']);

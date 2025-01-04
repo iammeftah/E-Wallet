@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DarkmodeTogglerComponent } from '../../elements/darkmode-toggler/darkmode-toggler.component';
 
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
-import {User} from '../../../models/auth.model';
-import {AuthService} from '../../../services/auth.service';
+import { User } from '../../../models/auth.model';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -48,21 +48,26 @@ export class HeaderComponent implements OnInit {
     return this.currentUser?.firstName?.charAt(0) || '';
   }
 
-  logout() {
-    // First clear local data
-    localStorage.removeItem('token');
-    localStorage.removeItem('currentUser');
-    this.authService.currentUserSubject.next(null);
+  navigateToProfile() {
+    this.isDropdownOpen = false; // Close the dropdown
+    this.isMenuOpen = false; // Close mobile menu if open
+    this.router.navigate(['/profile']);
+  }
 
-    // Then attempt server logout
+  logout() {
     this.authService.signOut().pipe(
       catchError(error => {
         console.error('Logout error:', error);
-        return of(void 0); // Continue with navigation even if server logout fails
+        return of(void 0);
+      }),
+      finalize(() => {
+        // Clear local storage only after server call (success or failure)
+        localStorage.removeItem('token');
+        localStorage.removeItem('currentUser');
+        this.authService.currentUserSubject.next(null);
+        this.router.navigate(['/auth']); // Navigate to auth instead of sign-in
       })
-    ).subscribe(() => {
-      this.router.navigate(['/sign-in']);
-    });
+    ).subscribe();
   }
 
   closeDropdown(event: Event) {

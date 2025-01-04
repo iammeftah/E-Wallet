@@ -1,9 +1,11 @@
 package wav.hmed.authentication.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import wav.hmed.authentication.entity.Agent;
 import wav.hmed.authentication.entity.RegistrationStatus;
+import wav.hmed.authentication.entity.Role;
 import wav.hmed.authentication.repository.AgentRepository;
 
 import java.util.List;
@@ -16,27 +18,31 @@ public class AgentService {
         this.agentRepository = agentRepository;
     }
 
-    public List<Agent> findAll() {
-        return agentRepository.findAll();
-    }
-
-    public Agent save(Agent agent) {
+    @Transactional
+    public Agent registerAgent(Agent agent) {
+        agent.setRole(Role.AGENT);
+        agent.setStatus(RegistrationStatus.PENDING);
         return agentRepository.save(agent);
     }
 
-    public Agent update(Long id, Agent agent) {
-        agent.setId(id);
-        return agentRepository.save(agent);
-    }
-
-    public void delete(Long id) {
-        agentRepository.deleteById(id);
-    }
-
-    public Agent updateStatus(Long id, RegistrationStatus status) {
-        Agent agent = agentRepository.findById(id)
+    @Transactional
+    public Agent updateStatus(Long agentId, RegistrationStatus status) {
+        Agent agent = agentRepository.findById(agentId)
                 .orElseThrow(() -> new RuntimeException("Agent not found"));
         agent.setStatus(status);
         return agentRepository.save(agent);
+    }
+
+    public List<Agent> getAllAgents() {
+        return agentRepository.findAll();
+    }
+
+    public Agent getAgentById(Long id) {
+        return agentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agent not found"));
+    }
+
+    public List<Agent> getAgentsByStatus(RegistrationStatus status) {
+        return agentRepository.findByStatus(status);
     }
 }

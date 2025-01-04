@@ -1,14 +1,14 @@
 package wav.hmed.backoffice.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import wav.hmed.backoffice.clients.AuthenticationClient;
+import org.springframework.web.multipart.MultipartFile;
+import wav.hmed.backoffice.dto.AgentDTO;
+import wav.hmed.backoffice.service.RegistrationService;
 import wav.hmed.backoffice.entity.RegistrationRequest;
 import wav.hmed.backoffice.entity.RegistrationStatus;
-import wav.hmed.backoffice.service.RegistrationService;
 
 import java.util.Map;
 
@@ -16,15 +16,44 @@ import java.util.Map;
 @RequestMapping("/api/registration-requests")
 @RequiredArgsConstructor
 public class BackofficeController {
-    private RegistrationService registrationService;
-    private final AuthenticationClient authenticationClient;
+    private final RegistrationService registrationService;
 
-    @PostMapping
-    public ResponseEntity<?> createRequest(@RequestBody Map<String, Object> agentData) throws JsonProcessingException {
-        RegistrationRequest request = new RegistrationRequest();
-        request.setAgentId((Long) agentData.get("id"));
-        request.setAgentData(new ObjectMapper().writeValueAsString(agentData));
-        return ResponseEntity.ok(registrationService.save(request));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createRequest(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email,
+            @RequestParam("phone") String phone,
+            @RequestParam("idType") String idType,
+            @RequestParam("idNumber") String idNumber,
+            @RequestParam("immatriculation") String immatriculation,
+            @RequestParam("patentNumber") String patentNumber,
+            @RequestParam(value = "idDocument", required = false) MultipartFile idDocument) {
+
+        AgentDTO agentData = new AgentDTO();
+        agentData.setFirstName(firstName);
+        agentData.setLastName(lastName);
+        agentData.setEmail(email);
+        agentData.setPhone(phone);
+        agentData.setIdType(idType);
+        agentData.setIdNumber(idNumber);
+        agentData.setImmatriculation(immatriculation);
+        agentData.setPatentNumber(patentNumber);
+
+        return ResponseEntity.ok(registrationService.processRegistration(agentData));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getRequest(@PathVariable Long id) {
+        return registrationService.findById(id)
+                .map(request -> {
+                    AgentDTO agentData = registrationService.getAgentDataFromRequest(request);
+                    return ResponseEntity.ok(Map.of(
+                            "request", request,
+                            "agentData", agentData
+                    ));
+                })
+                .orElseThrow(() -> new RuntimeException("Request not found"));
     }
 
     @GetMapping
@@ -37,17 +66,10 @@ public class BackofficeController {
         return ResponseEntity.ok(registrationService.findByStatus(RegistrationStatus.PENDING));
     }
 
-    @PutMapping("/{id}/accept")
-    public ResponseEntity<?> acceptRequest(@PathVariable Long id) {
-        RegistrationRequest request = registrationService.updateStatus(id, RegistrationStatus.ACCEPTED);
-        authenticationClient.updateAgentStatus(request.getAgentId(), RegistrationStatus.ACCEPTED);
-        return ResponseEntity.ok(request);
-    }
-
-    @PutMapping("/{id}/decline")
-    public ResponseEntity<?> declineRequest(@PathVariable Long id) {
-        RegistrationRequest request = registrationService.updateStatus(id, RegistrationStatus.DECLINED);
-        authenticationClient.updateAgentStatus(request.getAgentId(), RegistrationStatus.DECLINED);
-        return ResponseEntity.ok(request);
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestBody RegistrationStatus status) {
+        return ResponseEntity.ok(registrationService.updateStatus(id, status));
     }
 }
