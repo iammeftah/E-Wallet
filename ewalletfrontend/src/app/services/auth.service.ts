@@ -42,13 +42,13 @@ export class AuthService {
           const userData = { ...response.user, token: response.token };
 
           switch (userData.role) {
-            case 'agent':
+            case 'AGENT':
               user = new Agent(userData);
               break;
-            case 'client':
+            case 'CLIENT':
               user = new Client(userData);
               break;
-            case 'admin':
+            case 'ADMIN':
               user = new Admin(userData);
               break;
             default:

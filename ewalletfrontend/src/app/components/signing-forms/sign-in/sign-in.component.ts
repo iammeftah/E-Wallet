@@ -6,11 +6,17 @@ import { DOCUMENT } from '@angular/common';
 import { LoaderComponent } from '../../elements/loader/loader.component';
 import {AuthService} from '../../../services/auth.service';
 import {Router} from '@angular/router';
+import {ToastComponent} from '../../elements/toast/toast.component';
+import {ToastService} from '../../../services/toast.service';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  imports: [CommonModule, ReactiveFormsModule, LoaderComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    LoaderComponent,
+  ],
   standalone: true,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,10 +26,13 @@ export class SignInComponent {
   isDarkMode = false;
   isLoading = false;
 
-  constructor(private fb: FormBuilder,
-              private authService: AuthService,
-              private router: Router,
-              @Inject(DOCUMENT) private document: Document) {
+  constructor(
+      private fb: FormBuilder,
+      private authService: AuthService,
+      private router: Router,
+      private toastService: ToastService,  // Add this
+      @Inject(DOCUMENT) private document: Document
+    ) {
     this.signInForm = this.fb.group({
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -58,14 +67,14 @@ export class SignInComponent {
 
         if (user) {
           switch (user.role) {
-            case 'agent':
+            case 'AGENT':
               await this.router.navigate(['/']);
               break;
-            case 'client':
+            case 'CLIENT':
               await this.router.navigate(['/']);
               break;
-            case 'admin':
-              await this.router.navigate(['/']);
+            case 'ADMIN':
+              await this.router.navigate(['/backoffice']);
               break;
             default:
               await this.router.navigate(['/']);

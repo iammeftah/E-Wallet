@@ -10,7 +10,7 @@ export class User {
   lastName: string;
   email: string;
   phone: string;
-  role: 'client' | 'agent' | 'admin';
+  role: 'CLIENT' | 'AGENT' | 'ADMIN';
   token?: string;
 
   constructor(data: Partial<User>) {
@@ -18,7 +18,7 @@ export class User {
     this.lastName = data.lastName || '';
     this.email = data.email || '';
     this.phone = data.phone || '';
-    this.role = data.role || 'client';
+    this.role = data.role || 'CLIENT';
     this.id = data.id;
     this.token = data.token;
   }
@@ -32,7 +32,7 @@ export class Client extends User {
 
   constructor(data: Partial<Client>) {
     super(data);
-    this.role = 'client';
+    this.role = 'CLIENT';
     this.clientType = data.clientType || 'HSSAB1';
     this.idType = data.idType;
     this.idNumber = data.idNumber;
@@ -87,7 +87,7 @@ export class Agent extends User {
     super(parsedData);
 
     // Set Agent-specific properties
-    this.role = 'agent';
+    this.role = 'AGENT';
     this.idType = parsedData.idType || 'CIN';
     this.idNumber = parsedData.idNumber || '';
     this.birthdate = parsedData.birthdate || '';
@@ -120,7 +120,7 @@ export class Admin extends User {
 
   constructor(data: Partial<Admin>) {
     super(data);
-    this.role = 'admin';
+    this.role = 'ADMIN';
     this.adminLevel = data.adminLevel || '';
     this.department = data.department || '';
   }

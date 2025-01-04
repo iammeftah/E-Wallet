@@ -61,7 +61,7 @@ export class ProfilePageComponent implements OnInit {
       lastName: 'Doe',
       email: 'john@example.com',
       phone: '1234567890',
-      role: 'client',
+      role: 'CLIENT',
       clientType: 'HSSAB1',
       idType: 'Passport',
       idNumber: 'AB123456',
@@ -173,15 +173,15 @@ export class ProfilePageComponent implements OnInit {
   }
 
   isClient(user: User | undefined): user is Client {
-    return user?.role === 'client';
+    return user?.role === 'CLIENT';
   }
 
   isAgent(user: User | undefined): user is Agent {
-    return user?.role === 'agent';
+    return user?.role === 'AGENT';
   }
 
   isAdmin(user: User | undefined): user is Admin {
-    return user?.role === 'admin';
+    return user?.role === 'ADMIN';
   }
 
   viewAllTransactions() {

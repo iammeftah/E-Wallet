@@ -40,6 +40,8 @@ import { RequestVirtualCardComponent } from './components/request-virtual-card/r
 import { OtpVerificationComponent } from './components/elements/otp-verification/otp-verification.component';
 import { LoaderComponent } from './components/elements/loader/loader.component';
 import {HttpClientModule} from '@angular/common/http';
+import { ToastComponent } from './components/elements/toast/toast.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 
@@ -49,7 +51,6 @@ import {HttpClientModule} from '@angular/common/http';
     AppComponent,
     NotFoundPageComponent,
     WalletOrbitComponent,
-
 
 
 
@@ -103,6 +104,10 @@ import {HttpClientModule} from '@angular/common/http';
     OtpVerificationComponent,
     LoaderComponent,
     HomePageComponent,
+
+    BrowserModule,
+    BrowserAnimationsModule,
+
 
 
   ],
