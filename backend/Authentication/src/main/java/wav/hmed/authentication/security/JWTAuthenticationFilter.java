@@ -49,11 +49,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) throws IOException {
         User user = (User) authResult.getPrincipal();
+
+        logger.info("Successful authentication for user: " + user.getPhone());
+        logger.info("User role: " + user.getRole());
+        logger.info("User authorities: " + user.getAuthorities());
+
         String token = jwtUtil.generateToken(user);
+
+        // Verify token contents immediately after generation
+        logger.info("Generated token: " + token);
+        logger.info("Extracted roles from new token: " + jwtUtil.extractRoles(token));
 
         LoginResponse loginResponse = new LoginResponse(token, user);
         response.setContentType("application/json");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(loginResponse));
+        new ObjectMapper().writeValue(response.getWriter(), loginResponse);
     }
 
     @Override

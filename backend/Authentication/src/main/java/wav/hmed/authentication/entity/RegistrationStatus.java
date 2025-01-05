@@ -1,5 +1,8 @@
 package wav.hmed.authentication.entity;
 
+// In both Authentication and Backoffice services
 public enum RegistrationStatus {
-    PENDING, APPROVED, REJECTED
+    PENDING,
+    ACCEPTED,
+    DECLINED
 }

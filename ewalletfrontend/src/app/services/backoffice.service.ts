@@ -64,24 +64,12 @@ export class BackofficeService {
   acceptRequest(id: string): Observable<Agent> {
     return this.http.put<RegistrationResponse>(
       `${this.BACKOFFICE_API}/${id}/status`,
-      "ACCEPTED",
-      { headers: this.authService.getAuthHeader() }
+      { status: "ACCEPTED" },
+      {
+        headers: this.authService.getAuthHeader()  // Make sure this includes the Authorization header
+      }
     ).pipe(
-      map(response => new Agent({
-        id: response.id,
-        firstName: response.firstName,
-        lastName: response.lastName,
-        email: response.email,
-        phone: response.phone,
-        idType: response.idType as 'CIN' | 'Passport' | 'Residence permit',
-        idNumber: response.idNumber,
-        birthdate: response.birthdate,
-        address: response.address,
-        immatriculation: response.immatriculation,
-        patentNumber: response.patentNumber,
-        status: response.status,
-        created_at: response.createdAt
-      }))
+      map(response => new Agent(response))
     );
   }
 

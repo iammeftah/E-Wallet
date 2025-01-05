@@ -48,6 +48,10 @@ export class HeaderComponent implements OnInit {
     return this.currentUser?.firstName?.charAt(0) || '';
   }
 
+  getRole(): string {
+    return this.currentUser?.role || '';
+  }
+
   navigateToProfile() {
     this.isDropdownOpen = false; // Close the dropdown
     this.isMenuOpen = false; // Close mobile menu if open

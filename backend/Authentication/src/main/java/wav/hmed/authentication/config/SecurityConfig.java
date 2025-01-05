@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     private final JWTUtil jwtUtil;  // Add this
 
-    public SecurityConfig(UserRepository userRepository, JWTUtil jwtUtil) {  // Add JWTUtil parameter
+    public SecurityConfig(UserRepository userRepository, JWTUtil jwtUtil) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
     }
@@ -39,20 +39,21 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
                     corsConfig.addAllowedOrigin("http://localhost:4200");
+                    corsConfig.addAllowedOrigin("http://localhost:8092");
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
                     corsConfig.setAllowCredentials(true);
                     return corsConfig;
                 }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/admin/create-admin").permitAll()
-                        .requestMatchers("/api/auth/**", "/api/registration-response/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/registration-response/**").permitAll()
+                        .requestMatchers("/api/agents/create").hasAuthority("ROLE_ADMIN") // or whatever role is appropriate
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilter(new JWTAuthenticationFilter(authManager, jwtUtil))  // Pass jwtUtil
-                .addFilter(new JWTAuthorizationFilter(authManager, jwtUtil));  //
+                .addFilter(new JWTAuthenticationFilter(authManager, jwtUtil))
+                .addFilter(new JWTAuthorizationFilter(authManager, jwtUtil));
 
         return http.build();
     }
@@ -80,4 +81,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

@@ -3,6 +3,7 @@ package wav.hmed.authentication.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import wav.hmed.authentication.dto.AgentDTO;
 import wav.hmed.authentication.entity.Agent;
 import wav.hmed.authentication.entity.RegistrationStatus;
 import wav.hmed.authentication.service.AgentService;
@@ -19,6 +20,12 @@ public class AgentController {
     @PostMapping("/register")
     public ResponseEntity<?> registerAgent(@RequestBody Agent agent) {
         return ResponseEntity.ok(agentService.registerAgent(agent));
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<?> createAgent(@RequestBody AgentDTO agentDTO) {
+        Agent agent = agentService.createVerifiedAgent(agentDTO);
+        return ResponseEntity.ok(agent);
     }
 
     @GetMapping

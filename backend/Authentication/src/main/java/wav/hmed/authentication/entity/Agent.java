@@ -1,9 +1,6 @@
 package wav.hmed.authentication.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +16,9 @@ public class Agent extends User {
     private String patentNumber;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private RegistrationStatus status = RegistrationStatus.PENDING;
+
 
     public String getIdType() {
         return idType;

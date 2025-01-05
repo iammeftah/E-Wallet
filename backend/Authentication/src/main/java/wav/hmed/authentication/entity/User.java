@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -21,6 +23,7 @@ public class User implements UserDetails {
     @Column(unique = true)
     private String phone;
     @Enumerated(EnumType.STRING)
+
     private Role role;
     private String password;
 
@@ -73,10 +76,26 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    // UserDetails interface methods
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (role != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+            // Add this debug line
+            System.out.println("Generated authorities for user: " + authorities);
+        }
+        return authorities;
+    }
+
+    // Add this method for debugging
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", phone='" + phone + '\'' +
+                ", role=" + role +
+                ", authorities=" + getAuthorities() +
+                '}';
     }
 
     @Override

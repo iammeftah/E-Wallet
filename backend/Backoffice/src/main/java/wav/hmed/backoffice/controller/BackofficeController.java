@@ -43,6 +43,7 @@ public class BackofficeController {
         return ResponseEntity.ok(registrationService.processRegistration(agentData));
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getRequest(@PathVariable Long id) {
         return registrationService.findById(id)
@@ -66,10 +67,21 @@ public class BackofficeController {
         return ResponseEntity.ok(registrationService.findByStatus(RegistrationStatus.PENDING));
     }
 
+    // In BackofficeController.java
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateStatus(
             @PathVariable Long id,
-            @RequestBody RegistrationStatus status) {
+            @RequestBody Map<String, String> statusRequest,
+            @RequestHeader("Authorization") String authToken) {
+
+        System.out.println("==== BackofficeController Debug ====");
+        System.out.println("1. Received request for ID: " + id);
+        System.out.println("2. Status request: " + statusRequest);
+        System.out.println("3. Auth token received: " + authToken);
+
+        registrationService.setAuthToken(authToken);
+
+        RegistrationStatus status = RegistrationStatus.valueOf(statusRequest.get("status"));
         return ResponseEntity.ok(registrationService.updateStatus(id, status));
     }
 }
