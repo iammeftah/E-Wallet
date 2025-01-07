@@ -19,6 +19,8 @@ export class AuthService {
   private CLIENT_API = 'http://localhost:8091/api/clients';
 
   private BACKOFFICE_API = 'http://localhost:8092/api/registration-requests';
+  private USER_API = 'http://localhost:8091/api/users';
+
 
   public currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
@@ -155,4 +157,71 @@ export class AuthService {
       })
     );
   }
+
+
+  getUserProfile(): Observable<User> {
+    return this.http.get<User>(`${this.USER_API}/profile`, {
+      headers: this.getAuthHeader()
+    }).pipe(
+      map(response => {
+        let user: User;
+        switch (response.role) {
+          case 'AGENT':
+            user = new Agent(response);
+            break;
+          case 'CLIENT':
+            user = new Client(response);
+            break;
+          case 'ADMIN':
+            user = new Admin(response);
+            break;
+          default:
+            user = new User(response);
+        }
+        return user;
+      }),
+      catchError(error => {
+        console.error('Error fetching user profile:', error);
+        return throwError(() => new Error('Failed to fetch user profile'));
+      })
+    );
+  }
+
+  updateUserProfile(updatedUser: Partial<User>): Observable<User> {
+    return this.http.put<User>(`${this.USER_API}/profile`, updatedUser, {
+      headers: this.getAuthHeader()
+    }).pipe(
+      map(response => {
+        const currentUser = this.currentUserValue;
+        const updatedUserData = { ...currentUser, ...response };
+        localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
+        this.currentUserSubject.next(updatedUserData);
+        return updatedUserData;
+      }),
+      catchError(error => {
+        console.error('Error updating user profile:', error);
+        return throwError(() => new Error('Failed to update user profile'));
+      })
+    );
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    const passwordData = {
+      currentPassword,
+      newPassword
+    };
+
+    return this.http.put<void>(`${this.USER_API}/profile/password`, passwordData, {
+      headers: this.getAuthHeader()
+    }).pipe(
+      catchError(error => {
+        console.error('Error changing password:', error);
+        return throwError(() => new Error('Failed to change password'));
+      })
+    );
+  }
+
+
+
+
 }

@@ -1,8 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { User, Client, Agent, Admin } from '../../models/auth.model';
-import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../components/layout/header/header.component';
+import { AuthService } from '../../services/auth.service';
+import { catchError, of } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import {CurrencyPipe, DatePipe, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {HeaderComponent} from '../../components/layout/header/header.component';
 
 interface Transaction {
   date: Date;
@@ -19,26 +22,41 @@ interface SystemActivity {
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
   styleUrls: ['./profile-page.component.css'],
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent]
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    NgClass,
+    CurrencyPipe,
+    TitleCasePipe,
+    HeaderComponent
+  ],
+  providers: [DatePipe]
 })
 export class ProfilePageComponent implements OnInit {
   user: User | undefined;
   isEditing = false;
-  profileForm: FormGroup;
-  passwordForm: FormGroup;
+  isLoading = false;
+  error: string | null = null;
+  profileForm!: FormGroup;
+  passwordForm!: FormGroup;
+
   lastTransaction: Transaction | undefined;
   recentTransactions: Transaction[] = [];
   totalUsers: number = 0;
   activeAgents: number = 0;
   recentActivities: SystemActivity[] = [];
   showChangePasswordModal = false;
-  showSubscriptionPlans = false;
 
   constructor(
     private formBuilder: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef,
+    private datePipe: DatePipe
   ) {
+    this.initializeForms();
+  }
+
+  private initializeForms() {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -48,31 +66,42 @@ export class ProfilePageComponent implements OnInit {
 
     this.passwordForm = this.formBuilder.group({
       currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
+      newPassword: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
+      ]],
       confirmNewPassword: ['', Validators.required]
     }, { validators: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
-    // Mock user data
-    this.user = new Client({
-      id: '1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
-      phone: '1234567890',
-      role: 'CLIENT',
-      clientType: 'HSSAB1',
-      idType: 'Passport',
-      idNumber: 'AB123456',
-      balance: 5000
-    });
-
-    this.updateFormWithUserData();
-    this.loadUserSpecificData();
+    this.loadUserProfile();
   }
 
-  private updateFormWithUserData() {
+  loadUserProfile(): void {
+    this.isLoading = true;
+    this.error = null;
+
+    this.authService.getUserProfile().pipe(
+      catchError(error => {
+        this.error = error.message || 'Failed to load user profile';
+        return of(null);
+      }),
+      finalize(() => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      })
+    ).subscribe(user => {
+      if (user) {
+        this.user = user;
+        this.updateFormWithUserData();
+        this.loadUserSpecificData();
+      }
+    });
+  }
+
+  private updateFormWithUserData(): void {
     if (this.user) {
       this.profileForm.patchValue({
         firstName: this.user.firstName,
@@ -83,7 +112,7 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  private loadUserSpecificData() {
+  private loadUserSpecificData(): void {
     if (this.isClient(this.user)) {
       this.loadClientData();
     } else if (this.isAgent(this.user)) {
@@ -93,9 +122,9 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  private loadClientData() {
+  private loadClientData(): void {
     if (this.isClient(this.user)) {
-      // Mock client-specific data
+      // TODO: Fetch real client data from the backend
       this.lastTransaction = {
         date: new Date(),
         description: 'Online Purchase',
@@ -110,13 +139,13 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
-  private loadAgentData() {
-    // Mock agent-specific data (if needed)
+  private loadAgentData(): void {
+    // TODO: Implement agent-specific data loading
   }
 
-  private loadAdminData() {
+  private loadAdminData(): void {
     if (this.isAdmin(this.user)) {
-      // Mock admin-specific data
+      // TODO: Fetch real admin data from the backend
       this.totalUsers = 1000;
       this.activeAgents = 50;
       this.recentActivities = [
@@ -127,6 +156,74 @@ export class ProfilePageComponent implements OnInit {
     }
   }
 
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+    if (!this.isEditing) {
+      this.updateFormWithUserData();
+    }
+  }
+
+  saveProfile(): void {
+    if (this.profileForm.valid && this.user) {
+      this.isLoading = true;
+      this.error = null;
+
+      const updatedUser = { ...this.user, ...this.profileForm.value };
+
+      this.authService.updateUserProfile(updatedUser).pipe(
+        catchError(error => {
+          this.error = error.message || 'Failed to update profile';
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
+      ).subscribe(user => {
+        if (user) {
+          this.user = user;
+          this.isEditing = false;
+          alert('Profile updated successfully');
+        }
+      });
+    }
+  }
+
+  changePassword(): void {
+    if (this.passwordForm.valid) {
+      this.isLoading = true;
+      this.error = null;
+
+      const { currentPassword, newPassword } = this.passwordForm.value;
+
+      this.authService.changePassword(currentPassword, newPassword).pipe(
+        catchError(error => {
+          this.error = error.message || 'Failed to change password';
+          return of(null);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
+      ).subscribe(response => {
+        if (response !== null) {
+          this.passwordForm.reset();
+          this.closeChangePasswordModal();
+          alert('Password changed successfully');
+        }
+      });
+    }
+  }
+
+  openChangePasswordModal(): void {
+    this.showChangePasswordModal = true;
+  }
+
+  closeChangePasswordModal(): void {
+    this.showChangePasswordModal = false;
+    this.passwordForm.reset();
+  }
+
   private passwordMatchValidator(form: FormGroup) {
     const newPassword = form.get('newPassword');
     const confirmNewPassword = form.get('confirmNewPassword');
@@ -134,42 +231,6 @@ export class ProfilePageComponent implements OnInit {
     return newPassword?.value === confirmNewPassword?.value
       ? null
       : { passwordMismatch: true };
-  }
-
-  toggleEdit() {
-    this.isEditing = !this.isEditing;
-    if (!this.isEditing) {
-      this.updateFormWithUserData();
-    }
-  }
-
-  saveProfile() {
-    if (this.profileForm.valid && this.user) {
-      Object.assign(this.user, this.profileForm.value);
-      this.isEditing = false;
-      console.log('Profile updated:', this.user);
-      alert('Profile updated successfully');
-      this.cdr.detectChanges();
-    }
-  }
-
-  changePassword() {
-    if (this.passwordForm.valid) {
-      console.log('Password changed:', this.passwordForm.value);
-      alert('Password changed successfully');
-      this.passwordForm.reset();
-      this.closeChangePasswordModal();
-      this.cdr.detectChanges();
-    }
-  }
-
-  openChangePasswordModal() {
-    this.showChangePasswordModal = true;
-  }
-
-  closeChangePasswordModal() {
-    this.showChangePasswordModal = false;
-    this.passwordForm.reset();
   }
 
   isClient(user: User | undefined): user is Client {
@@ -184,23 +245,14 @@ export class ProfilePageComponent implements OnInit {
     return user?.role === 'ADMIN';
   }
 
-  viewAllTransactions() {
+  formatDate(date: string): string {
+    return this.datePipe.transform(date, 'medium') || '';
+  }
+
+  viewAllTransactions(): void {
     if (this.user && this.isClient(this.user)) {
       console.log('Viewing all transactions for client:', this.user.id);
       alert('Viewing all transactions (not implemented)');
-    }
-  }
-
-  toggleSubscriptionPlans() {
-    this.showSubscriptionPlans = !this.showSubscriptionPlans;
-  }
-
-  handlePlanChange(planName: 'HSSAB1' | 'HSSAB2' | 'HSSAB3') {
-    if (this.user && this.isClient(this.user)) {
-      this.user.clientType = planName;
-      console.log(`Changed plan to: ${planName}`);
-      alert(`Plan changed to ${planName}`);
-      this.cdr.detectChanges();
     }
   }
 }

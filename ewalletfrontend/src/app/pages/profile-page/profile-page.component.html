@@ -80,10 +80,6 @@
                 <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Balance</h3>
                 <p class="text-3xl font-bold text-neutral-800 dark:text-neutral-200">{{ user.balance | currency }}</p>
               </div>
-              <div class="bg-neutral-200 dark:bg-neutral-700 rounded-lg p-6">
-                <h3 class="text-xl font-semibold mb-2 text-neutral-800 dark:text-neutral-200">Last Transaction</h3>
-                <p class="text-lg text-neutral-800 dark:text-neutral-200">{{ lastTransaction?.amount | currency }} - {{ lastTransaction?.date | date:'short' }}</p>
-              </div>
             </div>
             <div class="mt-6">
               <h3 class="text-lg sm:text-xl font-semibold mb-4 text-neutral-800 dark:text-neutral-200">Recent Transactions</h3>
@@ -98,7 +94,7 @@
                   </thead>
                   <tbody class="divide-y divide-neutral-200 dark:divide-neutral-500">
                   <tr *ngFor="let transaction of recentTransactions">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{{ transaction.date | date:'short' }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{{ formatDate(transaction.date) }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-800 dark:text-neutral-200">{{ transaction.description }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm" [ngClass]="{'text-green-600': transaction.amount > 0, 'text-red-600': transaction.amount < 0}">
                       {{ transaction.amount | currency }}
@@ -144,7 +140,7 @@
               </div>
               <div>
                 <p class="text-neutral-600 dark:text-neutral-400"><strong>Birthdate:</strong></p>
-                <p class="text-neutral-800 dark:text-neutral-200">{{ user.birthdate | date:'mediumDate' }}</p>
+                <p class="text-neutral-800 dark:text-neutral-200">{{ formatDate(user.birthdate) }}</p>
               </div>
               <div>
                 <p class="text-neutral-600 dark:text-neutral-400"><strong>Address:</strong></p>
@@ -179,7 +175,7 @@
               <ul class="space-y-2">
                 <li *ngFor="let activity of recentActivities" class="bg-neutral-100 dark:bg-neutral-700 rounded-lg p-3">
                   <p class="text-neutral-800 dark:text-neutral-200">{{ activity.description }}</p>
-                  <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ activity.date | date:'medium' }}</p>
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400">{{ formatDate(activity.date) }}</p>
                 </li>
               </ul>
             </div>

@@ -50,10 +50,10 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/admin/create-admin").permitAll() // Allow access to this endpoint
+                        .requestMatchers("/api/admin/create-admin").permitAll()
                         .requestMatchers("/api/registration-response/**").permitAll()
-                        .requestMatchers("/api/agents/create").permitAll() // or whatever role is appropriate
-                        .requestMatchers("/api/clients/create").permitAll() // or whatever role is appropriate
+                        .requestMatchers("/api/agents/create").permitAll()
+                        .requestMatchers("/api/clients/create").permitAll()
                         .requestMatchers("/send-email").permitAll()
                         .requestMatchers("/api/notifications/**").permitAll()
 
@@ -89,6 +89,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 
 
 }
