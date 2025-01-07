@@ -25,6 +25,7 @@ export class User {
 }
 
 export class Client extends User {
+  override id: string;  // Add the 'override' modifier here
   clientType: 'HSSAB1' | 'HSSAB2' | 'HSSAB3';
   idType?: 'CIN' | 'Passport' | 'Residence permit';
   idNumber?: string;
@@ -34,6 +35,7 @@ export class Client extends User {
 
   constructor(data: Partial<Client>) {
     super(data);
+    this.id = data.id || '';
     this.role = 'CLIENT';
     this.clientType = data.clientType || 'HSSAB1';
     this.idType = data.idType;
@@ -43,6 +45,8 @@ export class Client extends User {
     this.registrationDate = data.registrationDate ? new Date(data.registrationDate) : undefined;
   }
 }
+
+
 
 export interface AgentData {
   id: string;

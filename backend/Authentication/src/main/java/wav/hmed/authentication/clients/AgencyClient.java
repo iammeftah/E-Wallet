@@ -6,6 +6,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import wav.hmed.authentication.dto.ClientDTO;
+import wav.hmed.authentication.entity.Client;
 
 @Component
 public class AgencyClient {
@@ -30,3 +32,4 @@ public class AgencyClient {
         );
     }
 }
+

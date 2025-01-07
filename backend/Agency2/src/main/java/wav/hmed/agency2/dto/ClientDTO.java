@@ -1,27 +1,27 @@
-// ClientDTO.java
-package wav.hmed.agency.dto;
+package wav.hmed.agency2.dto;
 
 import java.time.LocalDateTime;
 
 public class ClientDTO {
-    private Long id;
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
+    private String clientType;
     private String idType;
     private String idNumber;
-    private String birthdate;
-    private String address;
+    private Double balance;
     private String status;
-    private LocalDateTime createdAt;
+    private LocalDateTime registrationDate;
 
-    // Getters and setters
-    public Long getId() {
+    // Getters and setters for all fields
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -57,6 +57,14 @@ public class ClientDTO {
         this.phone = phone;
     }
 
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
     public String getIdType() {
         return idType;
     }
@@ -73,20 +81,12 @@ public class ClientDTO {
         this.idNumber = idNumber;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public Double getBalance() {
+        return balance;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setBalance(Double balance) {
+        this.balance = balance;
     }
 
     public String getStatus() {
@@ -97,13 +97,18 @@ public class ClientDTO {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setRegistrationDate(LocalDateTime registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
-
+    // Constructor
+    public ClientDTO() {
+        this.balance = 0.0;
+        this.status = "PENDING";
+        this.registrationDate = LocalDateTime.now();
+    }
 }

@@ -181,11 +181,7 @@
 
 
     </div>
-    <app-otp-verification
-      *ngIf="showOtpVerification"
-      [phoneNumber]="phoneNumber"
-      (otpVerified)="onOtpVerified($event)"
-    ></app-otp-verification>
+
   </form>
 </div>
 <app-loader *ngIf="isLoading"></app-loader>

@@ -1,7 +1,7 @@
-package wav.hmed.agency.entity;
+package wav.hmed.agency2.entity;
 
 import jakarta.persistence.*;
-import wav.hmed.agency.dto.ClientDTO;
+import wav.hmed.agency2.dto.ClientDTO;
 
 import java.time.LocalDateTime;
 
@@ -11,15 +11,14 @@ public class RegistrationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long clientId;
+    private String clientId;
     private String firstName;
     private String lastName;
     private String email;
     private String phone;
+    private String clientType;
     private String idType;
     private String idNumber;
-    private String birthdate;
-    private String address;
 
     @Enumerated(EnumType.STRING)
     private RegistrationStatus status = RegistrationStatus.PENDING;
@@ -27,7 +26,6 @@ public class RegistrationRequest {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and setters
-    // ...
 
     public Long getId() {
         return id;
@@ -37,11 +35,11 @@ public class RegistrationRequest {
         this.id = id;
     }
 
-    public Long getClientId() {
+    public String getClientId() {
         return clientId;
     }
 
-    public void setClientId(Long clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
@@ -77,6 +75,14 @@ public class RegistrationRequest {
         this.phone = phone;
     }
 
+    public String getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(String clientType) {
+        this.clientType = clientType;
+    }
+
     public String getIdType() {
         return idType;
     }
@@ -91,22 +97,6 @@ public class RegistrationRequest {
 
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
-    }
-
-    public String getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
     }
 
     public RegistrationStatus getStatus() {
@@ -132,12 +122,11 @@ public class RegistrationRequest {
         dto.setLastName(this.lastName);
         dto.setEmail(this.email);
         dto.setPhone(this.phone);
+        dto.setClientType(this.clientType);
         dto.setIdType(this.idType);
         dto.setIdNumber(this.idNumber);
-        dto.setBirthdate(this.birthdate);
-        dto.setAddress(this.address);
         dto.setStatus(this.status.name());
-        dto.setCreatedAt(this.createdAt);
+        dto.setRegistrationDate(this.createdAt);
         return dto;
     }
 
@@ -147,10 +136,8 @@ public class RegistrationRequest {
         this.lastName = dto.getLastName();
         this.email = dto.getEmail();
         this.phone = dto.getPhone();
+        this.clientType = dto.getClientType();
         this.idType = dto.getIdType();
         this.idNumber = dto.getIdNumber();
-        this.birthdate = dto.getBirthdate();
-        this.address = dto.getAddress();
     }
 }
-

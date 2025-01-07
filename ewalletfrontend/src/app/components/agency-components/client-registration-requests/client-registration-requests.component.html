@@ -16,31 +16,49 @@
     <table class="w-full">
       <thead>
       <tr class="bg-neutral-200 dark:bg-neutral-800">
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Client Name</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Email</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Phone</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Status</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Client Type</th>
-        <th class="px-6 py-3 text-left text-sm font-semibold text-neutral-800 dark:text-neutral-400">Actions</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Client Name</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Email</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Phone</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Status</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Submission Date</th>
+        <th class="px-6 py-3 text-left text-sm font-semibold">Actions</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let request of paginatedRequests" class="border-t border-neutral-300 dark:border-neutral-700 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.firstName}} {{request.lastName}}</td>
-        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.email}}</td>
-        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.phone}}</td>
-        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.status}}</td>
-        <td class="px-6 py-4 text-sm text-neutral-800 dark:text-neutral-200">{{request.clientType}}</td>
-        <td class="px-5 py-4 text-sm flex flex-row gap-2 items-center">
-          <button class="secondary-button" (click)="viewRequest(request.id!)">
-            View
-          </button>
-          <button class="primary-button" *ngIf="request.status === 'PENDING'" (click)="approveRequest(request.id!)">
-            Approve
-          </button>
-          <button class="danger-button" *ngIf="request.status === 'PENDING'" (click)="rejectRequest(request.id!)">
-            Reject
-          </button>
+      <tr *ngFor="let request of paginatedRequests" class="border-t border-neutral-300 dark:border-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-800">
+        <td class="px-6 py-4 text-sm">{{request.firstName}} {{request.lastName}}</td>
+        <td class="px-6 py-4 text-sm">{{request.email}}</td>
+        <td class="px-6 py-4 text-sm">{{request.phone}}</td>
+        <td class="px-6 py-4 text-sm">
+            <span [ngClass]="{
+              'text-yellow-600 dark:text-yellow-400': request.status === 'PENDING',
+              'text-green-600 dark:text-green-400': request.status === 'APPROVED',
+              'text-red-600 dark:text-red-400': request.status === 'REJECTED'
+            }">
+              {{request.status}}
+            </span>
+        </td>
+        <td class="px-6 py-4 text-sm">{{request.registrationDate | date:'short'}}</td>
+        <td class="px-6 py-4 text-sm">
+          <div class="flex gap-2">
+            <button
+              (click)="viewRequest(request.id)"
+              class="px-3 py-1 bg-neutral-200 dark:bg-neutral-700 rounded hover:bg-neutral-300 dark:hover:bg-neutral-600">
+              View
+            </button>
+            <button
+              *ngIf="request.status === 'PENDING'"
+              (click)="approveRequest(request.id)"
+              class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">
+              Approve
+            </button>
+            <button
+              *ngIf="request.status === 'PENDING'"
+              (click)="rejectRequest(request.id)"
+              class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+              Reject
+            </button>
+          </div>
         </td>
       </tr>
       </tbody>
@@ -65,6 +83,7 @@
           (click)="onPageChange(page)"
           [class.bg-neutral-400]="currentPage === page"
           [class.text-neutral-200]="currentPage === page"
+
           class="px-3 py-1 text-neutral-800 dark:text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 bg-neutral-200 dark:bg-neutral-700 rounded transition-colors"
         >
           {{ page }}
@@ -80,4 +99,3 @@
     </div>
   </div>
 </div>
-

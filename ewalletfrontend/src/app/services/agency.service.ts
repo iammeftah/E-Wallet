@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import {catchError, map, tap} from 'rxjs/operators';
 import { ClientSignUpData, Client, RegistrationResponse } from '../models/auth.model';
 
 @Injectable({
@@ -10,14 +10,40 @@ import { ClientSignUpData, Client, RegistrationResponse } from '../models/auth.m
 export class AgencyService {
   private API_URL = 'http://localhost:8093/api/agency';
 
+
   constructor(private http: HttpClient) {}
 
 
 
   submitRegistrationRequest(formData: FormData): Observable<RegistrationResponse> {
-    return this.http.post<RegistrationResponse>(`${this.API_URL}/registration-requests`, formData).pipe(
+    return this.http.post<RegistrationResponse>(
+      `${this.API_URL}/registration-requests`,
+      formData,
+      {
+        withCredentials: true
+      }
+    ).pipe(
       catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('=== Detailed Error Information ===');
+    console.error('Status:', error.status);
+    console.error('Status Text:', error.statusText);
+    console.error('URL:', error.url);
+    console.error('Headers:', error.headers);
+    console.error('Error:', error.error);
+
+    let errorMessage = 'An error occurred';
+    if (error.error instanceof ErrorEvent) {
+      console.error('Client Error Details:', error.error.message);
+      errorMessage = error.error.message;
+    } else {
+      console.error('Server Error Details:', error.error);
+      errorMessage = error.error?.message || 'Server error occurred';
+    }
+    return throwError(() => new Error(errorMessage));
   }
 
   getRegistrationStatus(clientId: string): Observable<RegistrationResponse> {
@@ -47,15 +73,4 @@ export class AgencyService {
     );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'An error occurred';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = error.error.message;
-    } else {
-      // Server-side error
-      errorMessage = error.error?.message || 'Server error occurred';
-    }
-    return throwError(() => new Error(errorMessage));
-  }
 }

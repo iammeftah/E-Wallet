@@ -1,0 +1,43 @@
+Access to XMLHttpRequest at 'http://localhost:8093/api/agency/registration-requests' from origin 'http://localhost:4200' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+agency.service.ts:47 === Detailed Error Information ===
+handleError @ agency.service.ts:47
+...
+onSubmit @ sign-up-client.component.ts:192
+SignUpClientComponent_Template_form_ngSubmit_11_listener @ sign-up-client.component.html:19
+...
+agency.service.ts:52 Error: ProgressEvent {isTrusted: true, lengthComputable: false, loaded: 0, total: 0, type: 'error', …}
+handleError @ agency.service.ts:52
+...
+onSubmit @ sign-up-client.component.ts:192
+SignUpClientComponent_Template_form_ngSubmit_11_listener @ sign-up-client.component.html:19
+executeListenerWithErrorHandling @ core.mjs:29251
+...
+agency.service.ts:59 Server Error Details: ProgressEvent {isTrusted: true, lengthComputable: false, loaded: 0, total: 0, type: 'error', …}
+handleError @ agency.service.ts:59
+(anonymous) @ catchError.js:10
+OperatorSubscriber2._this._error @ OperatorSubscriber.js:21
+Subscriber2.error @ Subscriber.js:40
+(anonymous) @ tap.js
+...
+(anonymous) @ main.ts:4
+sign-up-client.component.ts:200 Registration request failed: Error: Server error occurred
+    at agency.service.ts:62:29
+    at Observable2.init [as _subscribe] (throwError.js:8:29)
+    at Observable2._trySubscribe (Observable.js:33:19)
+    at Observable.js:27:115
+    at errorContext (errorContext.js:23:5)
+    at Observable2.subscribe (Observable.js:23:5)
+    at catchError.js:14:23
+    at OperatorSubscriber2._this._error (OperatorSubscriber.js:21:9)
+    at Subscriber2.error (Subscriber.js:40:12)
+    at tap.js:28:18
+error @ sign-up-client.component.ts:200
+ConsumerObserver2.error @ Subscriber.js:100
+Subscriber2._error @ Subscriber.js:63
+...
+bootstrapModule @ core.mjs:34800
+(anonymous) @ main.ts:4
+sign-up-client.component.ts:192
+
+
+       POST http://localhost:8093/api/agency/registration-requests net::ERR_FAILED

@@ -3,14 +3,13 @@ package wav.hmed.agency.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import wav.hmed.agency.dto.ClientDTO;
-import wav.hmed.agency.entity.RegistrationRequest;
+import wav.hmed.agency.entity.RegistrationStatus;
 import wav.hmed.agency.service.RegistrationService;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/agency")
+@RequestMapping("/api/client-registrations")
 public class AgencyController {
     private final RegistrationService registrationService;
 
@@ -18,40 +17,27 @@ public class AgencyController {
         this.registrationService = registrationService;
     }
 
-    @GetMapping("/registration-requests/list")
-    public ResponseEntity<List<ClientDTO>> getRegistrationRequests() {
-        List<RegistrationRequest> requests = registrationService.getRegistrationRequests();
-        return ResponseEntity.ok(requests.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList()));
+    @PostMapping
+    public ResponseEntity<?> createRequest(@RequestBody ClientDTO clientData) {
+        return ResponseEntity.ok(registrationService.processRegistration(clientData));
     }
 
-    private ClientDTO convertToDTO(RegistrationRequest request) {
-        ClientDTO dto = new ClientDTO();
-        dto.setId(request.getClientId());
-        dto.setFirstName(request.getFirstName());
-        dto.setLastName(request.getLastName());
-        dto.setEmail(request.getEmail());
-        dto.setPhone(request.getPhone());
-        dto.setStatus(request.getStatus().toString());
-        // Set other fields as needed
-        return dto;
+    @GetMapping
+    public ResponseEntity<?> getAllRequests() {
+        return ResponseEntity.ok(registrationService.findAll());
     }
 
-    @PostMapping("/registration-requests")
-    public ResponseEntity<?> handleRegistrationRequest(@RequestBody ClientDTO clientDTO) {
-        return ResponseEntity.ok(registrationService.createRegistrationRequest(clientDTO));
+    @GetMapping("/pending")
+    public ResponseEntity<?> getPendingRequests() {
+        return ResponseEntity.ok(registrationService.findByStatus(RegistrationStatus.PENDING));
     }
 
-    @PostMapping("/registration-requests/{requestId}/approve")
-    public ResponseEntity<?> approveRegistration(@PathVariable Long requestId) {
-        registrationService.approveRegistration(requestId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/registration-requests/{requestId}/reject")
-    public ResponseEntity<?> rejectRegistration(@PathVariable Long requestId) {
-        registrationService.rejectRegistration(requestId);
-        return ResponseEntity.ok().build();
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> updateStatus(
+            @PathVariable Long id,
+            @RequestBody Map<String, String> statusRequest,
+            @RequestHeader("Authorization") String authToken) {
+        RegistrationStatus status = RegistrationStatus.valueOf(statusRequest.get("status"));
+        return ResponseEntity.ok(registrationService.updateStatus(id, status, authToken));
     }
 }

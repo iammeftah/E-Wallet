@@ -4,14 +4,7 @@ import { FormsModule } from '@angular/forms';
 import {AgencyService} from '../../../services/agency.service';
 import {Client} from '../../../models/auth.model';
 
-interface ClientRegistrationRequest {
-  id: number;
-  clientName: string;
-  email: string;
-  phone: string;
-  status: 'Pending' | 'Approved' | 'Rejected';
-  submissionDate: Date;
-}
+
 
 @Component({
   selector: 'app-client-registration-requests',
