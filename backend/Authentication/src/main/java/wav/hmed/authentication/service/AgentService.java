@@ -51,7 +51,7 @@ public class AgentService {
 
         // Generate a temporary password and encode it
         String tempPassword = generateTemporaryPassword();
-
+        System.out.println(tempPassword);
         // TODO: Send temporary password to agent via email/SMS
 
 

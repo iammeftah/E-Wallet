@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {AgencyService} from '../../../services/agency.service';
+import {Client} from '../../../models/auth.model';
 
 interface ClientRegistrationRequest {
   id: number;
@@ -19,24 +21,50 @@ interface ClientRegistrationRequest {
   imports: [CommonModule, FormsModule]
 })
 export class ClientRegistrationRequestsComponent implements OnInit {
-  requests: ClientRegistrationRequest[] = [];
-  filteredRequests: ClientRegistrationRequest[] = [];
+  requests: Client[] = [];
+  filteredRequests: Client[] = [];
   pageSize = 10;
   currentPage = 1;
   searchTerm = '';
+  isLoading = false;
+  error = '';
+  successMessage = '';
+
+  constructor(private agencyService: AgencyService) {}
 
   ngOnInit() {
-    // Populate with dummy data
-    this.requests = Array(20).fill(null).map((_, index) => ({
-      id: index + 1,
-      clientName: `Client ${index + 1}`,
-      email: `client${index + 1}@example.com`,
-      phone: `+212${6000000 + index}`,
-      status: ['Pending', 'Approved', 'Rejected'][Math.floor(Math.random() * 3)] as 'Pending' | 'Approved' | 'Rejected',
-      submissionDate: new Date(Date.now() - Math.floor(Math.random() * 10000000000))
-    }));
-    this.filteredRequests = [...this.requests];
+    this.loadRegistrationRequests();
   }
+
+  loadRegistrationRequests() {
+    this.isLoading = true;
+    this.agencyService.getClientRegistrationRequests().subscribe({
+      next: (data) => {
+        this.requests = data;
+        this.filteredRequests = [...this.requests];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = 'Failed to load registration requests: ' + error.message;
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // In client-registration-requests.component.ts
+  isPending(request: Client): boolean {
+    return request.status === 'PENDING';
+  }
+
+  canApprove(request: Client): boolean {
+    return request.status === 'PENDING';
+  }
+
+  canReject(request: Client): boolean {
+    return request.status === 'PENDING';
+  }
+
+
 
   get paginatedRequests() {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -49,7 +77,8 @@ export class ClientRegistrationRequestsComponent implements OnInit {
 
   onSearch() {
     this.filteredRequests = this.requests.filter(request =>
-      request.clientName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      request.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      request.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       request.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       request.phone.includes(this.searchTerm)
     );
@@ -83,6 +112,55 @@ export class ClientRegistrationRequestsComponent implements OnInit {
     if (this.currentPage < pageCount) {
       this.onPageChange(this.currentPage + 1);
     }
+  }
+
+  approveRequest(id: string) {
+    this.isLoading = true;
+    this.error = '';
+    this.successMessage = '';
+
+    this.agencyService.approveClientRegistration(id).subscribe({
+      next: (updatedClient) => {
+        const index = this.requests.findIndex(r => r.id === id);
+        if (index !== -1) {
+          this.requests[index] = updatedClient;
+          this.filteredRequests = [...this.requests];
+          this.successMessage = 'Registration request approved successfully';
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = 'Error approving request: ' + error.message;
+        this.isLoading = false;
+      }
+    });
+  }
+
+  rejectRequest(id: string) {
+    this.isLoading = true;
+    this.error = '';
+    this.successMessage = '';
+
+    this.agencyService.rejectClientRegistration(id).subscribe({
+      next: (updatedClient) => {
+        const index = this.requests.findIndex(r => r.id === id);
+        if (index !== -1) {
+          this.requests[index] = updatedClient;
+          this.filteredRequests = [...this.requests];
+          this.successMessage = 'Registration request rejected successfully';
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = 'Error rejecting request: ' + error.message;
+        this.isLoading = false;
+      }
+    });
+  }
+
+  viewRequest(id: string) {
+    // Implementation for viewing request details
+    console.log(`Viewing request ${id}`);
   }
 
   protected readonly Math = Math;

@@ -4,6 +4,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import {OtpVerificationComponent} from '../../elements/otp-verification/otp-verification.component';
 import {LoaderComponent} from '../../elements/loader/loader.component';
+import { AgencyService } from '../../../services/agency.service';
+import {Router} from '@angular/router';
+import {ClientSignUpData} from '../../../models/auth.model';
 
 
 @Component({
@@ -30,14 +33,19 @@ export class SignUpClientComponent implements OnInit {
   isLoading: boolean = false;
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private agencyService: AgencyService,
+    private router: Router
+  ) {
     this.signUpForm = this.fb.group({
       clientType: ['', Validators.required],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
       idType: [''],
+      idNumber: [''],
       idDocument: [null],
       idDocumentBack: [null],
       incomeProof: [null]
@@ -131,16 +139,82 @@ export class SignUpClientComponent implements OnInit {
     }
   }
 
+  // In sign-up-client.component.ts
+  // In sign-up-client.component.ts
   onSubmit() {
     if (this.signUpForm.valid) {
+      console.log('Form submitted with values:', this.signUpForm.value);
       this.isLoading = true;
-      // Simulate an API call
-      setTimeout(() => {
-        console.log(this.signUpForm.value);
-        this.phoneNumber = this.signUpForm.get('phone')?.value;
-        this.showOtpVerification = true;
-        this.isLoading = false;
-      }, 2000);
+
+      // Create the ClientSignUpData object
+      const clientData: ClientSignUpData = {
+        clientType: this.signUpForm.get('clientType')?.value,
+        firstName: this.signUpForm.get('firstName')?.value,
+        lastName: this.signUpForm.get('lastName')?.value,
+        phone: this.signUpForm.get('phone')?.value,
+        email: this.signUpForm.get('email')?.value,
+        idType: this.signUpForm.get('idType')?.value,
+        idNumber: this.signUpForm.get('idNumber')?.value,
+      };
+
+      console.log('Prepared client data:', clientData);
+
+      // Create FormData and append all the data
+      const formData = new FormData();
+
+      // Append all non-file fields
+      Object.keys(clientData).forEach(key => {
+        if (clientData[key as keyof ClientSignUpData]) {
+          formData.append(key, clientData[key as keyof ClientSignUpData] as string);
+          console.log(`Appending ${key}:`, clientData[key as keyof ClientSignUpData]);
+        }
+      });
+
+      // Log files being uploaded
+      const idDocument = this.signUpForm.get('idDocument')?.value;
+      if (idDocument) {
+        console.log('Uploading ID document:', idDocument.name, 'Size:', idDocument.size);
+        formData.append('idDocument', idDocument);
+      }
+
+      const idDocumentBack = this.signUpForm.get('idDocumentBack')?.value;
+      if (idDocumentBack) {
+        console.log('Uploading ID document back:', idDocumentBack.name, 'Size:', idDocumentBack.size);
+        formData.append('idDocumentBack', idDocumentBack);
+      }
+
+      const incomeProof = this.signUpForm.get('incomeProof')?.value;
+      if (incomeProof) {
+        console.log('Uploading income proof:', incomeProof.name, 'Size:', incomeProof.size);
+        formData.append('incomeProof', incomeProof);
+      }
+
+      this.agencyService.submitRegistrationRequest(formData).subscribe({
+        next: (response) => {
+          console.log('Registration request successful. Response:', response);
+          this.isLoading = false;
+          this.phoneNumber = this.signUpForm.get('phone')?.value;
+          this.showOtpVerification = true;
+        },
+        error: (error) => {
+          console.error('Registration request failed:', error);
+          if (error.error) {
+            console.error('Error details:', error.error);
+          }
+          this.isLoading = false;
+        }
+      });
+    } else {
+      console.warn('Form validation failed. Form errors:', this.signUpForm.errors);
+      console.warn('Individual field errors:', {
+        clientType: this.signUpForm.get('clientType')?.errors,
+        firstName: this.signUpForm.get('firstName')?.errors,
+        lastName: this.signUpForm.get('lastName')?.errors,
+        phone: this.signUpForm.get('phone')?.errors,
+        email: this.signUpForm.get('email')?.errors,
+        idType: this.signUpForm.get('idType')?.errors,
+        idNumber: this.signUpForm.get('idNumber')?.errors,
+      });
     }
   }
 

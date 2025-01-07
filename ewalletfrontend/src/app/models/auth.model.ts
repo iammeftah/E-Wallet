@@ -29,6 +29,8 @@ export class Client extends User {
   idType?: 'CIN' | 'Passport' | 'Residence permit';
   idNumber?: string;
   balance: number;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  registrationDate?: Date;
 
   constructor(data: Partial<Client>) {
     super(data);
@@ -37,6 +39,8 @@ export class Client extends User {
     this.idType = data.idType;
     this.idNumber = data.idNumber;
     this.balance = data.balance || 0;
+    this.status = data.status || 'PENDING';
+    this.registrationDate = data.registrationDate ? new Date(data.registrationDate) : undefined;
   }
 }
 
@@ -146,7 +150,9 @@ export interface AgentSignUpData {
   idDocument: File | null;
 }
 
+// In auth.model.ts
 export interface ClientSignUpData {
+  id?: string; // Added for when receiving from backend
   clientType: 'HSSAB1' | 'HSSAB2' | 'HSSAB3';
   firstName: string;
   lastName: string;
@@ -155,5 +161,14 @@ export interface ClientSignUpData {
   idType?: 'CIN' | 'Passport' | 'Residence permit';
   idNumber?: string;
   idDocument?: File | null;
+  idDocumentBack?: File | null; // Added this field
   incomeProof?: File | null;
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED';
+  submissionDate?: Date;
+}
+
+export interface RegistrationResponse {
+  id: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  message?: string;
 }
