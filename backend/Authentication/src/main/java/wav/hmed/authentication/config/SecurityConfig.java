@@ -42,7 +42,7 @@ public class SecurityConfig {
                     corsConfig.addAllowedOrigin("http://localhost:8092");
                     corsConfig.addAllowedOrigin("http://localhost:8093");
                     corsConfig.addAllowedOrigin("http://localhost:8094");
-                    corsConfig.addAllowedOrigin("http://localhost:8095");
+                    corsConfig.addAllowedOrigin("http://localhost:8095");  // Notification service
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
                     corsConfig.setAllowCredentials(true);
@@ -50,9 +50,13 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/create-admin").permitAll() // Allow access to this endpoint
                         .requestMatchers("/api/registration-response/**").permitAll()
-                        .requestMatchers("/api/agents/create").hasAuthority("ROLE_ADMIN") // or whatever role is appropriate
+                        .requestMatchers("/api/agents/create").permitAll() // or whatever role is appropriate
                         .requestMatchers("/api/clients/create").permitAll() // or whatever role is appropriate
+                        .requestMatchers("/send-email").permitAll()
+                        .requestMatchers("/api/notifications/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
