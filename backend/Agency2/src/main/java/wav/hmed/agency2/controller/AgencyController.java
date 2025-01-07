@@ -1,14 +1,18 @@
 package wav.hmed.agency2.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import wav.hmed.agency2.dto.ClientDTO;
+import wav.hmed.agency2.entity.RegistrationRequest;
 import wav.hmed.agency2.entity.RegistrationStatus;
 import wav.hmed.agency2.service.FileStorageService;
 import wav.hmed.agency2.service.RegistrationService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,10 +70,10 @@ public class AgencyController {
         return ResponseEntity.ok(registrationService.processRegistration(clientData));
     }
 
-    // Other existing endpoints remain the same
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRequest(@PathVariable Long id) {
-        return registrationService.findById(id)
+    public ResponseEntity<?> getRequest(@PathVariable String id) {
+        Long requestId = Long.parseLong(id);
+        return registrationService.findById(requestId)
                 .map(request -> {
                     ClientDTO clientData = registrationService.getClientDataFromRequest(request);
                     return ResponseEntity.ok(Map.of(
@@ -77,7 +81,7 @@ public class AgencyController {
                             "clientData", clientData
                     ));
                 })
-                .orElseThrow(() -> new RuntimeException("Request not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Registration request not found"));
     }
 
     @GetMapping
@@ -105,4 +109,42 @@ public class AgencyController {
         RegistrationStatus status = RegistrationStatus.valueOf(statusRequest.get("status"));
         return ResponseEntity.ok(registrationService.updateStatus(id, status));
     }
+
+
+    @GetMapping("/list")
+    public ResponseEntity<List<RegistrationRequest>> getRegistrationRequests() {
+        List<RegistrationRequest> requests = registrationService.findAll();
+        return ResponseEntity.ok(requests);
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<RegistrationRequest> approveRequest(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String authToken  // Add this
+    ) {
+        registrationService.setAuthToken(authToken); // Add this
+        RegistrationRequest updatedClient = registrationService.updateStatus(
+                Long.parseLong(id),
+                RegistrationStatus.ACCEPTED
+        );
+        return ResponseEntity.ok(updatedClient);
+    }
+
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<RegistrationRequest> rejectRequest(
+            @PathVariable String id,
+            @RequestHeader("Authorization") String authToken  // Add this
+    ) {
+        registrationService.setAuthToken(authToken); // Add this
+        RegistrationRequest updatedClient = registrationService.updateStatus(
+                Long.parseLong(id),
+                RegistrationStatus.DECLINED
+        );
+        return ResponseEntity.ok(updatedClient);
+    }
+
+
+
+
+
 }

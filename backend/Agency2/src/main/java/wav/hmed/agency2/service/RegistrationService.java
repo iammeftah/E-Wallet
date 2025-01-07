@@ -41,13 +41,11 @@ public class RegistrationService {
         return request.toClientDTO();
     }
 
-    // In RegistrationService.java
     @Transactional
     public RegistrationRequest updateStatus(Long requestId, RegistrationStatus newStatus) {
-        System.out.println("==== RegistrationService Debug ====");
-        System.out.println("1. Processing request ID: " + requestId);
-        System.out.println("2. New status: " + newStatus);
-        System.out.println("3. Current auth token: " + authToken);
+        if (newStatus == RegistrationStatus.ACCEPTED && (authToken == null || authToken.trim().isEmpty())) {
+            throw new RuntimeException("Authentication token is required for approval");
+        }
 
         RegistrationRequest request = repository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
@@ -58,23 +56,14 @@ public class RegistrationService {
             try {
                 ClientDTO clientDTO = request.toClientDTO();
                 clientDTO.setStatus(RegistrationStatus.ACCEPTED.name());
-                System.out.println("4. Converting to AgentDTO: " + clientDTO);
 
-                // Make sure we're passing the full token
-                String fullToken = authToken;
-                if (!fullToken.startsWith("Bearer ")) {
-                    fullToken = "Bearer " + authToken;
-                }
-                System.out.println("5. Final token being sent: " + fullToken);
-
-                authenticationClient.createClient(clientDTO, fullToken);
-                System.out.println("6. Agent creation successful");
+                // Ensure token is properly formatted
+                String formattedToken = authToken.startsWith("Bearer ") ? authToken : "Bearer " + authToken;
+                authenticationClient.createClient(clientDTO, formattedToken);
             } catch (Exception e) {
-                System.out.println("==== Error in RegistrationService ====");
+                System.out.println("Error in updateStatus: " + e.getMessage());
                 e.printStackTrace();
-                System.out.println("Error message: " + e.getMessage());
-                System.out.println("Error cause: " + (e.getCause() != null ? e.getCause().getMessage() : "No cause"));
-                throw new RuntimeException("Failed to create agent in auth service", e);
+                throw new RuntimeException("Failed to create client in auth service: " + e.getMessage(), e);
             }
         }
 

@@ -1,10 +1,12 @@
 package wav.hmed.agency2.clients;
 
+import ch.qos.logback.core.net.server.Client;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import wav.hmed.agency2.dto.ClientDTO;
 import wav.hmed.agency2.entity.RegistrationStatus;
@@ -21,7 +23,10 @@ public class AuthenticationClient {
     public void createClient(ClientDTO clientDTO, String authToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", ensureBearerToken(authToken));
+
+        // Ensure token has Bearer prefix
+        String formattedToken = authToken.startsWith("Bearer ") ? authToken : "Bearer " + authToken;
+        headers.set("Authorization", formattedToken);
 
         HttpEntity<ClientDTO> request = new HttpEntity<>(clientDTO, headers);
 
@@ -30,9 +35,11 @@ public class AuthenticationClient {
                     authServiceUrl + "/api/clients/create",
                     HttpMethod.POST,
                     request,
-                    String.class
+                    Client.class
             );
-        } catch (Exception e) {
+        } catch (HttpClientErrorException e) {
+            System.out.println("Error creating client. Status code: " + e.getStatusCode());
+            System.out.println("Error response body: " + e.getResponseBodyAsString());
             throw new RuntimeException("Failed to create client: " + e.getMessage(), e);
         }
     }

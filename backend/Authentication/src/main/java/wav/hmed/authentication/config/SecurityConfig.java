@@ -40,6 +40,9 @@ public class SecurityConfig {
                     var corsConfig = new org.springframework.web.cors.CorsConfiguration();
                     corsConfig.addAllowedOrigin("http://localhost:4200");
                     corsConfig.addAllowedOrigin("http://localhost:8092");
+                    corsConfig.addAllowedOrigin("http://localhost:8093");
+                    corsConfig.addAllowedOrigin("http://localhost:8094");
+                    corsConfig.addAllowedOrigin("http://localhost:8095");
                     corsConfig.addAllowedMethod("*");
                     corsConfig.addAllowedHeader("*");
                     corsConfig.setAllowCredentials(true);
@@ -49,7 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/registration-response/**").permitAll()
                         .requestMatchers("/api/agents/create").hasAuthority("ROLE_ADMIN") // or whatever role is appropriate
-                        .requestMatchers("/api/clients/create").hasAuthority("ROLE_AGENT") // or whatever role is appropriate
+                        .requestMatchers("/api/clients/create").permitAll() // or whatever role is appropriate
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

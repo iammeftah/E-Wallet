@@ -60,17 +60,30 @@ export class AgencyService {
   }
 
   approveClientRegistration(clientId: string): Observable<Client> {
-    return this.http.post<Client>(`${this.API_URL}/registration-requests/${clientId}/approve`, {}).pipe(
+    return this.http.post<Client>(
+      `${this.API_URL}/registration-requests/${clientId}/approve`,
+      {},
+      { headers: this.getAuthHeaders() }  // Add this
+    ).pipe(
       map(client => new Client(client)),
       catchError(this.handleError)
     );
   }
 
   rejectClientRegistration(clientId: string): Observable<Client> {
-    return this.http.post<Client>(`${this.API_URL}/registration-requests/${clientId}/reject`, {}).pipe(
+    return this.http.post<Client>(
+      `${this.API_URL}/registration-requests/${clientId}/reject`,
+      {},
+      { headers: this.getAuthHeaders() }  // Add this
+    ).pipe(
       map(client => new Client(client)),
       catchError(this.handleError)
     );
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token'); // Or however you store your token
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
 
 }

@@ -33,8 +33,10 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
         String header = req.getHeader("Authorization");
+        System.out.println("Processing request with Authorization header: " + header);
 
         if (header == null || !header.startsWith("Bearer ")) {
+            System.out.println("No valid Authorization header found");
             chain.doFilter(req, res);
             return;
         }
@@ -42,11 +44,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         try {
             UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
             if (authentication != null) {
-                // Add this debug logging
-                System.out.println("Token subject: " + jwtUtil.extractPhone(header.replace("Bearer ", "")));
-                System.out.println("Token roles: " + jwtUtil.extractRoles(header.replace("Bearer ", "")));
-                System.out.println("Authentication authorities: " + authentication.getAuthorities());
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             chain.doFilter(req, res);

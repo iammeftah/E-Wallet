@@ -1,5 +1,6 @@
 package wav.hmed.bank.service;
 
+import wav.hmed.bank.dto.CreateAccountRequest;
 import wav.hmed.bank.entity.Account;
 import wav.hmed.bank.entity.SubscriptionPlan;
 import wav.hmed.bank.entity.Transaction;
@@ -19,6 +20,21 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository, AuthenticationClient authenticationClient) {
         this.accountRepository = accountRepository;
         this.authenticationClient = authenticationClient;
+    }
+
+    @Transactional
+    public Account createAccount(CreateAccountRequest request) {
+        // Check if account already exists for user
+        accountRepository.findByUserId(request.getUserId()).ifPresent(account -> {
+            throw new RuntimeException("Account already exists for user: " + request.getUserId());
+        });
+
+        Account account = new Account();
+        account.setUserId(request.getUserId());
+        account.setBalance(BigDecimal.ZERO);
+        account.setSubscriptionPlan(SubscriptionPlan.HSSAB1); // Set default plan
+
+        return accountRepository.save(account);
     }
 
 

@@ -30,12 +30,27 @@ public class ClientController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createClient(@RequestBody ClientDTO clientDTO) {
+    public ResponseEntity<?> createClient(
+            @RequestBody ClientDTO clientDTO,
+            @RequestHeader("Authorization") String authHeader) {
         try {
+            // Log the received token
+            System.out.println("Received auth header: " + authHeader);
+
+            // Extract and validate token
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                System.out.println("Invalid authorization header format");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Invalid authorization header format");
+            }
+
             Client createdClient = clientService.createVerifiedClient(clientDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error creating client: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating client: " + e.getMessage());
         }
     }
 
